@@ -1,0 +1,6 @@
+.login-screen {
+    background-color: rgba(49, 49, 49, 0.95);
+    color: #fff;
+    box-shadow: 0px 6px 6px rgba(11, 11, 11, 0.8);
+    border-radius: 10px;
+}

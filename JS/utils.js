@@ -23,9 +23,25 @@ function showLoginScreen() {
             <p class='text'>Not registered yet? <a href='#'>Register now</a> </p>
             <span class='hr-container'>
                 <hr class='hr-45' />
-                <p class='text'>or</p>
+                <p class='text hr-text'>or</p>
                 <hr class='hr-45' />
             </span>
+            <div class='social-media-login-container'>
+                <span class='social-media-icon'>
+                    <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+                </span>
+                <span class='login-prompt text--bold'>Login with Facebook</span>
+            </div>
+            <div class='social-media-login-container'>
+                <span class='social-media-icon'>
+                    <i class="fa-brands fa-twitter" aria-hidden="true"></i>
+                </span>
+                <span class='login-prompt text--bold'>Login with Twitter</span>
+            </div>
+            <div class='social-media-login-container'>
+                <i class="fa-brands fa-google social-media-icon--google"></i>
+                <span class='login-prompt text--bold'>Login with Google</span>
+            </div>
         </div>
     `)
 }
