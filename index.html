@@ -1,15 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Movie Finder</title>
-        <link rel="icon" type="image/x-icon" href="img/Movie_Icon.ico" />
-        <link href=”CSS/styles.css” rel="stylesheet" /> 
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    </head>
-    <body id="container">
-        <footer>
-            <a href="https://www.flaticon.com/free-icons/film" title="film icons">Page icon created by fjstudio - Flaticon</a>
-        </footer>
-    </body>
+<head>
+    <script src="https://kit.fontawesome.com/ce9dd96fad.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <!-- START fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,900;1,500&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- END fonts -->
+    <title>Movie Finder</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/Movie_Icon.ico?v=1" />
+    <link rel="icon" type="image/x-icon" href="img/Movie_Icon.ico?v=1" />
+    <!-- CHECK THE FAVICON HREF -->
+    <link href="css/layout.css" rel="stylesheet" /> 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+    <div>
+        <h1 class="page-title">
+            <span class="text--boldest text--uppercased">Movie</span><span class="text--italic">finder</span>
+        </h1>
+        <main>
+            <div class="container">
+                <div class="login-screen">
+                    <div class="welcome-prompt">
+                        <p class="text--bold">Welcome! Log in or Register</p>
+                        <p>Log in to find the movies you're looking for!</p>
+                    </div>
+                    <form>
+                        <input class="input--full-width" type="email" placeholder="Email" />
+                        <div class="password--container">
+                            <input class="input--full-width" type="password" placeholder="Password" />
+                            <i class="far fa-eye password-eye" id="togglePassword"></i>
+                        </div>
+                        <div class="user-extras">
+                            <label for="remember-user">
+                                <input class="input-checkbox" type="checkbox" id="remember-user" name="remember-user" />
+                                Remember me
+                            </label>
+                            <a class="link" href="#">Forgot Password?</a>
+                        </div>
+                        <button class="text--bold">Log in</button>
+                    </form>
+                    <p class="register-prompt">Not registered yet? <a class="link" href="#">Register now</a></p>
+                    <div class="separation">
+                        <hr><p>or</p><hr>
+                    </div>
+                    <div class="social-medias--container">
+                        <div class="social-media button--full-width">
+                            <i class="fa-brands fa-facebook-f border" aria-hidden="true"></i>
+                            <p class="text--bold">Login with Facebook</p>
+                        </div>
+                        <div class="social-media button--full-width">
+                            <i class="fa-brands fa-twitter border" aria-hidden="true"></i>
+                            <p class="text--bold">Login with Twitter</p>
+                        </div>
+                        <div class="social-media button--full-width">
+                            <i class="fa-brands fa-google text--bold" aria-hidden="true"></i>
+                            <p class="text--bold">Login with Google</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- <footer>
+        <a href="https://www.flaticon.com/free-icons/film" title="film icons">Page icon created by fjstudio - Flaticon</a>
+    </footer> -->
+    <!-- <script src="./js/index.js" type="module"></script> -->
+</body>
 </html>

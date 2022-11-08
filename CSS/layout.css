@@ -1,0 +1,116 @@
+:root {
+    font-family: 'Open Sans', sans-serif;
+    --blue-color: #2791C2;
+    --link-color: #29B9FC;
+}
+
+* { box-sizing: border-box; }
+img { max-width: 100%; }
+p { margin: 0; }
+span { color: inherit; }
+.text--bold { font-weight: 700; }
+.text--boldest {font-weight: 900; }
+.text--uppercased { text-transform: uppercase;}
+.text--italic { font-style: italic; }
+a { 
+    text-decoration: none; 
+    color: var(--link-color);
+}
+button { 
+    border-radius: 35px; 
+    border: none;
+    line-height: 32px;
+    width: 100%;
+    padding: .7rem .4rem;
+    background-color: var(--link-color);
+    color: #fff;
+}
+body {
+    background-image: url(../img/back_mobile.png);
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    /* background-size: cover; */
+}
+main {
+    max-width: 640px;
+    margin: 0 auto;
+}
+form {
+    width: 100%;
+    margin:  1.1rem auto;
+    display: grid;
+    gap: .7rem;
+}
+input {
+    border-radius: 5px;
+    height: 3em;
+    border: none;
+    box-shadow: none;
+    padding: .6rem .7rem;
+}
+label {
+    display: flex;
+    align-items: center;
+}
+hr {
+    width: 100%;
+    border: none;
+    height: 1px;
+    background-color: #fff; 
+}
+
+.container {
+    max-width: 545px;
+}
+.login-screen {
+    display: grid;
+    padding: 2rem;
+    
+    max-width: 580px;
+    border-radius: 10px;
+    
+    color: #fff;
+    background-color: rgba(49, 49, 49, 0.95);
+    box-shadow: 0px 6px 6px rgba(11, 11, 11, 0.8);
+}
+.page-title {
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+    color: var(--blue-color);
+}
+.welcome-prompt {
+    text-align: center;
+}
+.input--full-width {
+    width: 100%;
+}
+.password--container {
+    position: relative;
+    display: flex;
+}
+.password-eye {
+    position: absolute;
+    color: var(--blue-color);
+    align-self: center;
+    width: 1.5rem;
+    right: 0;
+}
+.user-extras {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.input-checkbox {
+    width: 1.2rem;
+    border-radius: 5px;
+}
+.register-prompt {
+    text-align: center;
+}
+.separation {
+    margin: .5rem 0;
+    display: grid;
+    place-items: center;
+    grid-template-columns: 45% 1fr 45%;
+}
