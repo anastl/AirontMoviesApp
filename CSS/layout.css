@@ -7,11 +7,11 @@
 * { box-sizing: border-box; }
 img { max-width: 100%; }
 p { margin: 0; }
-span { color: inherit; }
 .text--bold { font-weight: 700; }
 .text--boldest {font-weight: 900; }
 .text--uppercased { text-transform: uppercase;}
 .text--italic { font-style: italic; }
+
 a { 
     text-decoration: none; 
     color: var(--link-color);
@@ -19,9 +19,9 @@ a {
 button { 
     border-radius: 35px; 
     border: none;
-    line-height: 32px;
+    font-size: 1rem;
     width: 100%;
-    padding: .7rem .4rem;
+    padding: 1rem .7rem;
     background-color: var(--link-color);
     color: #fff;
 }
@@ -30,6 +30,7 @@ body {
     background-position: center;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     /* background-size: cover; */
 }
 main {
@@ -52,6 +53,7 @@ input {
 label {
     display: flex;
     align-items: center;
+    color: #BCBCBC;
 }
 hr {
     width: 100%;
@@ -65,6 +67,7 @@ hr {
 }
 .login-screen {
     display: grid;
+    gap: .7rem;
     padding: 2rem;
     
     max-width: 580px;
@@ -113,4 +116,21 @@ hr {
     display: grid;
     place-items: center;
     grid-template-columns: 45% 1fr 45%;
+}
+.social-media {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    place-items: center;
+    border: 1px solid #fff;
+    padding: .7rem .4rem;
+    border-radius: 35px;
+}
+.border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    border-radius: 10px;
+    width: 2rem;
+    height: 2rem;
 }
