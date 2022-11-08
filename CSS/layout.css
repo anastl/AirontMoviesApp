@@ -7,10 +7,16 @@
 * { box-sizing: border-box; }
 img { max-width: 100%; }
 p { margin: 0; }
+
+.fw--400 { font-weight: 400; }
 .text--bold { font-weight: 700; }
 .text--boldest {font-weight: 900; }
 .text--uppercased { text-transform: uppercase;}
 .text--italic { font-style: italic; }
+.text--tiny { font-size: .75rem; }
+.blue { color: var(--blue-color); }
+
+/* LOGIN SECTION */
 
 a { 
     text-decoration: none; 
@@ -31,6 +37,8 @@ body {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    padding: 0;
+    margin: 0;
     /* background-size: cover; */
 }
 main {
@@ -77,10 +85,9 @@ hr {
     background-color: rgba(49, 49, 49, 0.95);
     box-shadow: 0px 6px 6px rgba(11, 11, 11, 0.8);
 }
-.page-title {
+.title {
     font-family: Montserrat, sans-serif;
     text-align: center;
-    color: var(--blue-color);
 }
 .welcome-prompt {
     text-align: center;
@@ -134,3 +141,41 @@ hr {
     width: 2rem;
     height: 2rem;
 }
+
+/* NAV SECTION */
+
+nav {
+    color: #fff;
+    background-color: var(--blue-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.search--container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: #BCBCBC;
+}
+.input--search {
+    padding: 0 2rem;
+}
+.search-icon {
+    position: absolute;
+    width: 1rem;
+    left: .5rem;
+}
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.profile-vector-container {
+    background-color: #D9D9D9;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+}
+

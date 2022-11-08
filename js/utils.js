@@ -1,6 +1,6 @@
 function displayLogin() {
     return `
-        <h1 class="page-title">
+        <h1 class="title blue">
         <span class="text--boldest text--uppercased">Movie</span><span class="text--italic">finder</span>
         </h1>
         <main>
@@ -47,4 +47,26 @@ function displayLogin() {
     `
 }
 
-export { displayLogin }
+function displayHeaderAndSearchBar() {
+    return (`
+    <header>
+        <nav>
+            <h1 class="title">
+                <span class="text--boldest text--uppercased">Movie</span><span class="fw--400 text--italic">finder</span>
+            </h1>
+            <div class="search--container">
+                <input class="input--search" type="text" placeholder="Search movies" />
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+            <div class="profile-container">
+                <p class="text--tiny">Log out</p>
+                <div class="profile-vector-container">
+                    <img src="img/vector-profile.png" alt="profile picture" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    `)
+}
+
+export { displayLogin, displayHeaderAndSearchBar }

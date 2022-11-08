@@ -1,3 +1,3 @@
-import { displayLogin } from './utils.js'
+import { displayLogin, displayHeaderAndSearchBar } from './utils.js'
 
-// document.body.innerHTML = displayLogin()
+document.body.innerHTML = displayHeaderAndSearchBar()
