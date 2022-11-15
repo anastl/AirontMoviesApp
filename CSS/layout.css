@@ -12,33 +12,47 @@ p { margin: 0; }
 .text--bold { font-weight: 700; }
 .text--boldest {font-weight: 900; }
 .text--uppercased { text-transform: uppercase;}
-.text--italic { font-style: italic; }
 .text--tiny { font-size: .75rem; }
 .blue { color: var(--blue-color); }
 .center { text-align: center; }
 
-/* LOGIN SECTION */
+.bigger-spaced { letter-spacing: 0.8px; }
+.text--italic { 
+    margin-left: 1px;
+    font-style: italic; 
+    font-weight: 400; 
+}
 
+/* LOGIN SECTION */
 a { 
     text-decoration: none; 
     color: var(--link-color);
 }
 button { 
     border-radius: 35px; 
-    height: 4.375rem;
     border: none;
-    font-size: 1rem;
-    line-height: 2rem;
-    width: 100%;
-    padding: 1rem .7rem;
+    
     background-color: var(--link-color);
     color: #fff;
+    
+    height: 4.375rem;
+    width: 100%;
+    padding: 1rem .7rem;
+    
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 2rem;
 }
 body {
     background-color: #1E1E1E;
+
     display: grid;
     align-items: center;
+
     min-height: 100vh;
+    max-width: 100vw;
+
     padding: 0;
     margin: 0;
 }
@@ -54,43 +68,41 @@ form {
 }
 input {
     border-radius: 5px;
-    height: 3em;
+    height: 2.875em;
     border: none;
     box-shadow: none;
-    padding: .6rem .7rem;
+    /* padding: .6rem .7rem; */
+}
+input::placeholder {
+    color: #BCBCBC;
 }
 label {
     display: flex;
     align-items: center;
     color: #BCBCBC;
 }
-hr {
-    width: 100%;
-    border: none;
-    height: 1px;
-    background-color: #fff; 
-}
 
 .login--container {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     place-content: center;
-    text-align: center;
     gap: 4rem;
-    padding-top: 2rem;
+    
+    text-align: center;
+    
+    padding: 2rem;
     height: 100%;
     width: 100%;
-    flex-direction: column;
+    
     background-image: url(../img/backgrounds/login_mobile.png);
     background-position: top;
     background-size: cover;
-}
-.container {
-    max-width: 545px;
 }
 .login-screen {
     display: grid;
     gap: .7rem;
     padding: 2rem;
+
     
     max-width: 580px;
     border-radius: 10px;
@@ -102,7 +114,6 @@ hr {
 .title {
     font-family: Montserrat, sans-serif;
     font-size: 2.25rem;
-    line-height: 4rem;
     margin: 0;
     padding: 0;
 }
@@ -142,6 +153,12 @@ hr {
     place-items: center;
     grid-template-columns: 45% 1fr 45%;
 }
+.divider {
+    width: 100%;
+    border: none;
+    height: 1px;
+    background-color: #fff; 
+}
 .social-media-div {
     display: flex;
     align-items: center;
@@ -162,77 +179,123 @@ hr {
     width: 2.75rem;
     height: 2.75rem;
 }
-/* NAV SECTION */
 
-nav {
+/* NAV SECTION */
+header {
     color: #fff;
     background-color: var(--blue-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    
+    width: 100%;
+    min-height: 5.625rem;
+    padding: 1.5rem;
+    
+    display: grid;
+    grid-template-areas: 'title profile' 'search search';
+    place-items: center;
+    gap: 1rem;
+}
+.header--title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    grid-area: title;
 }
 .search--container {
+    grid-area: search;
     display: flex;
     align-items: center;
+    
     position: relative;
-    color: #BCBCBC;
+
+    width: 100%;
 }
-.input--search {
-    padding: 0 2rem;
+.input--search { 
+    padding-left: 3rem; 
+    width: 100%;
 }
 .search-icon {
     position: absolute;
-    width: 1rem;
-    left: .5rem;
+    left: .75rem;
+
+    width: 1.458rem;
+    height: 1.458rem;
 }
 .profile-container {
+    grid-area: profile;
+    justify-self: end;
+
+    max-width: 5.938rem;
+
     display: flex;
     align-items: center;
     gap: .5rem;
 }
 .profile-vector-container {
-    background-color: #D9D9D9;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
     display: grid;
     place-items: center;
+    width: 2.813rem;
+    height: 2.813rem;
+    border-radius: 50%;
+    background-color: #BCBCBC;
 }
 
-/* MEDIA QUERIES */
+/* MOVIE SEARCH { RESULT } AND MOST WATCHED MOVIES  SECTION */
 
-/** TABLETS **/
-@media screen and (min-width: 834px) {
-    .login--container {
-        background: url(../img/backgrounds/login_tablet.png);
-    }
-    .login-screen {
-        max-width: 445px;
-    }
-}
-
-/** DESKTOP **/
-@media screen and (min-width: 1140px) {
-    .login--container {
-        background: url(../img/backgrounds/login_desktop.png);
-    }
-}
-
-.mw-container {
-    display: grid;
-    gap: 3.125rem;
-    max-width: 617.38px;
-    margin: 4rem auto;
-    color: #fff;
-}
-.movie-card {
-    margin: 0 auto;
+.results-container {
     width: 100%;
-    min-height: 38.6rem;
+    margin: 0;
     
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+/* movie card */
+.movie { 
+    color: #fff;
+    font-size: 1rem;
+
+    margin: 0;
+    padding: 3.5rem 2rem;
+    /* min-height: 38.5rem; */
+
+    display: grid;
+    align-items: center;
+    gap: 1rem;
+}
+.movie-title {
+    font-size: 2.5rem;
+    overflow-wrap: break-word;
+    overflow: scroll;
+}
+
+/* MOST WATCHED SECTION */
+.most-watched-container {
+    display: grid;
+    gap: 1.5rem;
+
+    padding: 1.5rem;
+    width: 100%;
+
+    color: #fff;
+    overflow-wrap: break-word;
+    overflow: scroll;
+}
+.mw {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    
+    min-height: 70vh;
+    
+    overflow-wrap: break-word;
+    overflow: scroll;
     font-size: 1rem;
 }
+.mw-title {
+    font-size: 2rem;
+}
+
 .movie-details {
     display: flex;
     gap: 0;
@@ -243,13 +306,214 @@ nav {
     height: 100%;
     padding: 3.5rem;
 }
+.stars-and-genre {
+    margin-top: -.5rem;
+
+    display: flex;
+    flex-direction: column;
+    
+    gap: .5rem;
+}
 .stars-container {
-    color: #FF9900;
-    font-size: .8rem;
+    /* color: #FF9900; */ 
     margin: 0;
-    margin-bottom: 1.25rem;
 
     display: flex;
     align-items: center;
 }
+.star {
+    height: 1.391rem;
+    width: 1.464rem;
+}
 
+
+/* MEDIA QUERIES */
+
+/** HEADER BREAKPOINT **/
+@media screen and (min-width: 465px) {
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+    .search--container {
+        width: 15.25rem;
+    }
+    .profile-container {
+        min-width: 5.938rem;
+    }
+}
+
+/** MIN SIZE **/
+@media screen and (min-width: 640px) {
+    /* START LOGIN */
+    .login--container {
+        padding-top: 4.125rem;
+        display: flex;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    .title--login {
+        font-size: 2.625rem;
+        line-height: 2rem;
+
+        margin: 0;
+        margin-left: -4px;
+    }
+    .login-screen {
+        min-width: 36.25rem;
+        
+        padding: 3rem;
+        padding-bottom: 0;
+        margin-left: -2px;
+        
+        gap: 0;
+    }
+    .welcome-prompt {
+        line-height: 2.75rem;
+        margin-bottom: 2.5rem;
+    } 
+    form {
+        margin: 0;
+        margin-bottom: 2.5rem;
+        gap: 1.25rem;
+    }
+    .input--full-width {
+        padding-left: 1.563rem;
+        font-size: 1.5rem;
+        height: 4.375rem;
+        min-width: 30.375rem;
+    }
+    .input-checkbox {
+        width: 1.875rem;
+        height: 1.875rem;
+    }
+    .password-eye {
+        width: 2.375rem;
+    }
+    .user-extras {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    .input-checkbox {
+        margin: 0;
+        margin-right: .5rem;
+    }
+    .register-prompt {
+        margin-top: 2px;
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+    }
+    .separation {
+        font-size: 1.25rem;
+        
+        margin-top: 1.49rem;
+        margin-bottom: 3.3rem;
+        width: 100%;
+    }
+    .prompt--or {
+        margin-top: -5px;
+    }
+    .divider {
+        width: 12.156rem;
+    }
+    .divider--left {
+        justify-self: flex-start;
+    }
+    .divider--right {
+        justify-self: flex-end;
+    }
+    .social-media-div {
+        margin-bottom: 2.5rem;
+        padding-left: 4.688rem;
+        justify-content: flex-start;
+    }
+    .social-media-container {
+        margin-left: -2px;
+        gap: 0;
+    }
+    .social-media--last {
+        margin-bottom: 3.813rem;
+    }
+    .icon {
+        margin: 0;
+        padding: 0;
+        width: 2.75rem;
+        height: 2.75rem;
+
+        margin-right: 1.563rem;
+    }
+    /* START HEADER */
+    header {
+        grid-template-columns: 10.063rem 15.25rem 5.938rem;
+        grid-template-areas: 'title search profile';
+        place-items: center;
+        line-height: 2rem;
+        
+        height: 5.625rem;
+        padding-left: 2.5rem 1.375rem;
+
+    }
+    .header--title {
+        margin-left: 6px;
+        margin-top: 1px;
+    }
+    .search--container {
+        height: 2.875rem;
+        padding: 0;
+        margin: 0;
+        margin-left: 7px;
+
+        position: relative;
+        left: 0;
+        top: 0;
+    }
+    .input--search {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .log {
+        margin-left: -5px;
+        margin-top: 2px;
+    }
+    .movie {
+        min-height: 53.125rem;
+        padding: 9.5rem 5.563rem;
+
+        font-size: 1.5rem;
+    }
+    .movie-title {
+        font-size: 3.5rem;
+        overflow: initial;
+        overflow-wrap: initial;
+    }
+    button {
+        font-size: 1.5rem;
+    }
+}
+
+/** TABLETS **/
+@media screen and (min-width: 834px) {
+    .login--container {
+        background: url(../img/backgrounds/login_tablet.png);
+    }
+    .login-screen {
+        max-width: 445px;
+    }
+    header {
+        grid-template-columns: 2fr 11rem minmax(1fr, 24rem) 5.938rem 2fr;
+        grid-template-areas: '. title search profile .';
+    }
+}
+
+/** DESKTOP **/
+@media screen and (min-width: 1140px) {
+    .login--container {
+        background: url(../img/backgrounds/login_desktop.png);
+    }
+}
