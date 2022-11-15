@@ -5,10 +5,10 @@ getGenres()
     .then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
 
 // const callAsync = await getMostWatchedMovies() 
-const callAsync = displayLogin() 
-document.body.innerHTML = callAsync
+// const callAsync = displayLogin() 
+// document.body.innerHTML = callAsync
 
-// document.body.innerHTML = displayHeaderAndSearchBar()
+document.body.innerHTML = displayHeaderAndSearchBar()
 // const searchBar = document.getElementById('search-movie')
 
 // searchBar.addEventListener( 'keyup', e => {
@@ -22,8 +22,8 @@ document.body.innerHTML = callAsync
 // } )
 
 // TO TEST QUICKER [TODO DELETE]
-// getMovieHtml( 'harry' )
-//         .then( htmlRes => {
-//             const resContainer = document.getElementById('results-container')
-//             resContainer.innerHTML = htmlRes
-//         } )
+getMovieHtml( 'harry' )
+        .then( htmlRes => {
+            const resContainer = document.getElementById('results-container')
+            resContainer.innerHTML = htmlRes
+        } )
