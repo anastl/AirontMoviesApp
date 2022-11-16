@@ -2,6 +2,13 @@
     font-family: 'Open Sans', sans-serif;
     --blue-color: #2791C2;
     --link-color: #29B9FC;
+
+    --hover-btn: #4FC7FF;
+    --visited-btn: #4FC7FF;
+    --focus-btn-bg: #2791C2;
+    --focus-btn-border: #82CAFF;
+
+    --active-font--btn: #2791C2;
 }
 
 * { box-sizing: border-box; }
@@ -29,6 +36,7 @@ a {
     color: var(--link-color);
 }
 button { 
+    align-self: center;
     border-radius: 35px; 
     border: none;
     
@@ -43,6 +51,21 @@ button {
     font-size: 1.1rem;
     font-family: 'Open Sans', sans-serif;
     line-height: 2rem;
+}
+button:hover {
+    background-color: var(--hover-btn);
+}
+button:focus {
+    background-color: var(--focus-btn-bg);
+    border: var(--focus-btn-border) 2px solid;
+}
+button:visited {
+    background-color: var(--visited-btn);
+}
+button:active {
+    text-decoration: underline;
+    color: var(--active-font--btn);
+    background-color: #fff;
 }
 body {
     background-color: #1E1E1E;
@@ -519,6 +542,9 @@ header {
         padding: 3.625rem 5.938rem;
         gap: 3.5rem;
         background-color: #070707;
+
+        overflow-wrap: initial;
+        overflow: initial;
     }
     .title--mw {
         line-height: 3rem;
@@ -532,6 +558,9 @@ header {
     .mw {
         display: flex;
         justify-content: flex-end;
+        
+        overflow-wrap: initial;
+        overflow: initial;
         
         min-height: 38.586rem;
         padding: 3.5rem;
