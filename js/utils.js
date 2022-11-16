@@ -148,7 +148,7 @@ function resultMockup() {
     return `
     <div class="movie"
         style="
-            background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url('../img/mockups/Avatar_1.png');
+            background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url('./img/mockups/Avatar_1.png');
             background-position: center;
             background-size: cover;
     ">
@@ -173,7 +173,7 @@ function mostWatchedMockup() {
     return (`
     <div class="most-watched-movies">
         <div class="mw"
-            style=" background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url('../img/mockups/Prey_mw.png'); background-position: center; background-size: cover;"
+            style=" background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url('./img/mockups/Prey_mw.png'); background-position: center; background-size: cover;"
         >
             <div class="details--mw">
                 <p class="text--bold movie-title mw-title">${ 'Prey' }</p>
@@ -184,7 +184,7 @@ function mostWatchedMockup() {
             </div>
         </div>
         <div class="mw"
-            style=" background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url('../img/mockups/Jurassic_mw.png'); background-position: center; background-size: cover;"
+            style=" background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url('./img/mockups/Jurassic_mw.png'); background-position: center; background-size: cover;"
         >
             <div class="details--mw">
                 <p class="text--bold movie-title mw-title">${ 'Jurassic World Dominion' }</p>
@@ -195,7 +195,7 @@ function mostWatchedMockup() {
             </div>
         </div>
         <div class="mw"
-            style=" background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url('../img/mockups/Kong_mw.png'); background-position: center; background-size: cover;"
+            style=" background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url('./img/mockups/Kong_mw.png'); background-position: center; background-size: cover;"
         >
             <div class="details--mw">
                 <p class="text--bold movie-title mw-title">${ 'Godzilla vs Kong' }</p>
