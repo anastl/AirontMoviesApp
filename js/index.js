@@ -1,4 +1,4 @@
-import { displayLogin, displayHeaderAndSearchBar } from './utils.js'
+import { displayLogin, displayHeaderAndSearchBar, homeMockup } from './utils.js'
 import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 
 getGenres()
@@ -21,9 +21,9 @@ document.body.innerHTML = displayHeaderAndSearchBar()
 //         } )
 // } )
 
+const resContainer = document.getElementById('results-container')
+resContainer.innerHTML = homeMockup()
 // TO TEST QUICKER [TODO DELETE]
-getMovieHtml( 'harry' )
-        .then( htmlRes => {
-            const resContainer = document.getElementById('results-container')
-            resContainer.innerHTML = htmlRes
-        } )
+// getMovieHtml( 'harry' )
+//         .then( htmlRes => {
+//         } )

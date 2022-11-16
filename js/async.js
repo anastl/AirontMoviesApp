@@ -16,7 +16,6 @@ async function getMostWatchedMovies() {
                 ${ mostWatchedArray.join('') }
             </div>
         `)
-        // console.log( data.results.length )
         
         return mostWatchedDiv
     } catch ( e ) { console.log( e ) }

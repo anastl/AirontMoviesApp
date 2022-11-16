@@ -246,7 +246,6 @@ header {
     
     display: flex;
     flex-direction: column;
-    gap: .5rem;
 }
 
 /* movie card */
@@ -256,11 +255,10 @@ header {
 
     margin: 0;
     padding: 3.5rem 2rem;
-    /* min-height: 38.5rem; */
 
-    display: grid;
-    align-items: center;
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    /* align-content: space-between; */
 }
 .movie-title {
     font-size: 2.5rem;
@@ -295,7 +293,6 @@ header {
 .mw-title {
     font-size: 2rem;
 }
-
 .movie-details {
     display: flex;
     gap: 0;
@@ -307,12 +304,8 @@ header {
     padding: 3.5rem;
 }
 .stars-and-genre {
-    margin-top: -.5rem;
-
     display: flex;
-    flex-direction: column;
-    
-    gap: .5rem;
+    flex-direction: column;    
 }
 .stars-container {
     /* color: #FF9900; */ 
@@ -481,19 +474,92 @@ header {
         margin-left: -5px;
         margin-top: 2px;
     }
+    /* START MOVIE RESULT CARD */
     .movie {
         min-height: 53.125rem;
+        min-width: 449px;
         padding: 9.5rem 5.563rem;
 
         font-size: 1.5rem;
+
+        justify-content: flex-start;
+    }
+    .stars-and-genre {
+        line-height: 60%;
+        gap: 1.09rem;
+    }
+    .stars-container {
+        gap: 0.732rem;
     }
     .movie-title {
-        font-size: 3.5rem;
         overflow: initial;
         overflow-wrap: initial;
+        
+        margin-top: 2.7rem;
+        
+        font-size: 3.5rem;
+        line-height: 35%;
+    }
+    .summary {
+        margin-top: 2.4rem;
+        line-height: 2.375rem;
     }
     button {
         font-size: 1.5rem;
+    }
+    .watch-now {
+        border-radius: 5.813rem;
+        margin-top: 3.1rem;
+        margin-left: 4px;
+        height: 4.688rem;
+        width: 28.188rem;
+    }
+    /* START MOST WATCHED */
+    .most-watched-container {
+        padding: 3.625rem 5.938rem;
+        gap: 3.5rem;
+        background-color: #070707;
+    }
+    .title--mw {
+        line-height: 3rem;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 2rem;
+    }
+    .most-watched-movies {
+        display: grid;
+        gap: 3.102rem;
+    }
+    .mw {
+        display: flex;
+        justify-content: flex-end;
+        
+        min-height: 38.586rem;
+        padding: 3.5rem;
+    }
+    .details--mw {
+        display: flex;
+        flex-direction: column;
+    }
+    .stars-container--mw {
+        margin-bottom: 1.25rem;
+        gap: 0.417rem;
+    }
+    .star--mw {
+        width: 0.833rem;
+        height: 0.792rem;
+    }
+    .mw-title {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+
+        margin: 0;
+        margin-bottom: 0.625rem;
+    }
+    .summary--mw {
+        margin-top: 0;
+
+        font-size: 1rem;
+        line-height: 1.25rem;
     }
 }
 
