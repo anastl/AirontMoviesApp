@@ -1,14 +1,10 @@
-import { displayLogin, displayHeaderAndSearchBar, homeMockup } from './utils.js'
+import { showDetails, displayLogin, displayHeaderAndSearchBar, homeMockup, handleLogin, getDetailsHtml, showResAndSetUpBtn } from './utils.js'
 import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 
-getGenres()
-    .then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
+// getGenres()
+//     .then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
 
-// const callAsync = await getMostWatchedMovies() 
-// const callAsync = displayLogin() 
-// document.body.innerHTML = callAsync
-
-document.body.innerHTML = displayHeaderAndSearchBar()
+// document.body.innerHTML = displayHeaderAndSearchBar()
 // const searchBar = document.getElementById('search-movie')
 
 // searchBar.addEventListener( 'keyup', e => {
@@ -21,9 +17,15 @@ document.body.innerHTML = displayHeaderAndSearchBar()
 //         } )
 // } )
 
-const resContainer = document.getElementById('results-container')
-resContainer.innerHTML = homeMockup()
-// TO TEST QUICKER [TODO DELETE]
-// getMovieHtml( 'harry' )
-//         .then( htmlRes => {
-//         } )
+// DISPLAY MOCKUPS
+document.body.innerHTML = displayLogin()
+// showResAndSetUpBtn()
+
+// showDetails()
+
+/*
+const callAsync = displayHeaderAndSearchBar() 
+document.body.innerHTML = callAsync
+
+const resultsContainer = document.getElementById('results-container')
+resultsContainer.innerHTML = await getMostWatchedMovies() */

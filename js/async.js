@@ -6,8 +6,8 @@ async function getMostWatchedMovies() {
         const res = await fetch( baseUrl )
         const mostWatched = await res.json()
 
-        const mostWatchedArray = mostWatched.results.map( ( { original_title, genre_ids, vote_average, overview, backdrop_path } ) => {
-            const movie = new Movie( original_title, genre_ids[0], vote_average, overview, backdrop_path ) 
+        const mostWatchedArray = mostWatched.results.map( ( { id, original_title, genre_ids, vote_average, overview, backdrop_path } ) => {
+            const movie = new Movie( id, original_title, genre_ids[0], vote_average, overview, backdrop_path ) 
             return movie.getMovieDiv()
         })
         const mostWatchedDiv = (`
@@ -36,8 +36,8 @@ async function getMovieHtml ( query ) {
         const res = await fetch( mediaUrl )
         const searchResults = await res.json()
 
-        const moviesArray = searchResults.results.slice(0,5).map( ( { original_title, genre_ids, vote_average, overview, backdrop_path } ) => {
-            const movie = new Movie( original_title, genre_ids[0], vote_average, overview, backdrop_path ) 
+        const moviesArray = searchResults.results.slice(0,5).map( ( { id, original_title, genre_ids, vote_average, overview, backdrop_path } ) => {
+            const movie = new Movie( id, original_title, genre_ids[0], vote_average, overview, backdrop_path ) 
             return movie.getMovieDivWithButton()
         } )
            
