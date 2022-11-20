@@ -720,7 +720,7 @@ header {
     }
     .login-screen {
         width: 27.813rem;
-        padding: 2rem 2.75rem 2rem 2.813rem;
+        padding: 2rem 2.75rem 2.7rem 2.813rem;
         margin-top: 3.5rem;
     }
     .welcome-prompt {
@@ -754,10 +754,11 @@ header {
         right: 1rem;
     }
     .user-extras {
+        font-size: 0.625rem;
+
         width: 22.194rem;
         padding: 0 1.188rem 0 .937rem;
-        font-size: 0.625rem;
-        margin-top: .3rem;
+        margin-top: .253rem;
         margin-bottom: 0;
     }
     .input-checkbox {
@@ -765,8 +766,6 @@ header {
         height: 1.125rem;
 
         border-radius: .188rem;
-
-        margin-left: .033rem;
     }
     .login-btn {
         background-color: #2791C2;
@@ -776,7 +775,7 @@ header {
         padding: 0;
         width: 22.125rem;
         height: 2.938rem;
-        margin-top: .2rem;
+        margin-top: .263rem;
     }
     .register-prompt {
         margin: 0;
@@ -786,7 +785,7 @@ header {
         font-size: .625rem;
     }
     .separation {
-        margin-top: 0;
+        margin-top: .25rem;
 
         grid-template-columns: 8.883rem 1fr 8.883rem;
         gap: 1.781rem;
@@ -800,11 +799,12 @@ header {
     .social-medias--container {
         gap: .625rem;
         margin: 0;
-        margin-top: 1.688rem;
+        margin-top: 1.3rem;
     }
     .social-media-div {
         width: 22.375rem;
         height: 2.813rem;
+        padding-left: 4.313rem;
         justify-content: flex-start;
     }
     .social-media-container {
@@ -815,9 +815,10 @@ header {
         align-content: center;
     }
     .icon {
-        width: 1.75rem;
-        height: 1.813rem;
+        width: 1.8rem;
+        height: 1.9rem;
         margin-right: 1.063rem;
+        margin-left: -.2rem;
     }
     /*
     .separation {
