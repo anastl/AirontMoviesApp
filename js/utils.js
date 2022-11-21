@@ -2,7 +2,33 @@ import data from './data.json' assert { type: "json" }
 const movies = data.Movies[0]
 // console.log(movies)
 
-const star = `<img class="star" src="./img/vectors/star.png" alt="star rating" aria-hidden="true" />`
+const starFilled = `<svg class="star-res filled" xmlns="http://www.w3.org/2000/svg" >
+<path fill-rule="evenodd" clip-rule="evenodd" 
+d="M11.7143 
+0.538086L14.6429 
+8.94634H23.4286L16.5952 
+14.387L19.0357 
+22.7952L11.7143 
+17.8492L4.39286 
+22.7952L6.83333 
+14.387L0 
+8.94634H8.78571L11.7143 
+0.538086ZM46.8571 
+0.538086L49.7857 214Z" />
+</svg>`
+const starMw = `<svg class="star-svg-mw filled" xmlns="http://www.w3.org/2000/svg" width="164" height="23" viewBox="0 0 164 23" >
+<path fill-rule="evenodd" clip-rule="evenodd" 
+d="M11.7143 
+0.538086L14.6429 
+8.94634H23.4286L16.5952 
+14.387L19.0357 
+22.7952L11.7143 
+17.8492L4.39286 
+22.7952L6.83333 
+14.387L0 
+8.94634H8.78571L11.7143 
+0.538086ZM46.8571 
+0.538086L49.7857 214Z" />`
 
 class Movie {
     constructor( id, title, genreId, rating, summary, backgroundURL ){
@@ -17,11 +43,15 @@ class Movie {
         return this.summary.split(' ').length < 46 ? this.summary : this.summary.split(' ').slice( 0, 45 ).join(' ') + "..."
     }
     getStarsArray = () => {
-        const starsArray = []
-        for ( let s = 0; s < Math.round( this.rating/2 ); s++) {
-            starsArray.push(`<img class="star" src="./img/vectors/star.png" alt="star rating" aria-hidden="true" />`)
+        if ( starsRating/2 > 0 ){
+            const starsArray = []
+            for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
+                starsArray.push(`<div class="star">${ starFilled }</div>`)
+            }
+            return starsArray.join('')
+        } else {
+            return `<div class="star">${ starEmpty }</div>`
         }
-        return starsArray.join('')
     }
     getGenre = () => {
         const genreArray = JSON.parse( sessionStorage.getItem('genres') )
@@ -81,7 +111,12 @@ function displayLogin() {
                 <input class="input--full-width" type="email" placeholder="Email" />
                 <div class="password--container">
                     <input class="input--full-width" type="password" placeholder="Password" />
-                    <svg class="password-eye" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="19" cy="12" r="7" stroke="white" stroke-width="2"/><circle cx="19" cy="12" r="7" stroke="#2791C2" stroke-width="2"/><path d="M37 12C37 12.1633 36.9344 12.4766 36.7106 12.9481C36.4943 13.4038 36.1614 13.9423 35.7106 14.5357C34.8097 15.7216 33.4846 17.0656 31.8282 18.3302C28.5075 20.8654 23.9654 23 19 23C14.0346 23 9.49253 20.8654 6.17179 18.3302C4.51536 17.0656 3.19029 15.7216 2.2894 14.5357C1.83863 13.9423 1.50568 13.4038 1.2894 12.9481C1.06558 12.4766 1 12.1633 1 12C1 11.8367 1.06558 11.5234 1.2894 11.0519C1.50568 10.5962 1.83863 10.0577 2.2894 9.46429C3.19029 8.27839 4.51536 6.93444 6.17179 5.66984C9.49253 3.13461 14.0346 1 19 1C23.9654 1 28.5075 3.13461 31.8282 5.66984C33.4846 6.93444 34.8097 8.27839 35.7106 9.46429C36.1614 10.0577 36.4943 10.5962 36.7106 11.0519C36.9344 11.5234 37 11.8367 37 12Z" stroke="white" stroke-width="2"/><path d="M37 12C37 12.1633 36.9344 12.4766 36.7106 12.9481C36.4943 13.4038 36.1614 13.9423 35.7106 14.5357C34.8097 15.7216 33.4846 17.0656 31.8282 18.3302C28.5075 20.8654 23.9654 23 19 23C14.0346 23 9.49253 20.8654 6.17179 18.3302C4.51536 17.0656 3.19029 15.7216 2.2894 14.5357C1.83863 13.9423 1.50568 13.4038 1.2894 12.9481C1.06558 12.4766 1 12.1633 1 12C1 11.8367 1.06558 11.5234 1.2894 11.0519C1.50568 10.5962 1.83863 10.0577 2.2894 9.46429C3.19029 8.27839 4.51536 6.93444 6.17179 5.66984C9.49253 3.13461 14.0346 1 19 1C23.9654 1 28.5075 3.13461 31.8282 5.66984C33.4846 6.93444 34.8097 8.27839 35.7106 9.46429C36.1614 10.0577 36.4943 10.5962 36.7106 11.0519C36.9344 11.5234 37 11.8367 37 12Z" stroke="#2791C2" stroke-width="2"/></svg>
+                    <svg class="password-eye" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="19" cy="12" r="7" stroke="white" stroke-width="2"/>
+                        <circle cx="19" cy="12" r="7" stroke="#2791C2" stroke-width="2"/>
+                        <path d="M37 12C37 12.1633 36.9344 12.4766 36.7106 12.9481C36.4943 13.4038 36.1614 13.9423 35.7106 14.5357C34.8097 15.7216 33.4846 17.0656 31.8282 18.3302C28.5075 20.8654 23.9654 23 19 23C14.0346 23 9.49253 20.8654 6.17179 18.3302C4.51536 17.0656 3.19029 15.7216 2.2894 14.5357C1.83863 13.9423 1.50568 13.4038 1.2894 12.9481C1.06558 12.4766 1 12.1633 1 12C1 11.8367 1.06558 11.5234 1.2894 11.0519C1.50568 10.5962 1.83863 10.0577 2.2894 9.46429C3.19029 8.27839 4.51536 6.93444 6.17179 5.66984C9.49253 3.13461 14.0346 1 19 1C23.9654 1 28.5075 3.13461 31.8282 5.66984C33.4846 6.93444 34.8097 8.27839 35.7106 9.46429C36.1614 10.0577 36.4943 10.5962 36.7106 11.0519C36.9344 11.5234 37 11.8367 37 12Z" stroke="white" stroke-width="2"/>
+                        <path d="M37 12C37 12.1633 36.9344 12.4766 36.7106 12.9481C36.4943 13.4038 36.1614 13.9423 35.7106 14.5357C34.8097 15.7216 33.4846 17.0656 31.8282 18.3302C28.5075 20.8654 23.9654 23 19 23C14.0346 23 9.49253 20.8654 6.17179 18.3302C4.51536 17.0656 3.19029 15.7216 2.2894 14.5357C1.83863 13.9423 1.50568 13.4038 1.2894 12.9481C1.06558 12.4766 1 12.1633 1 12C1 11.8367 1.06558 11.5234 1.2894 11.0519C1.50568 10.5962 1.83863 10.0577 2.2894 9.46429C3.19029 8.27839 4.51536 6.93444 6.17179 5.66984C9.49253 3.13461 14.0346 1 19 1C23.9654 1 28.5075 3.13461 31.8282 5.66984C33.4846 6.93444 34.8097 8.27839 35.7106 9.46429C36.1614 10.0577 36.4943 10.5962 36.7106 11.0519C36.9344 11.5234 37 11.8367 37 12Z" stroke="#2791C2" stroke-width="2"/>
+                    </svg>
                 </div>
                 <div class="user-extras">
                     <label for="remember-user">
@@ -167,7 +202,7 @@ function mostWatchedhtml( movie ) {
     const getStarsArray = ( ) => {
         const starsArray = []
         for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
-            starsArray.push(`<div class="star">${ star }</div>`)
+            starsArray.push(`<div class="star-mw">${ starMw }</div>`)
         }
         return starsArray.join('')
     }
@@ -175,7 +210,7 @@ function mostWatchedhtml( movie ) {
     return (`
     <div class="mw" data-movieid='${ id }'
         style="
-            background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url('${ imgLong }');
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%), url('${ imgLong }');
             background-position: center;
             background-size: cover;"
     >
@@ -196,7 +231,7 @@ function resultMockup() {
     const getStarsArray = ( ) => {
         const starsArray = []
         for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
-            starsArray.push(`<div class="star">${ star }</div>`)
+            starsArray.push(`<div class="star">${ starFilled }</div>`)
         }
         return starsArray.join('')
     }
@@ -206,7 +241,6 @@ function resultMockup() {
         style="
             background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(${ imgLong });
             background-position: center;
-            background-size: cover;
     ">
         <div class="stars-and-genre">
             <p class="genre blue">${ genre }</p>
@@ -216,7 +250,7 @@ function resultMockup() {
         </div>
         <p class="text--bold movie-title">${ title }</p>
         <p class="summary">${ summary }</p>
-        <button class="watch-now" id="watch-movie" data-movieid='${ id }'>Watch Now</button>
+        <button class="watch-now-btn" id="watch-movie" data-movieid='${ id }'>Watch Now</button>
     </div>
     `
 }

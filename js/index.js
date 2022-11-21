@@ -18,8 +18,8 @@ import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 // } )
 
 // DISPLAY MOCKUPS
-document.body.innerHTML = displayLogin()
-// showResAndSetUpBtn()
+// document.body.innerHTML = displayLogin()
+showResAndSetUpBtn()
 
 // showDetails()
 

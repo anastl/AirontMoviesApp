@@ -12,8 +12,8 @@
 }
 
 * { box-sizing: border-box; }
-img, svg { max-width: 100%;  }
-svg { max-height: 100%; }
+img { max-width: 100%;  }
+svg { height: 100%; width: 100%; }
 p,a, h1 { margin: 0; }
 
 .fw--400 { font-weight: 400; }
@@ -120,21 +120,19 @@ label {
     margin: 0;
     padding: 0;
 }
+/* END GENERAL */
 
 /* START LOGIN */
 .login--container { 
     display: flex;
     flex-direction: column;
     place-items: center;
+    justify-content: center;
     
-    padding: 1.875rem 1.875rem 0 1.875rem;
-    margin-bottom: 4.422rem;
+    padding: 4.125rem 1.875rem 4.422rem 1.875rem;
     width: 100vw;
     min-height: 100vh;
-
-    padding: 0;
-    margin: 0;
-    
+   
     font-size: 1.5rem;
     text-align: center;
 
@@ -143,7 +141,6 @@ label {
     background-size: cover;
 }
 .title--login {
-    margin-top: 4.125rem;
     margin-left: -1px;
 
     font-size: 2.625rem;
@@ -283,100 +280,172 @@ form {
     margin-right: 1.563rem;
 }
 /* END LOGIN */
-/* FIXED FROM HERE UP */
-
 
 /* START HEADER */
-header {
+/*
+*/
+header {  
+    color: #fff;
+    background-color: var(--blue-color);
+    
+    display: grid;
     grid-template-columns: 10.063rem 15.25rem 5.938rem;
     grid-template-areas: 'title search profile';
-    place-items: center;
+    align-items: center;
+    justify-content: space-evenly;
     line-height: 2rem;
     
     height: 5.625rem;
-    padding-left: 2.5rem 1.375rem;
-
+    padding-left: .738rem;
+    padding-right: .625rem;
 }
 .header--title {
-    margin-left: 6px;
-    margin-top: 1px;
+    grid-area: title;
+
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-family: 'Montserrat', sans-serif;
 }
 .search--container {
+    grid-area: search;
+    
+    display: flex;
+    align-items: center;
+        
+    width: 100%;
     height: 2.875rem;
     padding: 0;
     margin: 0;
-    margin-left: 7px;
+    margin-left: 0rem;
 
     position: relative;
     left: 0;
     top: 0;
 }
 .input--search {
+    padding-left: 3rem; 
     height: 100%;
     width: 100%;
     margin: 0;
     
     position: absolute;
-    left: 0;
+    left: .438rem;
     top: 0;
 }
-.log {
-    margin-left: -5px;
-    margin-top: 2px;
+.search-icon {
+    position: absolute;
+    left: .75rem;
+
+    margin-left: .5rem;
+    width: 1.458rem;
+    height: 1.458rem;
 }
+.profile-container {
+    grid-area: profile;
+    justify-self: end;
+
+    width: 5.938rem;
+
+    display: flex;
+    align-items: center;
+}
+.log {
+    margin-right: .3rem;
+    margin-top: .125rem;
+
+    width: fit-content;
+}
+.profile-vector-container {
+    display: grid;
+    place-items: center;
+    
+    width: 2.813rem;
+    height: 2.813rem;
+    margin-right: .15rem;
+
+    border-radius: 50%;
+    background-color: #BCBCBC;
+}
+/* END HEADER */
+
 /* START MOVIE RESULT CARD */
 .movie {
     min-height: 53.125rem;
-    min-width: 449px;
-    padding: 9.5rem 5.563rem;
+    padding: 9.5rem 5.938rem 9.5rem 5.563rem;
 
     font-size: 1.5rem;
+    color: #fff;
 
     justify-content: flex-start;
 }
 .stars-and-genre {
+    margin-left: .25rem;
     line-height: 60%;
     gap: 1.09rem;
 }
 .stars-container {
+    margin-top: 1.034rem;
+    width: 10.25rem;
+    display: flex;
     gap: 0.732rem;
+}
+.star {
+    width: 1.464rem;
+    height: 1.391rem;
+}
+.star-res {
+    width: 1.464rem;
+    height: 1.391rem;
+}
+.filled {
+    fill: #FF9900;
 }
 .movie-title {
     overflow: initial;
     overflow-wrap: initial;
     
     margin-top: 2.7rem;
+    margin-left: .25rem;
     
     font-size: 3.5rem;
     line-height: 35%;
 }
 .summary {
     margin-top: 2.4rem;
+    margin-left: .188rem;
     line-height: 2.375rem;
+
+    width: 28.875rem;
 }
 button {
     font-size: 1.5rem;
 }
-.watch-now {
+.watch-now-btn {
     border-radius: 5.813rem;
     margin-top: 3.1rem;
-    margin-left: 4px;
+    margin-left: .6rem;
     height: 4.688rem;
     width: 28.188rem;
 }
+/* END MOVIE RESULT CARD */
+
 /* START MOST WATCHED */
 .most-watched-container {
-    padding: 3.625rem 5.938rem;
-    gap: 3.5rem;
-    background-color: #070707;
+    padding: 3.127rem 6rem 15.164rem 6.1rem;
+    width: 100vw;
 
-    overflow-wrap: initial;
-    overflow: initial;
+    display: grid;
+    gap: 3.125rem;
+
+    background-color: #070707;
+    color: #fff;
 }
 .title--mw {
-    line-height: 3rem;
+    line-height: 4rem;
     font-family: 'Open Sans', sans-serif;
     font-size: 2rem;
+
+    margin-left: .1rem;
 }
 .most-watched-movies {
     display: grid;
@@ -384,41 +453,56 @@ button {
 }
 .mw {
     display: flex;
+    flex-direction: column;
     justify-content: flex-end;
     
-    overflow-wrap: initial;
-    overflow: initial;
-    
     min-height: 38.586rem;
-    padding: 3.5rem;
+    width: 28.063rem;
+    padding-left: 3.443rem;
+    padding-right: 3.333rem;
+    padding-bottom: 2.137rem;
 }
 .details--mw {
     display: flex;
     flex-direction: column;
-}
-.stars-container--mw {
-    margin-bottom: 1.25rem;
-    gap: 0.417rem;
-}
-.star--mw {
-    width: 0.833rem;
-    height: 0.792rem;
+    gap: 0;
 }
 .mw-title {
     font-size: 2.25rem;
-    line-height: 2.5rem;
+    line-height: 3.7rem;
 
     margin: 0;
-    margin-bottom: 0.625rem;
+    margin-left: .2rem;
+}
+.stars-container--mw {
+    display: flex;
+    margin: 0;
+    margin-left: .2rem;
+    gap: 0;
+}
+.star-mw {
+    width: 5rem;
+    overflow: hidden;
+    margin: 0;
+    margin-right: -3.75rem;
+}
+.star-svg-mw {
+    width: 5.5rem;
 }
 .summary--mw {
-    margin-top: 0;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
 
     font-size: 1rem;
     line-height: 1.25rem;
 }
-/* START INDIVIDUAL MOVIE DETAILS*/
-.movie-dets {
+/* END MOST WATCHED */
+
+/* TODO DELETE: WORKS UNTIL HERE */
+
+/* START INDIVIDUAL MOVIE DETAILS */
+/* .movie-dets {
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -466,9 +550,6 @@ button {
     
     padding: 0 3.75rem;
     color: #fff;
-
-    /* display: flex;
-    flex-direction: column; */
 }
 .extended {
     font-size: 1.5rem;
@@ -532,83 +613,26 @@ button {
 
     display: grid;
     place-items: center;
-}
+} */
+/* INDIVIDUAL MOVIE DETAILS */
 /* START TRAILER */
 .trailer--modal, .trailer {
     display: grid;
     place-items: center;
 }
 
-/* NAV SECTION */
-header {
-    color: #fff;
-    background-color: var(--blue-color);
-    
-    width: 100%;
-    min-height: 5.625rem;
-    padding: 1.5rem;
-    
-    display: grid;
-    grid-template-areas: 'title profile' 'search search';
-    place-items: center;
-    gap: 1rem;
-}
-.header--title {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    grid-area: title;
-}
-.search--container {
-    grid-area: search;
-    display: flex;
-    align-items: center;
-    
-    position: relative;
-
-    width: 100%;
-}
-.input--search { 
-    padding-left: 3rem; 
-    width: 100%;
-}
-.search-icon {
-    position: absolute;
-    left: .75rem;
-
-    width: 1.458rem;
-    height: 1.458rem;
-}
-.profile-container {
-    grid-area: profile;
-    justify-self: end;
-
-    max-width: 5.938rem;
-
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-}
-.profile-vector-container {
-    display: grid;
-    place-items: center;
-    width: 2.813rem;
-    height: 2.813rem;
-    border-radius: 50%;
-    background-color: #BCBCBC;
-}
-
 /* MOVIE SEARCH { RESULT } AND MOST WATCHED MOVIES  SECTION */
 
-.results-container {
+/* .results-container {
     width: 100%;
     margin: 0;
     
     display: flex;
     flex-direction: column;
-}
+} */
 
 /* movie card */
-.movie { 
+/* .movie { 
     color: #fff;
     font-size: 1rem;
 
@@ -617,16 +641,16 @@ header {
 
     display: flex;
     flex-direction: column;
-    /* align-content: space-between; */
+    align-content: space-between;
 }
 .movie-title {
     font-size: 2.5rem;
     overflow-wrap: break-word;
     overflow: scroll;
-}
+} */
 
 /* MOST WATCHED SECTION */
-.most-watched-container {
+/* .most-watched-container {
     display: grid;
     gap: 1.5rem;
 
@@ -667,7 +691,7 @@ header {
     flex-direction: column;    
 }
 .stars-container {
-    /* color: #FF9900; */ 
+    color: #FF9900; 
     margin: 0;
 
     display: flex;
@@ -676,27 +700,10 @@ header {
 .star {
     height: 1.391rem;
     width: 1.464rem;
-}
+} */
 
 
 /* MEDIA QUERIES */
-
-/** HEADER BREAKPOINT **/
-/* 
-    @media screen and (min-width: 465px) {
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
-        }
-        .search--container {
-            width: 15.25rem;
-        }
-        .profile-container {
-            min-width: 5.938rem;
-        }
-    } 
-*/
 
 /** TABLETS **/
 @media screen and (min-width: 834px) {
@@ -705,13 +712,10 @@ header {
         background: url(../img/backgrounds/login_tablet.png);
         
         display: grid;
-        place-items: center;
         gap: 0;
         
-        min-width: 100vw;
-        min-height: 100vh;
         padding: 16.75rem 12.125rem;
-        margin: 0;
+        margin: 0 auto;
     }
     .title--login {
         font-size: 2.25rem;
@@ -820,55 +824,110 @@ header {
         margin-right: 1.063rem;
         margin-left: -.2rem;
     }
-    /*
-    .separation {
-        font-size: 1.25rem;
-        
-        margin-top: 1.49rem;
-        margin-bottom: 3.3rem;
-        width: 100%;
-    }
-    .prompt--or {
-        margin-top: -5px;
-    }
-    .divider {
-        width: 12.156rem;
-    }
-    .divider--left {
-        justify-self: flex-start;
-    }
-    .divider--right {
-        justify-self: flex-end;
-    }
-    .social-media-div {
-        margin-bottom: 2.5rem;
-        padding-left: 4.688rem;
-        justify-content: flex-start;
-    }
-    .social-media-container {
-        margin-left: -2px;
-        gap: 0;
-    }
-    .social-media--last {
-        margin-bottom: 3.813rem;
-    }
-    .icon {
-        margin: 0;
-        padding: 0;
-        width: 2.75rem;
-        height: 2.75rem;
-
-        margin-right: 1.563rem;
-    }
-    */
+    /* END LOGIN */
 }
 
 /** DESKTOP **/
 @media screen and (min-width: 1140px) {
+    /* START LOGIN */
     .login--container {
         background: url(../img/backgrounds/login_desktop.png);
+        
+        padding: 4.5rem 31.0625rem 5rem 31.125rem;
     }
+    .title--login {
+        font-size: 2.25rem;
+    }
+    .login-screen {
+        width: 27.813rem;
+        padding: 2rem 2.75rem 2.7rem 2.813rem;
+        margin: 0 auto;
+        margin-top: 3.5rem;
+    }
+    form {
+        margin: 0;
+        margin-top: 1.244rem;
+        gap: 0;
+    }
+    .input--full-width {
+        padding-left: 1.142rem;
+        font-size: 0.813rem;
+        height: 2.324rem;
+        width: 22.194rem;
+    }
+    .password--container {
+        margin-top: 0.664rem;
+        width: 22.194rem;
+    }
+    .password-eye {
+        width: 1.125rem;
+        height: .75rem;
+        margin-right: 0;
+        right: 1.176rem;
+    }
+    .user-extras {
+        font-size: 0.625rem;
+
+        width: 22.194rem;
+        padding: 0 1.188rem 0 .937rem;
+        margin-top: .584rem;
+        margin-bottom: 0;
+    }
+    .input-checkbox {
+        width: 1.125rem;
+        height: 1.125rem;
+
+        border-radius: .188rem;
+    }
+    .login-btn {
+        background-color: #2791C2;
+        
+        font-size: 0.938rem;
+
+        padding: 0;
+        width: 22.125rem;
+        height: 2.938rem;
+        margin-top: .75rem;
+    }
+    .register-prompt {
+        margin: 0;
+        margin-top: .625rem;
+
+        line-height: 2rem;
+        font-size: .625rem;
+    }
+    .separation {
+        margin-top: .25rem;
+
+        grid-template-columns: 8.883rem 1fr 8.883rem;
+        gap: 1.781rem;
+
+        line-height: 2rem;
+        font-size: .813rem;
+    }
+    .divider {
+        width: 100%;
+    }
+    /* END LOGIN */
 }
+
+
+/** HEADER BREAKPOINT **/
+/* 
+    @media screen and (min-width: 465px) {
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .search--container {
+            width: 15.25rem;
+        }
+        .profile-container {
+            min-width: 5.938rem;
+        }
+    } 
+*/
 
 /*
 div {
