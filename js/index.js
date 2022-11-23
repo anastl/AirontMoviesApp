@@ -1,4 +1,14 @@
-import { showDetails, displayLogin, displayHeaderAndSearchBar, homeMockup, handleLogin, getDetailsHtml, showResAndSetUpBtn } from './utils.js'
+import { 
+    changeClass, 
+    setUpSelectionButtons, 
+    showDetails, 
+    displayLogin, 
+    displayHeaderAndSearchBar, 
+    homeMockup, 
+    handleLogin, 
+    getDetailsHtml, 
+    showResAndSetUpBtn 
+} from './utils.js'
 import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 
 // getGenres()
@@ -20,6 +30,7 @@ import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 // DISPLAY MOCKUPS
 // document.body.innerHTML = displayLogin()
 showResAndSetUpBtn()
+setUpSelectionButtons()
 
 // showDetails()
 

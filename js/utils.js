@@ -40,7 +40,11 @@ class Movie {
         this.backgroundURL = backgroundURL
     }
     getSummary = () => {
-        return this.summary.split(' ').length < 46 ? this.summary : this.summary.split(' ').slice( 0, 45 ).join(' ') + "..."
+        if ( window.innerWidth >= 834 ) {
+            return this.summary
+        } else {
+            return this.summary.split(' ').slice( 0, 45 ).join(' ') + "..."
+        }
     }
     getStarsArray = () => {
         if ( starsRating/2 > 0 ){
@@ -193,6 +197,64 @@ function displayHeaderAndSearchBar() {
     `)
 }
 
+function changeClass( selected ) {
+    const oldClass = selected === 'grid' ? 'column' : 'grid'
+    const newClass = selected
+
+    const moviesMwArray = [ ... document.getElementsByClassName('mw') ]
+    moviesMwArray.forEach( movie => {
+        movie.classList.remove( `mw-${oldClass}` )
+        movie.classList.add( `mw-${newClass}` )
+    } )
+
+    const titlesMwArray = [ ... document.getElementsByClassName('mw-title') ]
+    titlesMwArray.forEach( title => {
+        title.classList.remove( `mw-title-${oldClass}` )
+        title.classList.add( `mw-title-${newClass}` )
+    } )
+
+    const summaryMwArray = [ ... document.getElementsByClassName('summary--mw') ]
+    summaryMwArray.forEach( summaryClass => {
+        summaryClass.classList.remove( `summary--${oldClass}-mw` )
+        summaryClass.classList.add( `summary--${newClass}-mw` )
+    } )
+
+    const detailsMwArray = [ ... document.getElementsByClassName('details--mw') ]
+    detailsMwArray.forEach( detail => {
+        detail.classList.remove( `details--mw-${oldClass}` )
+        detail.classList.add( `details--mw-${newClass}` )
+    })
+
+    const starsContainerArray = [ ... document.getElementsByClassName('stars-container--mw') ]
+    starsContainerArray.forEach( starClass => {
+        starClass.classList.remove( `stars-container--mw-${oldClass}` )
+        starClass.classList.add( `stars-container--mw-${newClass}` )
+    })
+
+    document.getElementById('most-watched-movies').classList.remove( oldClass )
+    document.getElementById('most-watched-movies').classList.add( newClass )
+}
+
+function setUpSelectionButtons() {
+    const displaySelectionBtnsArr = [ ...document.getElementsByClassName('svg-btn') ]
+    
+    displaySelectionBtnsArr.forEach( btn => {
+        btn.addEventListener('click', e => {
+            if ( ! [...btn.classList].find( classBtn => classBtn === 'selected') ) {
+                btn.classList.add('add_selected')
+            }
+            displaySelectionBtnsArr.forEach( btn => {
+                btn.classList.remove('selected')
+                if ( [...btn.classList].find( classBtn => classBtn === 'add_selected') ) {
+                    btn.classList.remove('add_selected')
+                    btn.classList.add('selected')
+                }
+            })
+            changeClass( e.target.dataset.view )
+        } )
+    } )
+}
+
 // MOCKUPS
 // TODO DELETE
 
@@ -208,18 +270,18 @@ function mostWatchedhtml( movie ) {
     }
 
     return (`
-    <div class="mw" data-movieid='${ id }'
+    <div class="mw mw-column" data-movieid='${ id }'
         style="
             background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%), url('${ imgLong }');
             background-position: center;
             background-size: cover;"
     >
         <div class="details--mw">
-            <p class="text--bold movie-title mw-title">${ title }</p>
-            <div class="stars-container stars-container--mw">
+            <p class="text--bold movie-title mw-title mw-title-column">${ title }</p>
+            <div class="stars-container stars-container--mw stars-container--mw-column">
                 ${ getStarsArray() }
             </div>
-            <p class="summary summary--mw">${ summary }</p>
+            <p class="summary summary--mw summary--column-mw">${ summary }</p>
         </div>
     </div>
     `)
@@ -231,7 +293,7 @@ function resultMockup() {
     const getStarsArray = ( ) => {
         const starsArray = []
         for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
-            starsArray.push(`<div class="star">${ starFilled }</div>`)
+            starsArray.push(`<div class="star">${ starMw }</div>`)
         }
         return starsArray.join('')
     }
@@ -241,6 +303,7 @@ function resultMockup() {
         style="
             background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(${ imgLong });
             background-position: center;
+            background-size: cover;
     ">
         <div class="stars-and-genre">
             <p class="genre blue">${ genre }</p>
@@ -256,22 +319,42 @@ function resultMockup() {
 }
 
 function mostWatchedMockup() {
-    const moviesMW = [ movies[2][0], movies[3][0], movies[4][0] ]
-    
+    const moviesMW = [ movies[2][0], movies[3][0], movies[4][0] ]  
     const mwHtml = moviesMW.map( movie => mostWatchedhtml(movie) )
 
     return (`
-    <div class="most-watched-movies">
+    <div class="most-watched-movies column" id="most-watched-movies">
         ${ mwHtml.join('') }
     </div>
     `)
 }
 
+
+// TODO ADD ONWINDOWESIZE EVENT LISTENER TO DISPLAY 
+// <div class="display-type"> OR NOT
 function homeMockup() { // homeMockup = resultMockup + mostWatchedMockup
+    const displaytypeDiv = `
+    <div class="display-type">
+        <button data-view="grid" class="invisible-btn svg-btn">
+            <svg data-view="grid" class="display-mw" width="58" height="36" viewBox="0 0 58 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect data-view="grid" x="39" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
+                <rect data-view="grid" x="23" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
+                <rect data-view="grid" x="7" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
+            </svg>
+        </button>
+        <button data-view="column" class="invisible-btn svg-btn selected">
+            <svg data-view="column" class="display-mw" width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect data-view="column" x="7" y="6" width="45" height="24" rx="2" fill="#D9D9D9"/>
+            </svg>
+        </button>
+    </div>`
     return (`
         ${ resultMockup() }
         <div class="most-watched-container">
-            <p class="title title--mw text--bold">Most Watched Movies</p>
+            <div class="title-mw-and-mw-display">
+                <p class="title title--mw text--bold">Most Watched Movies</p>
+                ${ displaytypeDiv }
+            </div>
             ${ mostWatchedMockup() }
         </div>
     `)
@@ -279,18 +362,23 @@ function homeMockup() { // homeMockup = resultMockup + mostWatchedMockup
 
 // TODO ADAPT TO WORK WITH API
 function getDetailsHtml( movieId ) {
-    const { id, title, extended, starsRatingDets, releaseDate, genre, ogLang, imgSquare } = movies[movieId][0]
+    const { id, title, extended, starsRatingDets, releaseDate, genre, ogLang, imgLong } = movies[movieId][0]
     return(`
+    <div class="movie-modal">
         <div class="movie-dets">
             <div class="movie-header"
                 style="
-                    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%), url(${ imgSquare });
+                    background: 
+                        linear-gradient(
+                            180deg, rgba(0, 0, 0, 0) 0%, 
+                            rgba(17, 17, 17, 1) 100%), 
+                        url(${ imgLong });
                     background-repeat: no-repeat;
                     background-position: center;
                     background-size: cover;
                 "
             >
-                <img class="close" src="./img/vectors/close.png" alt="close modal" />
+                <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
                 <button id="play" class="play-btn">Play Trailer</button>
                 <h1 class="text--bold blue title title--dets">${ title }</h1>
             </div>
@@ -304,7 +392,7 @@ function getDetailsHtml( movieId ) {
                         </div>
                         <div class="details--individual">
                             <p class="text--bold details--title">Genre:</p>
-                            <p href="#" class="details--info genre-dets cyan underline">${ genre }</p>
+                            <a href="#" class="details--info genre-dets cyan underline">${ genre }</a>
                         </div>
                     </div>
                     <div class="details--column">
@@ -318,10 +406,10 @@ function getDetailsHtml( movieId ) {
                         </div>
                     </div>
                 </div>
-                    </div>
                 ${ getRecs( id ) }
             </div>
         </div>
+    </div>
     `)
 }
 
@@ -329,7 +417,6 @@ function getRecs( movieId ){
     const recsArray = []
     for ( const movie in movies ){
         const { id, title, imgSquare } = movies[movie][0]
-        console.log( id, movieId )
         if ( id != movieId ){
             recsArray.push(`<a class="img-link" href="#"><img class="rec-poster" src=${ imgSquare } alt="Poster for ${ title }" /></a>`)
         }
@@ -337,10 +424,10 @@ function getRecs( movieId ){
     } 
     return (`
         <div class="similar-container">
-            <p class="similar--title text--bold">Similar Movies:
+            <p class="similar--title text--bold">Similar Movies:</p>
             <div class="similar--movies">
                 ${ recsArray.join('') } 
-                <button id="load-more-similar" class="invisible-btn">
+                <button id="load-more-similar" class="invisible-btn img-link-btn">
                     <img src="./img/vectors/add.png" alt="more movies" />
                 </button>
             </div>
@@ -376,18 +463,24 @@ function setUpWatchBtns() {
 
 // showResAndSetUpBtn = displayHeaderAndSearchBar + homeMockup + setUpWatchBtns
 function showResAndSetUpBtn() { 
-    document.body.innerHTML = displayHeaderAndSearchBar() + homeMockup()
+    document.body.innerHTML = displayHeaderAndSearchBar() 
+    document.getElementById('results-container').innerHTML = homeMockup()
     setUpWatchBtns()
 }
 
 function showDetails() {
     document.body.innerHTML = getDetailsHtml( '1' )
+    document.getElementById('close-modal').addEventListener('click', e => {
+        console.log("clicked close")
+    })
 }
 
 export { 
     displayLogin, 
     displayHeaderAndSearchBar, 
     Movie, 
+    changeClass, 
+    setUpSelectionButtons, 
     homeMockup, 
     handleLogin, 
     getDetailsHtml, 
