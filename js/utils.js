@@ -1,55 +1,58 @@
-import data from './data.json' assert { type: "json" }
-const movies = data.Movies[0]
-// console.log(movies)
+import { 
+    getMovieById, 
+    getRecommendedMovies 
+} from './async.js'
 
-const starFilled = `<svg class="star-res filled" xmlns="http://www.w3.org/2000/svg" >
-<path fill-rule="evenodd" clip-rule="evenodd" 
-d="M11.7143 
-0.538086L14.6429 
-8.94634H23.4286L16.5952 
-14.387L19.0357 
-22.7952L11.7143 
-17.8492L4.39286 
-22.7952L6.83333 
-14.387L0 
-8.94634H8.78571L11.7143 
-0.538086ZM46.8571 
-0.538086L49.7857 214Z" />
+import { 
+    setUpSelectionButtons, 
+    setUpWatchBtns, 
+    showDetails,
+    changeClass
+} from './buttonsSetUp.js'
+
+
+const starFilled = `<svg class="star-res filled" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
 </svg>`
-const starMw = `<svg class="star-svg-mw filled" xmlns="http://www.w3.org/2000/svg" width="164" height="23" viewBox="0 0 164 23" >
-<path fill-rule="evenodd" clip-rule="evenodd" 
-d="M11.7143 
-0.538086L14.6429 
-8.94634H23.4286L16.5952 
-14.387L19.0357 
-22.7952L11.7143 
-17.8492L4.39286 
-22.7952L6.83333 
-14.387L0 
-8.94634H8.78571L11.7143 
-0.538086ZM46.8571 
-0.538086L49.7857 214Z" />`
+const starMw = `<svg class="star-svg-mw filled" stroke="#FF9900" xmlns="http://www.w3.org/2000/svg" width="164" height="23" viewBox="0 0 164 23" >
+<path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
+</svg>`
+const starEmpty = `<svg class="star-svg-mw" stroke="#FF9900" xmlns="http://www.w3.org/2000/svg" width="164" height="23" viewBox="0 0 164 23" >
+<path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
+</svg>`
 
 class Movie {
-    constructor( id, title, genreId, rating, summary, backgroundURL ){
+    constructor( 
+        id,
+        title,
+        genreIdArray,
+        rating,
+        summary,
+        backgroundURL,
+        releaseDate,
+        originalLanguage
+    ) {
         this.id = id
         this.title = title
-        this.genreId = genreId
+        this.genreId = genreIdArray[0]
         this.rating = rating
         this.summary = summary
-        this.backgroundURL = backgroundURL
+        this.backgroundURL = `https://image.tmdb.org/t/p/w1280/${backgroundURL}`
+        this.releaseDate = releaseDate || null
+        this.originalLanguage = originalLanguage || null
     }
     getSummary = () => {
-        if ( window.innerWidth >= 834 ) {
-            return this.summary
-        } else {
-            return this.summary.split(' ').slice( 0, 45 ).join(' ') + "..."
-        }
+        return this.summary.split(' ').length >= 30 ? this.summary.split(' ').slice( 0, 30 ).join(' ') + "..." : this.summary
+        // if ( window.innerWidth >= 834 ) {
+        //     return this.summary
+        // } else {
+        //     return this.summary.split(' ').slice( 0, 45 ).join(' ') + "..."
+        // }
     }
     getStarsArray = () => {
-        if ( starsRating/2 > 0 ){
+        if ( this.rating/2 > 0 ){
             const starsArray = []
-            for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
+            for ( let s = 0; s < Math.round( this.rating/2 ); s++) {
                 starsArray.push(`<div class="star">${ starFilled }</div>`)
             }
             return starsArray.join('')
@@ -57,16 +60,50 @@ class Movie {
             return `<div class="star">${ starEmpty }</div>`
         }
     }
-    getGenre = () => {
+    getStarsBaseFive = () => {
+        return Math.round( this.rating/2 )
+    }
+    getGenre = modal => {
         const genreArray = JSON.parse( sessionStorage.getItem('genres') )
-        const genreObj = genreArray.find( el => el.id === this.genreId )
-        return genreObj.name
+        let genre
+        if ( modal ) {
+            genreArray.forEach( genreObj => {
+                if ( genreObj.id === this.genreId.id ) {
+                    genre = genreObj.name
+                }
+            } )
+        } else {
+            genreArray.forEach( genreObj => {
+                if ( genreObj.id === this.genreId ) {
+                    genre = genreObj.name
+                }
+            } )
+        }
+        return genre
+
+    }
+    getLanguage = () => {
+        const languageArray = JSON.parse( sessionStorage.getItem('languages') )
+        const languageObj = languageArray.find( el => el.iso_639_1 === this.originalLanguage )
+        return languageObj.name
+    }
+    getReleaseDate = () => {
+        const [ year, month, day ] = this.releaseDate.split('-')
+        const date = new Date( Date.UTC( year, month, day ) )
+        const release = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long' }).format(date)
+        
+        const releaseArray = release.split(' ')
+        const releaseFormatted = releaseArray[0] + ' ' + releaseArray[1] + ', ' + releaseArray[2]
+        
+        return releaseFormatted 
     }
     getMovieDiv = () => {
         return (`
             <div class="movie mw"
             style="
-            background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(https://image.tmdb.org/t/p/w1280/${ this.backgroundURL });
+            background: 
+                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+                url(${ this.backgroundURL });
             background-position: center;
             background-size: cover;
             ">
@@ -74,7 +111,7 @@ class Movie {
                 <div class="stars-container">
                     ${ this.getStarsArray() }
                 </div>
-                <p class="summary">${ this.summary }</p>
+                <p class="summary">${ this.getSummary() }</p>
             </div>
         `)
     }
@@ -82,7 +119,9 @@ class Movie {
         return (`
             <div class="movie"
                 style="
-                    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(https://image.tmdb.org/t/p/w1280/${ this.backgroundURL });
+                    background: 
+                        linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+                        url(${ this.backgroundURL });
                     background-position: center;
                     background-size: cover;
             ">
@@ -93,9 +132,61 @@ class Movie {
                     </div>
                 </div>
                 <p class="text--bold movie-title">${ this.title }</p>
-                <p class="summary">${ this.summary }</p>
-                <button id="watch-movie" data-movieId='${ this.id }'>Watch Now</button>
+                <p class="summary">${ this.getSummary() }</p>
+                <button class="watch-now-btn" data-movieId='${ this.id }'>Watch Now</button>
             </div>
+        `)
+    }
+    getModal = () => {
+        return(`
+        <div class="movie-modal">
+            <div class="movie-dets">
+                <div class="movie-header"
+                    style="
+                        background: 
+                            linear-gradient(
+                                180deg, rgba(0, 0, 0, 0) 0%, 
+                                rgba(17, 17, 17, 1) 100%), 
+                            url(${ this.backgroundURL });
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: cover;
+                    "
+                >
+                    <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
+                    <button id="play" class="play-btn">Play Trailer</button>
+                    <h1 class="text--bold blue title title--dets">${ this.title }</h1>
+                </div>
+                <div class="movie-body">
+                    <p class="extended summary">${ this.summary }</p>
+                    <div class="details-and-similar--container">
+                        <div class="details--container">
+                            <div class="details--column">
+                                <div class="details--individual">
+                                    <p class="text--bold details--title">Release Date:</p>
+                                    <p class="details--info">${ this.getReleaseDate() }</p>
+                                </div>
+                                <div class="details--individual">
+                                    <p class="text--bold details--title">Genre:</p>
+                                    <a href="#" class="details--info genre-dets cyan underline">${ this.getGenre( true ) }</a>
+                                </div>
+                            </div>
+                            <div class="details--column">
+                                <div class="details--individual details--individual-extra-padding">
+                                    <p class="text--bold details--title">Original Language:</p>
+                                    <p class="details--info">${ this.getLanguage() }</p>
+                                </div>
+                                <div class="details--individual details--individual-extra-padding">
+                                    <p class="text--bold details--title">Popularity:</p>
+                                    <p class="details--info">${ this.getStarsBaseFive() } / 5</p>
+                                </div>
+                            </div>
+                        </div>
+                        ${ 'getRecs( this.id )' }
+                    </div>
+                </div>
+            </div>
+        </div>
         `)
     }
 }
@@ -192,72 +283,12 @@ function displayHeaderAndSearchBar() {
             </div>
         </div>
     </header>
-    <div class="results-container" id="results-container">
-    </div>
+    <div class="results-container" id="results-container"></div>
     `)
 }
 
-function changeClass( selected ) {
-    const oldClass = selected === 'grid' ? 'column' : 'grid'
-    const newClass = selected
-
-    const moviesMwArray = [ ... document.getElementsByClassName('mw') ]
-    moviesMwArray.forEach( movie => {
-        movie.classList.remove( `mw-${oldClass}` )
-        movie.classList.add( `mw-${newClass}` )
-    } )
-
-    const titlesMwArray = [ ... document.getElementsByClassName('mw-title') ]
-    titlesMwArray.forEach( title => {
-        title.classList.remove( `mw-title-${oldClass}` )
-        title.classList.add( `mw-title-${newClass}` )
-    } )
-
-    const summaryMwArray = [ ... document.getElementsByClassName('summary--mw') ]
-    summaryMwArray.forEach( summaryClass => {
-        summaryClass.classList.remove( `summary--${oldClass}-mw` )
-        summaryClass.classList.add( `summary--${newClass}-mw` )
-    } )
-
-    const detailsMwArray = [ ... document.getElementsByClassName('details--mw') ]
-    detailsMwArray.forEach( detail => {
-        detail.classList.remove( `details--mw-${oldClass}` )
-        detail.classList.add( `details--mw-${newClass}` )
-    })
-
-    const starsContainerArray = [ ... document.getElementsByClassName('stars-container--mw') ]
-    starsContainerArray.forEach( starClass => {
-        starClass.classList.remove( `stars-container--mw-${oldClass}` )
-        starClass.classList.add( `stars-container--mw-${newClass}` )
-    })
-
-    document.getElementById('most-watched-movies').classList.remove( oldClass )
-    document.getElementById('most-watched-movies').classList.add( newClass )
-}
-
-function setUpSelectionButtons() {
-    const displaySelectionBtnsArr = [ ...document.getElementsByClassName('svg-btn') ]
-    
-    displaySelectionBtnsArr.forEach( btn => {
-        btn.addEventListener('click', e => {
-            if ( ! [...btn.classList].find( classBtn => classBtn === 'selected') ) {
-                btn.classList.add('add_selected')
-            }
-            displaySelectionBtnsArr.forEach( btn => {
-                btn.classList.remove('selected')
-                if ( [...btn.classList].find( classBtn => classBtn === 'add_selected') ) {
-                    btn.classList.remove('add_selected')
-                    btn.classList.add('selected')
-                }
-            })
-            changeClass( e.target.dataset.view )
-        } )
-    } )
-}
-
-// MOCKUPS
 // TODO DELETE
-
+// Mockups
 function mostWatchedhtml( movie ) {
     const {id, title, summary, starsRating, imgLong } = movie
 
@@ -287,36 +318,38 @@ function mostWatchedhtml( movie ) {
     `)
 }
 
-function resultMockup() {
-    const { id, title, summary, starsRating, genre, imgLong } = movies[1][0]
+// function resultMockup() {
+//     const { id, title, summary, starsRating, genre, imgLong } = movies[1][0]
     
-    const getStarsArray = ( ) => {
-        const starsArray = []
-        for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
-            starsArray.push(`<div class="star">${ starMw }</div>`)
-        }
-        return starsArray.join('')
-    }
+//     const getStarsArray = ( ) => {
+//         const starsArray = []
+//         for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
+//             starsArray.push(`<div class="star">${ starMw }</div>`)
+//         }
+//         return starsArray.join('')
+//     }
 
-    return `
-    <div class="movie"
-        style="
-            background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(${ imgLong });
-            background-position: center;
-            background-size: cover;
-    ">
-        <div class="stars-and-genre">
-            <p class="genre blue">${ genre }</p>
-            <div class="stars-container">
-                ${ getStarsArray() }
-            </div>
-        </div>
-        <p class="text--bold movie-title">${ title }</p>
-        <p class="summary">${ summary }</p>
-        <button class="watch-now-btn" id="watch-movie" data-movieid='${ id }'>Watch Now</button>
-    </div>
-    `
-}
+//     return `
+//     <div class="movie"
+//         style="
+//             background: 
+//                 linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+//                 url(${ imgLong });
+//             background-position: center;
+//             background-size: cover;
+//     ">
+//         <div class="stars-and-genre">
+//             <p class="genre blue">${ genre }</p>
+//             <div class="stars-container">
+//                 ${ getStarsArray() }
+//             </div>
+//         </div>
+//         <p class="text--bold movie-title">${ title }</p>
+//         <p class="summary">${ summary }</p>
+//         <button class="watch-now-btn" id="watch-movie" data-movieid='${ id }'>Watch Now</button>
+//     </div>
+//     `
+// }
 
 function mostWatchedMockup() {
     const moviesMW = [ movies[2][0], movies[3][0], movies[4][0] ]  
@@ -329,9 +362,6 @@ function mostWatchedMockup() {
     `)
 }
 
-
-// TODO ADD ONWINDOWESIZE EVENT LISTENER TO DISPLAY 
-// <div class="display-type"> OR NOT
 function homeMockup() { // homeMockup = resultMockup + mostWatchedMockup
     const displaytypeDiv = `
     <div class="display-type">
@@ -360,8 +390,31 @@ function homeMockup() { // homeMockup = resultMockup + mostWatchedMockup
     `)
 }
 
-// TODO ADAPT TO WORK WITH API
 function getDetailsHtml( movieId ) {
+    getMovieById( movieId )
+        .then( movieRes => {
+            const { id,
+                title,
+                genres,
+                vote_average,
+                overview,
+                backdrop_path,
+                release_date,
+                original_language
+            } = movieRes
+            const movieModal = new Movie (
+                id,
+                title,
+                genres,
+                vote_average,
+                overview,
+                backdrop_path,
+                release_date,
+                original_language
+            )
+            document.body.innerHTML = movieModal.getModal()
+        } )
+    /*
     const { id, title, extended, starsRatingDets, releaseDate, genre, ogLang, imgLong } = movies[movieId][0]
     return(`
     <div class="movie-modal">
@@ -384,55 +437,67 @@ function getDetailsHtml( movieId ) {
             </div>
             <div class="movie-body">
                 <p class="extended summary">${ extended }</p>
-                <div class="details--container">
-                    <div class="details--column">
-                        <div class="details--individual">
-                            <p class="text--bold details--title">Release Date:</p>
-                            <p class="details--info">${ releaseDate }</p>
+                <div class="details-and-similar--container">
+                    <div class="details--container">
+                        <div class="details--column">
+                            <div class="details--individual">
+                                <p class="text--bold details--title">Release Date:</p>
+                                <p class="details--info">${ releaseDate }</p>
+                            </div>
+                            <div class="details--individual">
+                                <p class="text--bold details--title">Genre:</p>
+                                <a href="#" class="details--info genre-dets cyan underline">${ genre }</a>
+                            </div>
                         </div>
-                        <div class="details--individual">
-                            <p class="text--bold details--title">Genre:</p>
-                            <a href="#" class="details--info genre-dets cyan underline">${ genre }</a>
+                        <div class="details--column">
+                            <div class="details--individual details--individual-extra-padding">
+                                <p class="text--bold details--title">Original Language:</p>
+                                <p class="details--info">${ ogLang }</p>
+                            </div>
+                            <div class="details--individual details--individual-extra-padding">
+                                <p class="text--bold details--title">Popularity:</p>
+                                <p class="details--info">${ starsRatingDets } / 5</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="details--column">
-                        <div class="details--individual details--individual-extra-padding">
-                            <p class="text--bold details--title">Original Language:</p>
-                            <p class="details--info">${ ogLang }</p>
-                        </div>
-                        <div class="details--individual details--individual-extra-padding">
-                            <p class="text--bold details--title">Popularity:</p>
-                            <p class="details--info">${ starsRatingDets } / 5</p>
-                        </div>
-                    </div>
+                    ${ getRecs( id ) }
                 </div>
-                ${ getRecs( id ) }
             </div>
         </div>
     </div>
     `)
+    */
 }
 
+// TODO ADAPT TO WORK WITH API
 function getRecs( movieId ){
-    const recsArray = []
-    for ( const movie in movies ){
-        const { id, title, imgSquare } = movies[movie][0]
-        if ( id != movieId ){
-            recsArray.push(`<a class="img-link" href="#"><img class="rec-poster" src=${ imgSquare } alt="Poster for ${ title }" /></a>`)
-        }
-        else { continue }
-    } 
-    return (`
-        <div class="similar-container">
-            <p class="similar--title text--bold">Similar Movies:</p>
-            <div class="similar--movies">
-                ${ recsArray.join('') } 
-                <button id="load-more-similar" class="invisible-btn img-link-btn">
-                    <img src="./img/vectors/add.png" alt="more movies" />
-                </button>
-            </div>
-        </div>
-    `)
+    getRecommendedMovies( movieId )
+        .then( recommendedArray => {
+            const recommendedImg = recommendedArray.map( ( { poster_path, title } ) => {
+                return `<img src=https://image.tmdb.org/t/p/w1280/${poster_path} alt='poster for ${ title }' />`
+            } )
+            console.log( recommendedImg )
+            return recommendedImg
+        } )
+    // const recsArray = []
+    // for ( const movie in movies ){
+    //     const { id, title, imgSquare } = movies[movie][0]
+    //     if ( id != movieId ){
+    //         recsArray.push(`<a class="img-link" href="#"><img class="rec-poster" src=${ imgSquare } alt="Poster for ${ title }" /></a>`)
+    //     }
+    //     else { continue }
+    // } 
+    // return (`
+    //     <div class="similar-container">
+    //         <p class="similar--title text--bold">Similar Movies:</p>
+    //         <div class="similar--movies">
+    //             ${ recsArray.join('') } 
+    //             <button id="load-more-similar" class="invisible-btn img-link-btn">
+    //                 <img src="./img/vectors/add.png" alt="more movies" />
+    //             </button>
+    //         </div>
+    //     </div>
+    // `)
 }
 
 function handleLogin() {
@@ -448,19 +513,6 @@ function handleLogin() {
     } )
 }
 
-function handleWatch( id ){
-    document.body.innerHTML = getDetailsHtml( id )
-}
-
-function setUpWatchBtns() {
-    const watchBtn = document.getElementById('watch-movie')
-
-    watchBtn.addEventListener('click', e => {
-        e.preventDefault()
-        handleWatch( watchBtn.dataset.movieid )
-    } )
-}
-
 // showResAndSetUpBtn = displayHeaderAndSearchBar + homeMockup + setUpWatchBtns
 function showResAndSetUpBtn() { 
     document.body.innerHTML = displayHeaderAndSearchBar() 
@@ -468,22 +520,15 @@ function showResAndSetUpBtn() {
     setUpWatchBtns()
 }
 
-function showDetails() {
-    document.body.innerHTML = getDetailsHtml( '1' )
-    document.getElementById('close-modal').addEventListener('click', e => {
-        console.log("clicked close")
-    })
-}
-
 export { 
+    Movie, 
     displayLogin, 
     displayHeaderAndSearchBar, 
-    Movie, 
-    changeClass, 
-    setUpSelectionButtons, 
+    mostWatchedhtml, 
+    mostWatchedMockup, 
     homeMockup, 
-    handleLogin, 
     getDetailsHtml, 
-    showResAndSetUpBtn,
-    showDetails 
+    getRecs, 
+    handleLogin, 
+    showResAndSetUpBtn
 }

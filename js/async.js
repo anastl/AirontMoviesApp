@@ -21,12 +21,29 @@ async function getMostWatchedMovies() {
     } catch ( e ) { console.log( e ) }
 }
 
+async function getRecommendedMovies( idBaseMovie ) {
+    const baseUrl = `https://api.themoviedb.org/3/movie/${ idBaseMovie }/recommendations?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&page=1`
+    const res = await fetch( baseUrl )
+    const recommended = await res.json()
+
+    return recommended.results
+}
+
 async function getGenres() {
     try {
         const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=a549a10218e6b1e84fddfc056a830b2c`
         const res = await fetch(url)
         const data = await res.json()
         return data.genres
+    } catch ( e ) { console.log( e ) }
+}
+
+async function getLangs() {
+    try {
+        const url = `https://api.themoviedb.org/3/configuration/languages?api_key=a549a10218e6b1e84fddfc056a830b2c`
+        const res = await fetch(url)
+        const data = await res.json()
+        return data
     } catch ( e ) { console.log( e ) }
 }
 
@@ -37,18 +54,50 @@ async function getMovieHtml ( query ) {
         const searchResults = await res.json()
 
         const moviesArray = searchResults.results.slice(0,5).map( ( { id, original_title, genre_ids, vote_average, overview, backdrop_path } ) => {
-            const movie = new Movie( id, original_title, genre_ids[0], vote_average, overview, backdrop_path ) 
+            const movie = new Movie( id, original_title, genre_ids, vote_average, overview, backdrop_path ) 
             return movie.getMovieDivWithButton()
         } )
            
         // TODO UNCOMMENT FOLLOWING LINE AND DELETE THE ONE AFTER 
-        return moviesArray.join('') + await getMostWatchedMovies() 
+        return moviesArray.join('') + await getMostWatchedMovies()
         // return moviesArray.join('')
         return await getMostWatchedMovies() 
     } catch ( e ) { console.log( e ) }
 }
 
-export { getMostWatchedMovies, getMovieHtml, getGenres }
+async function getMovieById( id ) {
+    try {
+        const movieUrl = `https://api.themoviedb.org/3/movie/${id}?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US`
+        const res = await fetch( movieUrl )
+        const movie = await res.json()
+
+        return await movie
+    } catch ( e ) { console.log( e ) }
+}
+
+async function search( query ) {
+    const urlGenre = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&with_genres=${query}`
+    const urlMovie = `https://api.themoviedb.org/3/search/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&query=${ query }&include_adult=false`
+
+    const genreRes = await fetch (urlGenre)
+    const movieRes = await fetch (urlMovie)
+
+    const genreData = await genreRes.json()
+    const movieData = await movieRes.json()
+
+    console.log( movieData )
+    console.log( genreData )
+}
+
+export { 
+    getMostWatchedMovies,
+    getRecommendedMovies,
+    getGenres,
+    getLangs,
+    getMovieHtml,
+    getMovieById,
+    search
+}
 // https://image.tmdb.org/t/p/w780/${backdrop_path}
 // <img class="movie-poster" src="https://image.tmdb.org/t/p/w780/${backdrop_path}" alt="${original_title} poster" aria-hidden="true"/> 
 // <div class="movie-poster" style="background: url(https://image.tmdb.org/t/p/w780/${backdrop_path});" ></div> 

@@ -1,21 +1,45 @@
 import { 
-    changeClass, 
-    setUpSelectionButtons, 
-    showDetails, 
+    Movie, 
     displayLogin, 
     displayHeaderAndSearchBar, 
+    mostWatchedhtml, 
+    mostWatchedMockup, 
     homeMockup, 
-    handleLogin, 
     getDetailsHtml, 
-    showResAndSetUpBtn 
+    getRecs, 
+    handleLogin, 
+    showResAndSetUpBtn
 } from './utils.js'
-import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 
-// getGenres()
-//     .then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
+import { 
+    getMostWatchedMovies,
+    getRecommendedMovies,
+    getGenres,
+    getLangs,
+    getMovieHtml,
+    getMovieById,
+    search
+} from './async.js'
 
-// document.body.innerHTML = displayHeaderAndSearchBar()
-// const searchBar = document.getElementById('search-movie')
+import {
+    setUpSelectionButtons, 
+    setUpWatchBtns, 
+    showDetails,
+    changeClass
+} from './buttonsSetUp.js'
+
+getGenres().then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
+getLangs().then( langsArray => sessionStorage.setItem( 'languages', JSON.stringify( langsArray ) ) )
+
+document.body.innerHTML = displayHeaderAndSearchBar()
+const searchBar = document.getElementById('search-movie')
+
+getMovieHtml( 'harry' )
+    .then( htmlRes => {
+        const resContainer = document.getElementById('results-container')
+        resContainer.innerHTML = htmlRes
+        setUpWatchBtns()
+    } )
 
 // searchBar.addEventListener( 'keyup', e => {
 //     if ( e.key !== 'Enter' ) { return }   
@@ -29,7 +53,7 @@ import { getMostWatchedMovies, getMovieHtml, getGenres } from './async.js'
 
 // DISPLAY MOCKUPS
 // document.body.innerHTML = displayLogin()
-showResAndSetUpBtn()
+// showResAndSetUpBtn()
 setUpSelectionButtons()
 
 // showDetails()
