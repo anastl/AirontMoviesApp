@@ -84,9 +84,20 @@ function changeClass( selected ) {
     document.getElementById('most-watched-movies').classList.add( newClass )
 }
 
+function setUpRecommendedMovies() {
+    const recs = [ ... document.getElementsByClassName('img-link') ]
+    recs.forEach( rec => {
+        rec.addEventListener('click', () => {
+            const movieId = rec.dataset.movieid
+            getDetailsHtml( movieId )
+        } )
+    } )
+}
+
 export {
     setUpSelectionButtons, 
     setUpWatchBtns, 
     showDetails,
-    changeClass
+    changeClass,
+    setUpRecommendedMovies
 }

@@ -1,13 +1,15 @@
 import { 
     getMovieById, 
-    getRecommendedMovies 
+    getRecommendedMovies,
+    getRecs
 } from './async.js'
 
 import { 
     setUpSelectionButtons, 
     setUpWatchBtns, 
     showDetails,
-    changeClass
+    changeClass,
+    setUpRecommendedMovies
 } from './buttonsSetUp.js'
 
 
@@ -182,7 +184,7 @@ class Movie {
                                 </div>
                             </div>
                         </div>
-                        ${ 'getRecs( this.id )' }
+                        <div class="similar-container" id="similar-container" ></div>
                     </div>
                 </div>
             </div>
@@ -414,6 +416,11 @@ function getDetailsHtml( movieId ) {
             )
             document.body.innerHTML = movieModal.getModal()
         } )
+    getRecommendedMovies( movieId )
+        .then( moviesRec => {
+            document.getElementById('similar-container').innerHTML = moviesRec
+            setUpRecommendedMovies()
+        } )
     /*
     const { id, title, extended, starsRatingDets, releaseDate, genre, ogLang, imgLong } = movies[movieId][0]
     return(`
@@ -470,36 +477,6 @@ function getDetailsHtml( movieId ) {
 }
 
 // TODO ADAPT TO WORK WITH API
-function getRecs( movieId ){
-    getRecommendedMovies( movieId )
-        .then( recommendedArray => {
-            const recommendedImg = recommendedArray.map( ( { poster_path, title } ) => {
-                return `<img src=https://image.tmdb.org/t/p/w1280/${poster_path} alt='poster for ${ title }' />`
-            } )
-            console.log( recommendedImg )
-            return recommendedImg
-        } )
-    // const recsArray = []
-    // for ( const movie in movies ){
-    //     const { id, title, imgSquare } = movies[movie][0]
-    //     if ( id != movieId ){
-    //         recsArray.push(`<a class="img-link" href="#"><img class="rec-poster" src=${ imgSquare } alt="Poster for ${ title }" /></a>`)
-    //     }
-    //     else { continue }
-    // } 
-    // return (`
-    //     <div class="similar-container">
-    //         <p class="similar--title text--bold">Similar Movies:</p>
-    //         <div class="similar--movies">
-    //             ${ recsArray.join('') } 
-    //             <button id="load-more-similar" class="invisible-btn img-link-btn">
-    //                 <img src="./img/vectors/add.png" alt="more movies" />
-    //             </button>
-    //         </div>
-    //     </div>
-    // `)
-}
-
 function handleLogin() {
     const loginBtn = document.getElementById('login')
 
@@ -528,7 +505,6 @@ export {
     mostWatchedMockup, 
     homeMockup, 
     getDetailsHtml, 
-    getRecs, 
     handleLogin, 
     showResAndSetUpBtn
 }

@@ -21,14 +21,6 @@ async function getMostWatchedMovies() {
     } catch ( e ) { console.log( e ) }
 }
 
-async function getRecommendedMovies( idBaseMovie ) {
-    const baseUrl = `https://api.themoviedb.org/3/movie/${ idBaseMovie }/recommendations?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&page=1`
-    const res = await fetch( baseUrl )
-    const recommended = await res.json()
-
-    return recommended.results
-}
-
 async function getGenres() {
     try {
         const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=a549a10218e6b1e84fddfc056a830b2c`
@@ -75,6 +67,41 @@ async function getMovieById( id ) {
     } catch ( e ) { console.log( e ) }
 }
 
+async function getRecommendedMovies( idBaseMovie ) {
+    const baseUrl = `https://api.themoviedb.org/3/movie/${ idBaseMovie }/recommendations?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&page=1`
+    const res = await fetch( baseUrl )
+    const recommended = await res.json()
+
+    const recommendedArray = recommended.results
+    const imgArray = recommendedArray.map( ( { backdrop_path, title, id } ) => {
+        if ( backdrop_path ) {
+            return `
+            <a class="img-link" href="#" data-movieid="${id}">
+                <img class="rec-poster" data-movieid="${id}" src=https://image.tmdb.org/t/p/w1280/${backdrop_path} alt='poster for ${ title }' />
+            </a>`
+        }
+    } )
+
+    const recommendedDiv = `
+        <p class="similar--title text--bold">Similar Movies:</p>
+        <div class="similar--movies">
+            ${ imgArray.join('') }
+            <button id="load-more-similar" class="invisible-btn img-link-btn">
+                <img src="./img/vectors/add.png" alt="more movies" />
+            </button>
+        </div>`
+
+    return recommendedDiv
+}
+
+async function getRecs( movieId ){
+//     const myRes = getRecommendedMovies( movieId )
+//         .then( recommendedArray => {
+//             const recommendedImg = 
+//         } )
+//     return myRes
+}
+
 async function search( query ) {
     const urlGenre = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&with_genres=${query}`
     const urlMovie = `https://api.themoviedb.org/3/search/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&query=${ query }&include_adult=false`
@@ -90,12 +117,13 @@ async function search( query ) {
 }
 
 export { 
-    getMostWatchedMovies,
-    getRecommendedMovies,
-    getGenres,
-    getLangs,
-    getMovieHtml,
-    getMovieById,
+    getMostWatchedMovies, 
+    getRecommendedMovies, 
+    getGenres, 
+    getLangs, 
+    getMovieHtml, 
+    getMovieById, 
+    getRecs, 
     search
 }
 // https://image.tmdb.org/t/p/w780/${backdrop_path}

@@ -613,6 +613,10 @@ header {
     margin: 0;
     padding: 0;
 }
+.rec-poster {
+    object-fit: cover;
+    height: 100%;
+}
 .similar--title {
     font-size: 1.5rem;
 }
