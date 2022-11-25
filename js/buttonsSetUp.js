@@ -1,6 +1,6 @@
 import {
-    displayLogin, 
-    displayHeaderAndSearchBar, 
+    loginHtml, 
+    headerAndSearchBarHtml, 
     Movie, 
     homeMockup, 
     getDetailsHtml, 

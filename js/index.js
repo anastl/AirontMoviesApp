@@ -1,12 +1,14 @@
 import { 
     Movie, 
-    displayLogin, 
-    displayHeaderAndSearchBar, 
+    loginHtml, 
+    handleLogin, 
+    headerAndSearchBarHtml, 
     mostWatchedhtml, 
     mostWatchedMockup, 
     homeMockup, 
     getDetailsHtml, 
-    showResAndSetUpBtn
+    showResAndSetUpBtn,
+    displayLogin
 } from './utils.js'
 
 import { 
@@ -17,7 +19,7 @@ import {
     getMovieHtml,
     getMovieById,
     search,
-    handleLogin
+    getUsers
 } from './async.js'
 
 import {
@@ -32,12 +34,11 @@ import {
 getGenres().then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
 getLangs().then( langsArray => sessionStorage.setItem( 'languages', JSON.stringify( langsArray ) ) )
 
-document.getElementById('master-container').innerHTML = displayLogin()
-handleLogin()
+displayLogin()
 
 /*
 
-document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar()
+document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
 const searchBar = document.getElementById('search-movie')
 
 getMostWatchedMovies()
@@ -84,14 +85,14 @@ searchBar.addEventListener( 'keyup', e => {
 } )
 
 // DISPLAY MOCKUPS
-// document.getElementById('master-container').innerHTML = displayLogin()
+// document.getElementById('master-container').innerHTML = loginHtml
 // showResAndSetUpBtn()
 setUpSelectionButtons()
 
 // showDetails()
 
 /*
-const callAsync = displayHeaderAndSearchBar() 
+const callAsync = headerAndSearchBarHtml 
 document.getElementById('master-container').innerHTML = callAsync
 
 const resultsContainer = document.getElementById('results-container')

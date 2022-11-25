@@ -129,7 +129,7 @@ label {
 /* END GENERAL */
 
 /* START LOGIN */
-.login-error-msg.show {
+.login-error-msg {
     color: red;
     font-size: 1.2rem;
     font-weight: bolder;
@@ -195,7 +195,6 @@ label {
     align-self: center;
     right: 0;
     margin-right: 1.125rem;
-    /* TODO CHECK IF MARGIN-RIGHT AND RIGHT CAN BE SWAPPED */
 }
 .user-extras {
     display: flex;

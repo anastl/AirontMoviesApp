@@ -1,4 +1,4 @@
-import { displayHeaderAndSearchBar, Movie } from './utils.js'
+import { headerAndSearchBarHtml, Movie } from './utils.js'
 
 async function getMostWatchedMovies() {
     try {
@@ -143,51 +143,10 @@ async function search( query ) {
     return resultsDiv
 }
 
-function handleLogin() {
-    const loginBtn = document.getElementById('login')
-
-    async function getUsers(){
-        const res = await fetch(`http://localhost:3002/users/`)
-        const data = await res.json()
-        return data
-    }
-
-    loginBtn.addEventListener('click', e => {
-        e.preventDefault()
-
-        const emailInput = document.getElementById('email-input')
-        const passwordInput = document.getElementById('password-input')
-
-        getUsers( )
-            .then( usersArray => {
-                const userFound = usersArray.find( user => user.email === emailInput.value )
-                if ( userFound ) { // The email exists in the DataBase
-                    if ( userFound.password === passwordInput.value ) {
-                        document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar()
-                        getMostWatchedMovies()
-                            .then( mostWatched => {
-                                document.getElementById('results-container').innerHTML = mostWatched
-                                setUpMovies()
-                            } )
-                    } 
-                    else {
-                        const errorSpan = document.getElementById('login-error-msg')
-                        errorSpan.classList.add('show')
-                        errorSpan.textContent= `The password is incorrect, please try again`
-                    }
-                }
-                else { // The email doesn't exist in the DataBase
-                    const errorSpan = document.getElementById('login-error-msg')
-                    errorSpan.classList.add('show')
-                    errorSpan.textContent = `The email you provided couldn't be found, please try again`
-                }
-            } )
-        
-        // document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar()
-        
-        // const resContainer = document.getElementById('results-container')
-        // resContainer.innerHTML = homeMockup()
-    } )
+async function getUsers(){
+    const res = await fetch(`http://localhost:3002/users/`)
+    const data = await res.json()
+    return data
 }
 
 export { 
@@ -198,7 +157,7 @@ export {
     getMovieHtml, 
     getMovieById, 
     search,
-    handleLogin
+    getUsers
 }
 // https://image.tmdb.org/t/p/w780/${backdrop_path}
 // <img class="movie-poster" src="https://image.tmdb.org/t/p/w780/${backdrop_path}" alt="${original_title} poster" aria-hidden="true"/> 
