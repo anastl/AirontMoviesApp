@@ -2,7 +2,7 @@ import { headerAndSearchBarHtml, Movie } from './utils.js'
 
 async function getMostWatchedMovies() {
     try {
-        const baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
+        const baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true`
         const res = await fetch( baseUrl )
         const mostWatched = await res.json()
 
@@ -103,6 +103,8 @@ async function search( query ) {
         }
     } )
 
+    // SI NO ESTÁ EL GÉNERO, NO BUSCAR GÉNERO EN LA API
+
     const urlGenre = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres=${genreToUrl}`
     const urlMovie = `https://api.themoviedb.org/3/search/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&query=${ query }&include_adult=false`
 
@@ -143,10 +145,23 @@ async function search( query ) {
     return resultsDiv
 }
 
-async function getUsers(){
-    const res = await fetch(`http://localhost:3002/users/`)
-    const data = await res.json()
-    return data
+async function getUser( email, password ){
+    // Password123!
+    // email@email.com
+    try {
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( { "email": email, "password": password} )
+        }
+    
+        const res = await fetch( `http://localhost:3000/login/`, options )
+        const data = await res.json()
+        return data
+    } 
+    catch ( error ) {
+        console.log( error )
+    }
 }
 
 export { 
@@ -157,7 +172,7 @@ export {
     getMovieHtml, 
     getMovieById, 
     search,
-    getUsers
+    getUser
 }
 // https://image.tmdb.org/t/p/w780/${backdrop_path}
 // <img class="movie-poster" src="https://image.tmdb.org/t/p/w780/${backdrop_path}" alt="${original_title} poster" aria-hidden="true"/> 

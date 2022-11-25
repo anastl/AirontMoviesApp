@@ -6,6 +6,16 @@ import {
     getDetailsHtml, 
     showResAndSetUpBtn
 } from './utils.js'
+import {
+    getMostWatchedMovies, 
+    getRecommendedMovies, 
+    getGenres, 
+    getLangs, 
+    getMovieHtml, 
+    getMovieById, 
+    search,
+    getUser
+} from './async.js'
 
 function setUpSelectionButtons() {
     const displaySelectionBtnsArr = [ ...document.getElementsByClassName('svg-btn') ]
@@ -101,6 +111,13 @@ function setUpMovies() {
             getDetailsHtml( movieId )
         } )
     } )
+}
+
+function setUpHome() {
+    getMostWatchedMovies()
+        .then( mostWatchedDiv => {
+            console.log( mostWatchedDiv )
+        } )
 }
 
 export {

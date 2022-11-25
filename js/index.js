@@ -8,7 +8,8 @@ import {
     homeMockup, 
     getDetailsHtml, 
     showResAndSetUpBtn,
-    displayLogin
+    displayLogin,
+    searchFunctionality
 } from './utils.js'
 
 import { 
@@ -19,7 +20,7 @@ import {
     getMovieHtml,
     getMovieById,
     search,
-    getUsers
+    getUser
 } from './async.js'
 
 import {
@@ -37,9 +38,6 @@ getLangs().then( langsArray => sessionStorage.setItem( 'languages', JSON.stringi
 displayLogin()
 
 /*
-
-document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
-const searchBar = document.getElementById('search-movie')
 
 getMostWatchedMovies()
     .then( mostWatched => {
@@ -59,30 +57,8 @@ getMostWatchedMovies()
     //     resContainer.innerHTML = htmlRes
     //     setUpWatchBtns()
     // } )
-
-searchBar.addEventListener( 'keyup', e => {    
-    search( searchBar.value )
-        .then( searchResults => {
-            document.getElementById('dropdown').innerHTML = searchResults
-        } )
-
-    if ( ! searchBar.value ){
-        document.getElementById('dropdown').innerHTML = ''
-    }
-
-    console.log( e.key === 'Enter', searchBar.value, e.key === 'Enter' && searchBar.value ) 
-    if( e.key === 'Enter' && searchBar.value ) {
-        getMovieHtml( searchBar.value )
-            .then( htmlRes => {
-                const resContainer = document.getElementById('results-container')
-                resContainer.innerHTML = htmlRes
-                setUpWatchBtns()
-            } )
-        searchBar.value = ''
-        document.getElementById('dropdown').innerHTML = ''
-    }
-
-} )
+*/
+// searchFunctionality()
 
 // DISPLAY MOCKUPS
 // document.getElementById('master-container').innerHTML = loginHtml

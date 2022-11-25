@@ -2,7 +2,8 @@ import {
     getMovieById, 
     getRecommendedMovies,
     getMostWatchedMovies, 
-    getUsers
+    getUser,
+    search
 } from './async.js'
 
 import { 
@@ -308,31 +309,21 @@ function handleLogin() {
             return
         }
 
-        getUsers( )
-            .then( usersArray => {
-                const userFound = usersArray.find( user => user.email === emailInput.value )
-                if ( userFound ) { // The email exists in the DataBase
-                    if ( userFound.password === passwordInput.value ) {
-                        localStorage.setItem('logged', 'true') // Remember user is logged in
-                        document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
-                        getMostWatchedMovies()
-                            .then( mostWatched => {
-                                document.getElementById('results-container').innerHTML = mostWatched
-                                document.getElementById('log-out').addEventListener('click', () => {
-                                    localStorage.removeItem('logged')
-                                    displayLogin()
-                                } )
-                                setUpMovies()
+        getUser( emailInput.value, passwordInput.value )
+            .then( response => {
+                if ( typeof response === 'string' ) {
+                    errorSpan.textContent = response
+                } else {
+                    localStorage.setItem('logged', 'true') // Remember user is logged in
+                    document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
+                    getMostWatchedMovies()
+                        .then( mostWatched => {
+                            document.getElementById('results-container').innerHTML = mostWatched
+                            document.getElementById('log-out').addEventListener('click', () => {
+                                localStorage.removeItem('logged')
+                                displayLogin()
                             } )
-                    } 
-                    else {
-                        errorSpan.classList.add('show')
-                        errorSpan.textContent= `The password is incorrect, please try again`
-                    }
-                }
-                else { // The email doesn't exist in the DataBase
-                    errorSpan.classList.add('show')
-                    errorSpan.textContent = `The email you provided couldn't be found, please try again`
+                    } )
                 }
             } )
     } )
@@ -540,6 +531,9 @@ function showResAndSetUpBtn() {
     setUpWatchBtns()
 }
 
+function displayMostWatched() {
+
+}
 
 function displayLogin() {
     const isLogged = JSON.parse( localStorage.getItem('logged') )
@@ -571,6 +565,36 @@ function displayLogin() {
     }
 }
 
+function searchFunctionality(){ //
+    document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
+    const searchBar = document.getElementById('search-movie')
+
+    searchBar.addEventListener( 'keyup', e => {    
+        if ( searchBar.value.length < 3 ) { return }
+        search( searchBar.value )
+            .then( searchResults => {
+                document.getElementById('dropdown').innerHTML = searchResults
+            } )
+
+        if ( ! searchBar.value ){
+            document.getElementById('dropdown').innerHTML = ''
+        }
+
+        // console.log( e.key === 'Enter', searchBar.value, e.key === 'Enter' && searchBar.value ) 
+        if( e.key === 'Enter' && searchBar.value ) {
+            getMovieHtml( searchBar.value )
+                .then( htmlRes => {
+                    const resContainer = document.getElementById('results-container')
+                    resContainer.innerHTML = htmlRes
+                    setUpWatchBtns()
+                } )
+            searchBar.value = ''
+            document.getElementById('dropdown').innerHTML = ''
+        }
+
+    } )
+}
+
 export { 
     Movie, 
     loginHtml, 
@@ -581,5 +605,6 @@ export {
     homeMockup, 
     getDetailsHtml, 
     showResAndSetUpBtn,
-    displayLogin
+    displayLogin,
+    searchFunctionality
 }
