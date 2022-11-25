@@ -86,8 +86,8 @@ async function getRecommendedMovies( idBaseMovie ) {
         <p class="similar--title text--bold">Similar Movies:</p>
         <div class="similar--movies">
             ${ imgArray.join('') }
-            <button id="load-more-similar" class="invisible-btn img-link-btn">
-                <img src="./img/vectors/add.png" alt="more movies" />
+            <button data-movieid="${idBaseMovie}" id="load-more-similar" class="invisible-btn img-link-btn">
+                <img data-movieid="${idBaseMovie}" src="./img/vectors/add.png" alt="more movies" />
             </button>
         </div>`
 
@@ -103,7 +103,15 @@ async function getRecs( movieId ){
 }
 
 async function search( query ) {
-    const urlGenre = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&with_genres=${query}`
+    let genreToUrl
+    const genreArray = JSON.parse( sessionStorage.getItem('genres') )
+    genreArray.forEach( genre => {
+        if ( genre.name.toLowerCase() === query.toLowerCase() ) {
+            genreToUrl = genre.id
+        }
+    } )
+
+    const urlGenre = `https://api.themoviedb.org/3/discover/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_genres=${genreToUrl}`
     const urlMovie = `https://api.themoviedb.org/3/search/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&query=${ query }&include_adult=false`
 
     const genreRes = await fetch (urlGenre)
@@ -112,8 +120,75 @@ async function search( query ) {
     const genreData = await genreRes.json()
     const movieData = await movieRes.json()
 
-    console.log( movieData )
-    console.log( genreData )
+    const allDataArray = [ ...genreData.results.splice(0,5), ...movieData.results.splice(0,5) ]
+
+    const allDivs = allDataArray.map( ( { id, poster_path, title, release_date } ) => {
+        if ( poster_path ) {
+            const releaseYear = release_date.split('-')[0]
+            return `
+                <span data-movieid="${id}" class="dropdown-result">
+                    <img class="dropdown-result--img" src="https://image.tmdb.org/t/p/w1280/${poster_path}" alt="Poster for ${title}" />
+                    <p class="dropdown-result--title text--boldest">${title}</p>
+                    <p class="dropdown-result--year">(${releaseYear})</p>
+                </span>`
+        }
+    } )
+
+    const resultsDiv = `
+        <div class="dropdown-category">
+            <p class="dropdown--separator-title text--boldest">Movies</p>
+            <div class="dropdown-category--container">
+                ${allDivs.slice(5).join('')}
+            </div>
+        </div>    
+        <div class="dropdown-category">
+            <p class="dropdown--separator-title text--boldest">By genre</p>
+            <div class="dropdown-category--container">
+                ${allDivs.slice(0,5).join('')}
+            </div>
+        </div>`
+
+    return resultsDiv
+}
+
+function handleLogin() {
+    const loginBtn = document.getElementById('login')
+
+    async function getUsers(){
+        const res = await fetch(`http://localhost:3002/users/`)
+        const data = await res.json()
+        return data
+    }
+
+    loginBtn.addEventListener('click', e => {
+        e.preventDefault()
+
+        const emailInput = document.getElementById('email-input')
+        const passwordInput = document.getElementById('password-input')
+
+        getUsers( )
+            .then( usersArray => {
+                const found = usersArray.find( ( { email, password } ) => {
+                    if ( emailInput.value === email && passwordInput.value !== password ) {
+                        const errorSpan = document.getElementById('login-error-msg')
+                        errorSpan.classList.add('show')
+                        errorSpan.classList.remove('empty')
+                        errorSpan.textContent= `The password is incorrect, please try again`
+                    }
+                } )
+                if ( ! found ) {
+                    const errorSpan = document.getElementById('login-error-msg')
+                    errorSpan.classList.add('show')
+                    errorSpan.classList.remove('empty')
+                    errorSpan.textContent = `The email you provided couldn't be found, please try again`
+                }
+            } )
+        
+        // document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar()
+        
+        // const resContainer = document.getElementById('results-container')
+        // resContainer.innerHTML = homeMockup()
+    } )
 }
 
 export { 
@@ -124,7 +199,8 @@ export {
     getMovieHtml, 
     getMovieById, 
     getRecs, 
-    search
+    search,
+    handleLogin
 }
 // https://image.tmdb.org/t/p/w780/${backdrop_path}
 // <img class="movie-poster" src="https://image.tmdb.org/t/p/w780/${backdrop_path}" alt="${original_title} poster" aria-hidden="true"/> 

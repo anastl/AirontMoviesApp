@@ -6,7 +6,6 @@ import {
     mostWatchedMockup, 
     homeMockup, 
     getDetailsHtml, 
-    handleLogin, 
     showResAndSetUpBtn
 } from './utils.js'
 
@@ -18,7 +17,8 @@ import {
     getMovieHtml,
     getMovieById,
     getRecs, 
-    search
+    search,
+    handleLogin
 } from './async.js'
 
 import {
@@ -26,15 +26,26 @@ import {
     setUpWatchBtns, 
     showDetails,
     changeClass,
-    setUpRecommendedMovies
+    setUpRecommendedMovies,
+    setUpMovies
 } from './buttonsSetUp.js'
 
 getGenres().then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) )
 getLangs().then( langsArray => sessionStorage.setItem( 'languages', JSON.stringify( langsArray ) ) )
 
-document.body.innerHTML = displayHeaderAndSearchBar()
+document.getElementById('master-container').innerHTML = displayLogin()
+handleLogin()
+
+/*
+
+document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar()
 const searchBar = document.getElementById('search-movie')
 
+getMostWatchedMovies()
+    .then( mostWatched => {
+        document.getElementById('results-container').innerHTML = mostWatched
+        setUpMovies()
+    } )
 // getMovieHtml( 'harry' )
 //     .then( htmlRes => {
 //         const resContainer = document.getElementById('results-container')
@@ -42,25 +53,39 @@ const searchBar = document.getElementById('search-movie')
 //         setUpWatchBtns()
 //     } )
 
-getDetailsHtml( '671' )
+// getDetailsHtml( '671' )
     // .then( htmlRes => {
     //     const resContainer = document.getElementById('results-container')
     //     resContainer.innerHTML = htmlRes
     //     setUpWatchBtns()
     // } )
 
-// searchBar.addEventListener( 'keyup', e => {
-//     if ( e.key !== 'Enter' ) { return }   
+searchBar.addEventListener( 'keyup', e => {    
+    search( searchBar.value )
+        .then( searchResults => {
+            document.getElementById('dropdown').innerHTML = searchResults
+        } )
 
-//     getMovieHtml( searchBar.value )
-//         .then( htmlRes => {
-//             const resContainer = document.getElementById('results-container')
-//             resContainer.innerHTML = htmlRes
-//         } )
-// } )
+    if ( ! searchBar.value ){
+        document.getElementById('dropdown').innerHTML = ''
+    }
+
+    console.log( e.key === 'Enter', searchBar.value, e.key === 'Enter' && searchBar.value ) 
+    if( e.key === 'Enter' && searchBar.value ) {
+        getMovieHtml( searchBar.value )
+            .then( htmlRes => {
+                const resContainer = document.getElementById('results-container')
+                resContainer.innerHTML = htmlRes
+                setUpWatchBtns()
+            } )
+        searchBar.value = ''
+        document.getElementById('dropdown').innerHTML = ''
+    }
+
+} )
 
 // DISPLAY MOCKUPS
-// document.body.innerHTML = displayLogin()
+// document.getElementById('master-container').innerHTML = displayLogin()
 // showResAndSetUpBtn()
 setUpSelectionButtons()
 
@@ -68,7 +93,7 @@ setUpSelectionButtons()
 
 /*
 const callAsync = displayHeaderAndSearchBar() 
-document.body.innerHTML = callAsync
+document.getElementById('master-container').innerHTML = callAsync
 
 const resultsContainer = document.getElementById('results-container')
 resultsContainer.innerHTML = await getMostWatchedMovies() */

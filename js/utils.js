@@ -71,23 +71,22 @@ class Movie {
         if ( modal ) {
             genreArray.forEach( genreObj => {
                 if ( genreObj.id === this.genreId.id ) {
-                    genre = genreObj.name
+                    genre = genreObj//.name
                 }
             } )
         } else {
             genreArray.forEach( genreObj => {
                 if ( genreObj.id === this.genreId ) {
-                    genre = genreObj.name
+                    genre = genreObj//.name
                 }
             } )
         }
         return genre
-
     }
     getLanguage = () => {
         const languageArray = JSON.parse( sessionStorage.getItem('languages') )
         const languageObj = languageArray.find( el => el.iso_639_1 === this.originalLanguage )
-        return languageObj.name
+        return languageObj.english_name
     }
     getReleaseDate = () => {
         const [ year, month, day ] = this.releaseDate.split('-')
@@ -101,19 +100,19 @@ class Movie {
     }
     getMovieDiv = () => {
         return (`
-            <div class="movie mw"
+            <div data-movieid="${ this.id }" class="movie mw"
             style="
-            background: 
-                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-                url(${ this.backgroundURL });
-            background-position: center;
-            background-size: cover;
+                background: 
+                    linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+                    url(${ this.backgroundURL });
+                background-position: center;
+                background-size: cover;
             ">
-                <p class="text--bold movie-title mw-title">${ this.title }</p>
-                <div class="stars-container">
+                <p data-movieid="${ this.id }" class="text--bold movie-title mw-title">${ this.title }</p>
+                <div data-movieid="${ this.id }" class="stars-container">
                     ${ this.getStarsArray() }
                 </div>
-                <p class="summary">${ this.getSummary() }</p>
+                <p data-movieid="${ this.id }" class="summary">${ this.getSummary() }</p>
             </div>
         `)
     }
@@ -128,7 +127,7 @@ class Movie {
                     background-size: cover;
             ">
                 <div class="stars-and-genre">
-                    <p class="genre blue">${ this.getGenre() }</p>
+                    <p class="genre blue">${ this.getGenre().name }</p>
                     <div class="stars-container">
                         ${ this.getStarsArray() }
                     </div>
@@ -170,7 +169,7 @@ class Movie {
                                 </div>
                                 <div class="details--individual">
                                     <p class="text--bold details--title">Genre:</p>
-                                    <a href="#" class="details--info genre-dets cyan underline">${ this.getGenre( true ) }</a>
+                                    <a href="#" data-genreId="${this.getGenre( true ).id}" class="details--info genre-dets cyan underline">${ this.getGenre( true ).name }</a>
                                 </div>
                             </div>
                             <div class="details--column">
@@ -205,9 +204,9 @@ function displayLogin() {
                 <p class="instructions">Log in to find the movies you're looking for!</p>
             </div>
             <form>
-                <input class="input--full-width" type="email" placeholder="Email" />
+                <input id="email-input" class="input--full-width" type="email" placeholder="Email" />
                 <div class="password--container">
-                    <input class="input--full-width" type="password" placeholder="Password" />
+                    <input id="password-input" class="input--full-width" type="password" placeholder="Password" />
                     <svg class="password-eye" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="19" cy="12" r="7" stroke="white" stroke-width="2"/>
                         <circle cx="19" cy="12" r="7" stroke="#2791C2" stroke-width="2"/>
@@ -222,6 +221,7 @@ function displayLogin() {
                     </label>
                     <a class="link" href="#">Forgot Password?</a>
                 </div>
+                <span class="login-error-msg" id="login-error-msg"></span>
                 <button id="login" class="text--bold login-btn">Log in</button>
             </form>
             <p class="register-prompt">Not registered yet? <a class="link" href="#">Register now</a></p>
@@ -285,7 +285,10 @@ function displayHeaderAndSearchBar() {
             </div>
         </div>
     </header>
-    <div class="results-container" id="results-container"></div>
+    <div id="container-dropdown-results" class="container-dropdown-results">
+        <div id="dropdown" class="dropdown"></div>
+        <div class="results-container" id="results-container"></div>
+    </div>
     `)
 }
 
@@ -414,7 +417,15 @@ function getDetailsHtml( movieId ) {
                 release_date,
                 original_language
             )
-            document.body.innerHTML = movieModal.getModal()
+
+            const beforeModal = document.getElementById('master-container').innerHTML
+            
+            document.getElementById('master-container').innerHTML = movieModal.getModal()
+            
+            document.getElementById('close-modal').addEventListener('click', () => {
+                document.getElementById('master-container').innerHTML = beforeModal
+                setUpRecommendedMovies()
+            } )
         } )
     getRecommendedMovies( movieId )
         .then( moviesRec => {
@@ -476,23 +487,9 @@ function getDetailsHtml( movieId ) {
     */
 }
 
-// TODO ADAPT TO WORK WITH API
-function handleLogin() {
-    const loginBtn = document.getElementById('login')
-
-    loginBtn.addEventListener('click', e => {
-        e.preventDefault()
-        
-        document.body.innerHTML = displayHeaderAndSearchBar()
-        
-        const resContainer = document.getElementById('results-container')
-        resContainer.innerHTML = homeMockup()
-    } )
-}
-
 // showResAndSetUpBtn = displayHeaderAndSearchBar + homeMockup + setUpWatchBtns
 function showResAndSetUpBtn() { 
-    document.body.innerHTML = displayHeaderAndSearchBar() 
+    document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar() 
     document.getElementById('results-container').innerHTML = homeMockup()
     setUpWatchBtns()
 }
@@ -505,6 +502,5 @@ export {
     mostWatchedMockup, 
     homeMockup, 
     getDetailsHtml, 
-    handleLogin, 
     showResAndSetUpBtn
 }

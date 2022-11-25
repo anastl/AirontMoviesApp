@@ -3,7 +3,6 @@ import {
     displayHeaderAndSearchBar, 
     Movie, 
     homeMockup, 
-    handleLogin, 
     getDetailsHtml, 
     showResAndSetUpBtn
 } from './utils.js'
@@ -40,7 +39,7 @@ function setUpWatchBtns() { // Calls getDetailsHtml with the movie ID
 }
 
 function showDetails() {
-    document.body.innerHTML = getDetailsHtml( '1' )
+    document.getElementById('master-container').innerHTML = getDetailsHtml( '1' )
     document.getElementById('close-modal').addEventListener('click', e => {
         console.log("clicked close")
     })
@@ -94,10 +93,21 @@ function setUpRecommendedMovies() {
     } )
 }
 
+function setUpMovies() {
+    const moviesArray = [ ...document.getElementsByClassName('mw') ]
+    moviesArray.forEach( movie => {
+        movie.addEventListener('click', () => {
+            const movieId = movie.dataset.movieid
+            getDetailsHtml( movieId )
+        } )
+    } )
+}
+
 export {
     setUpSelectionButtons, 
     setUpWatchBtns, 
     showDetails,
     changeClass,
-    setUpRecommendedMovies
+    setUpRecommendedMovies,
+    setUpMovies
 }
