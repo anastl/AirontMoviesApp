@@ -1,7 +1,6 @@
 import { 
     getMovieById, 
-    getRecommendedMovies,
-    getRecs
+    getRecommendedMovies
 } from './async.js'
 
 import { 

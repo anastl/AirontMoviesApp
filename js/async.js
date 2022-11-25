@@ -1,4 +1,4 @@
-import { Movie } from './utils.js'
+import { displayHeaderAndSearchBar, Movie } from './utils.js'
 
 async function getMostWatchedMovies() {
     try {
@@ -94,14 +94,6 @@ async function getRecommendedMovies( idBaseMovie ) {
     return recommendedDiv
 }
 
-async function getRecs( movieId ){
-//     const myRes = getRecommendedMovies( movieId )
-//         .then( recommendedArray => {
-//             const recommendedImg = 
-//         } )
-//     return myRes
-}
-
 async function search( query ) {
     let genreToUrl
     const genreArray = JSON.parse( sessionStorage.getItem('genres') )
@@ -168,18 +160,25 @@ function handleLogin() {
 
         getUsers( )
             .then( usersArray => {
-                const found = usersArray.find( ( { email, password } ) => {
-                    if ( emailInput.value === email && passwordInput.value !== password ) {
+                const userFound = usersArray.find( user => user.email === emailInput.value )
+                if ( userFound ) { // The email exists in the DataBase
+                    if ( userFound.password === passwordInput.value ) {
+                        document.getElementById('master-container').innerHTML = displayHeaderAndSearchBar()
+                        getMostWatchedMovies()
+                            .then( mostWatched => {
+                                document.getElementById('results-container').innerHTML = mostWatched
+                                setUpMovies()
+                            } )
+                    } 
+                    else {
                         const errorSpan = document.getElementById('login-error-msg')
                         errorSpan.classList.add('show')
-                        errorSpan.classList.remove('empty')
                         errorSpan.textContent= `The password is incorrect, please try again`
                     }
-                } )
-                if ( ! found ) {
+                }
+                else { // The email doesn't exist in the DataBase
                     const errorSpan = document.getElementById('login-error-msg')
                     errorSpan.classList.add('show')
-                    errorSpan.classList.remove('empty')
                     errorSpan.textContent = `The email you provided couldn't be found, please try again`
                 }
             } )
@@ -198,7 +197,6 @@ export {
     getLangs, 
     getMovieHtml, 
     getMovieById, 
-    getRecs, 
     search,
     handleLogin
 }

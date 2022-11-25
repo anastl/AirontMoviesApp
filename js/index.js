@@ -16,7 +16,6 @@ import {
     getLangs,
     getMovieHtml,
     getMovieById,
-    getRecs, 
     search,
     handleLogin
 } from './async.js'
