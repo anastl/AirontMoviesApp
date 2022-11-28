@@ -5,7 +5,7 @@ import {
     homeMockup, 
     getDetailsHtml, 
     showResAndSetUpBtn
-} from './utils.js'
+} from './OLDutils.js'
 import {
     getMostWatchedMovies, 
     getRecommendedMovies, 
@@ -15,7 +15,7 @@ import {
     getMovieById, 
     search,
     getUser
-} from './async.js'
+} from './OLDasync.js'
 
 function setUpSelectionButtons() {
     const displaySelectionBtnsArr = [ ...document.getElementsByClassName('svg-btn') ]

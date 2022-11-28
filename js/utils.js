@@ -1,27 +1,11 @@
-import { 
-    getMovieById, 
-    getRecommendedMovies,
-    getMostWatchedMovies, 
-    getUser,
-    search
-} from './async.js'
+// import {
 
-import { 
-    setUpSelectionButtons, 
-    setUpWatchBtns, 
-    showDetails,
-    changeClass,
-    setUpRecommendedMovies,
-    setUpMovies
-} from './buttonsSetUp.js'
+// } from ''
 
-const starFilled = `<svg class="star-res filled" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
+const starSVG = `<svg class="star filled" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
 </svg>`
-const starMw = `<svg class="star-svg-mw filled" stroke="#FF9900" xmlns="http://www.w3.org/2000/svg" width="164" height="23" viewBox="0 0 164 23" >
-<path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
-</svg>`
-const starEmpty = `<svg class="star-svg-mw" stroke="#FF9900" xmlns="http://www.w3.org/2000/svg" width="164" height="23" viewBox="0 0 164 23" >
+const starEmpty = `<svg class="star" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
 </svg>`
 const loginHtml = `
@@ -118,132 +102,69 @@ const headerAndSearchBarHtml = `
     <div class="results-container" id="results-container"></div>
 </div>
 `
-class Movie {
-    constructor( 
-        id,
-        title,
-        genreIdArray,
-        rating,
-        summary,
-        backgroundURL,
-        releaseDate,
-        originalLanguage
-    ) {
-        this.id = id
-        this.title = title
-        this.genreId = genreIdArray[0]
-        this.rating = rating
-        this.summary = summary
-        this.backgroundURL = `https://image.tmdb.org/t/p/w1280/${backgroundURL}`
-        this.releaseDate = releaseDate || null
-        this.originalLanguage = originalLanguage || null
-    }
-    getSummary = () => {
-        return this.summary.split(' ').length >= 30 ? this.summary.split(' ').slice( 0, 30 ).join(' ') + "..." : this.summary
-        // if ( window.innerWidth >= 834 ) {
-        //     return this.summary
-        // } else {
-        //     return this.summary.split(' ').slice( 0, 45 ).join(' ') + "..."
-        // }
-    }
-    getStarsArray = () => {
-        if ( this.rating/2 > 0 ){
-            const starsArray = []
-            for ( let s = 0; s < Math.round( this.rating/2 ); s++) {
-                starsArray.push(`<div class="star">${ starFilled }</div>`)
-            }
-            return starsArray.join('')
-        } else {
-            return `<div class="star">${ starEmpty }</div>`
+function getStarsArray( ratingBaseFive ) {
+    if ( ratingBaseFive > 0 ){
+        const starsArray = []
+        for ( let s = 0; s < ratingBaseFive; s++) {
+            starsArray.push( starSVG )
         }
+        return starsArray.join('')
+    } else {
+        return starEmpty
     }
-    getStarsBaseFive = () => {
-        return Math.round( this.rating/2 )
-    }
-    getGenre = modal => {
-        const genreArray = JSON.parse( sessionStorage.getItem('genres') )
-        let genre
-        if ( modal ) {
-            genreArray.forEach( genreObj => {
-                if ( genreObj.id === this.genreId.id ) {
-                    genre = genreObj//.name
-                }
-            } )
-        } else {
-            genreArray.forEach( genreObj => {
-                if ( genreObj.id === this.genreId ) {
-                    genre = genreObj//.name
-                }
-            } )
-        }
-        return genre
-    }
-    getLanguage = () => {
-        const languageArray = JSON.parse( sessionStorage.getItem('languages') )
-        const languageObj = languageArray.find( el => el.iso_639_1 === this.originalLanguage )
-        return languageObj.english_name
-    }
-    getReleaseDate = () => {
-        const [ year, month, day ] = this.releaseDate.split('-')
-        const date = new Date( Date.UTC( year, month, day ) )
-        const release = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long' }).format(date)
-        
-        const releaseArray = release.split(' ')
-        const releaseFormatted = releaseArray[0] + ' ' + releaseArray[1] + ', ' + releaseArray[2]
-        
-        return releaseFormatted 
-    }
-    getMovieDiv = () => {
-        return (`
-            <div data-movieid="${ this.id }" class="movie mw"
-            style="
-                background: 
-                    linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-                    url(${ this.backgroundURL });
-                background-position: center;
-                background-size: cover;
-            ">
-                <p data-movieid="${ this.id }" class="text--bold movie-title mw-title">${ this.title }</p>
-                <div data-movieid="${ this.id }" class="stars-container">
-                    ${ this.getStarsArray() }
-                </div>
-                <p data-movieid="${ this.id }" class="summary">${ this.getSummary() }</p>
-            </div>
-        `)
-    }
-    getMovieDivWithButton = () => {
-        return (`
-            <div class="movie"
-                style="
-                    background: 
-                        linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-                        url(${ this.backgroundURL });
-                    background-position: center;
-                    background-size: cover;
-            ">
-                <div class="stars-and-genre">
-                    <p class="genre blue">${ this.getGenre().name }</p>
-                    <div class="stars-container">
-                        ${ this.getStarsArray() }
-                    </div>
-                </div>
-                <p class="text--bold movie-title">${ this.title }</p>
-                <p class="summary">${ this.getSummary() }</p>
-                <button class="watch-now-btn" data-movieId='${ this.id }'>Watch Now</button>
-            </div>
-        `)
-    }
-    getModal = () => {
-        return(`
-        <div class="movie-modal">
-            <div class="movie-dets">
-                <div class="movie-header"
+}
+
+// class Movie {
+//     constructor ( id,
+//         title,
+//         genreIdArray,
+//         rating,
+//         summary,
+//         backgroundURL,
+//         releaseDate,
+//         originalLanguage ) {
+//             this.id = id
+//             this.title = title
+//             this.rating = rating
+//             this.genre = genreIdArray
+//             this.summary = summary
+//             this.releaseDate = releaseDate
+//             this.backgroundURL = `https://image.tmdb.org/t/p/w1280/${backgroundURL}`
+//             this.ratingBaseFive = Math.round( rating/2 )
+//             this.originalLanguage = originalLanguage 
+//         }
+
+//     asMostWatched = () => { 
+//         return (`
+//         <div data-movieid="${ this.id }" class="most-watched--movie"
+//         style="
+//             background: 
+//                 linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+//                 url(${ this.backgroundURL });
+//             background-position: center;
+//             background-size: cover;
+//         ">
+//             <p data-movieid="${ this.id }" class="text--bold most-watched--title">${ this.title }</p>
+//             <div data-movieid="${ this.id }" class="stars-container">
+//                 ${ this._getStarsArray() }
+//             </div>
+//             <p data-movieid="${ this.id }" class="most-watched--summary">${ this.summary }</p>
+//         </div>
+//         `)
+//     }
+// }
+
+const asModal = ( id, title, genre, summary, releaseDate, backgroundURL, originalLanguage, ratingBaseFive ) => {
+    return `
+    <div class="modal--container">
+            <div class="modal">
+                <div class="modal--header"
                     style="
                         background: 
                             linear-gradient(
                                 180deg, rgba(0, 0, 0, 0) 0%, 
                                 rgba(17, 17, 17, 1) 100%), 
-                            url(${ this.backgroundURL });
+                            url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
                         background-repeat: no-repeat;
                         background-position: center;
                         background-size: cover;
@@ -251,360 +172,103 @@ class Movie {
                 >
                     <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
                     <button id="play" class="play-btn">Play Trailer</button>
-                    <h1 class="text--bold blue title title--dets">${ this.title }</h1>
+                    <h1 class="text--bold blue title modal--title">${ title }</h1>
                 </div>
-                <div class="movie-body">
-                    <p class="extended summary">${ this.summary }</p>
-                    <div class="details-and-similar--container">
-                        <div class="details--container">
-                            <div class="details--column">
-                                <div class="details--individual">
-                                    <p class="text--bold details--title">Release Date:</p>
-                                    <p class="details--info">${ this.getReleaseDate() }</p>
+                <div class="modal--body">
+                    <p class="modal--summary">${ summary }</p>
+                    <div class="modal-info--container">
+                        <div class="modal-details--container">
+                            <div class="modal-details--column">
+                                <div class="modal-details--individual">
+                                    <p class="text--bold modal-details--title">Release Date:</p>
+                                    <p class="modal-details--info">${ releaseDate }</p>
                                 </div>
-                                <div class="details--individual">
-                                    <p class="text--bold details--title">Genre:</p>
-                                    <a href="#" data-genreId="${this.getGenre( true ).id}" class="details--info genre-dets cyan underline">${ this.getGenre( true ).name }</a>
+                                <div class="modal-details--individual">
+                                    <p class="text--bold modal-details--title">Genre:</p>
+                                    <a class="modal-details--info modal--genre cyan underline" href="#" data-genreId="${ genre }">${ genre }</a>
                                 </div>
                             </div>
-                            <div class="details--column">
-                                <div class="details--individual details--individual-extra-padding">
-                                    <p class="text--bold details--title">Original Language:</p>
-                                    <p class="details--info">${ this.getLanguage() }</p>
+                            <div class="modal-details--column">
+                                <div class="modal-details--individual extra-padding">
+                                    <p class="text--bold modal-details--title">Original Language:</p>
+                                    <p class="modal-details--info">${ originalLanguage }</p>
                                 </div>
-                                <div class="details--individual details--individual-extra-padding">
-                                    <p class="text--bold details--title">Popularity:</p>
-                                    <p class="details--info">${ this.getStarsBaseFive() } / 5</p>
+                                <div class="modal-details--individual extra-padding">
+                                    <p class="text--bold modal-details--title">Popularity:</p>
+                                    <p class="modal-details--info">${ ratingBaseFive } / 5</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="similar-container" id="similar-container" ></div>
+                        <div class="similar-container" id="similar-container" >
+                            <svg data-movieid="${id}" data-number-of-recs="3" id="add-more" class="add-more recommended-square" width="244" height="244" viewBox="0 0 244 244" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 2.95703C0 1.85246 0.895431 0.957031 2 0.957031H241.043C242.148 0.957031 243.043 1.85246 243.043 2.95703V242.001C243.043 243.105 242.148 244.001 241.043 244.001H1.99999C0.895425 244.001 0 243.105 0 242.001V2.95703Z" fill="black"/>
+                                <rect x="115.5" y="79" width="12" height="85" fill="#D9D9D9"/>
+                                <rect x="79" y="127.5" width="12" height="85" transform="rotate(-90 79 127.5)" fill="#D9D9D9"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        `)
-    }
+        </div>`
 }
 
-function handleLogin() {
-    const loginBtn = document.getElementById('login')
-
-    loginBtn.addEventListener('click', e => {
-        e.preventDefault()
-
-        const emailInput = document.getElementById('email-input')
-        const passwordInput = document.getElementById('password-input')
-        const errorSpan = document.getElementById('login-error-msg')
-
-        const passwordRegex = new RegExp('^[a-zA-Z0-9!@#$&()`\.+,/\"]{8,20}$', 'g')
-        const emailRegex = new RegExp('^([a-zA-Z0-9]+)@([a-zA-Z]+){4,}\.([a-z]+){3,}$', 'g')
-
-        if ( ! passwordRegex.test( passwordInput.value) ) {
-            errorSpan.textContent = `Please enter a valid password`
-            return
-        } 
-        else if ( ! emailRegex.test( emailInput.value )) {
-            errorSpan.textContent = `Please enter a valid email`
-            return
-        }
-
-        getUser( emailInput.value, passwordInput.value )
-            .then( response => {
-                if ( typeof response === 'string' ) {
-                    errorSpan.textContent = response
-                } else {
-                    localStorage.setItem('logged', 'true') // Remember user is logged in
-                    document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
-                    getMostWatchedMovies()
-                        .then( mostWatched => {
-                            document.getElementById('results-container').innerHTML = mostWatched
-                            document.getElementById('log-out').addEventListener('click', () => {
-                                localStorage.removeItem('logged')
-                                displayLogin()
-                            } )
-                    } )
-                }
-            } )
-    } )
-}
-
-// TODO DELETE
-// Mockups
-function mostWatchedhtml( movie ) {
-    const {id, title, summary, starsRating, imgLong } = movie
-
-    const getStarsArray = ( ) => {
-        const starsArray = []
-        for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
-            starsArray.push(`<div class="star-mw">${ starMw }</div>`)
-        }
-        return starsArray.join('')
-    }
-
-    return (`
-    <div class="mw mw-column" data-movieid='${ id }'
+const asMain = ( id, title, genre, summary, ratingBaseFive, backgroundURL ) => {
+    return `
+    <div class="movie"
         style="
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%), url('${ imgLong }');
+            background: 
+                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+                url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
             background-position: center;
-            background-size: cover;"
-    >
-        <div class="details--mw">
-            <p class="text--bold movie-title mw-title mw-title-column">${ title }</p>
-            <div class="stars-container stars-container--mw stars-container--mw-column">
-                ${ getStarsArray() }
-            </div>
-            <p class="summary summary--mw summary--column-mw">${ summary }</p>
-        </div>
-    </div>
-    `)
-}
-
-// function resultMockup() {
-//     const { id, title, summary, starsRating, genre, imgLong } = movies[1][0]
-    
-//     const getStarsArray = ( ) => {
-//         const starsArray = []
-//         for ( let s = 0; s < Math.round( starsRating/2 ); s++) {
-//             starsArray.push(`<div class="star">${ starMw }</div>`)
-//         }
-//         return starsArray.join('')
-//     }
-
-//     return `
-//     <div class="movie"
-//         style="
-//             background: 
-//                 linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-//                 url(${ imgLong });
-//             background-position: center;
-//             background-size: cover;
-//     ">
-//         <div class="stars-and-genre">
-//             <p class="genre blue">${ genre }</p>
-//             <div class="stars-container">
-//                 ${ getStarsArray() }
-//             </div>
-//         </div>
-//         <p class="text--bold movie-title">${ title }</p>
-//         <p class="summary">${ summary }</p>
-//         <button class="watch-now-btn" id="watch-movie" data-movieid='${ id }'>Watch Now</button>
-//     </div>
-//     `
-// }
-
-function mostWatchedMockup() {
-    const moviesMW = [ movies[2][0], movies[3][0], movies[4][0] ]  
-    const mwHtml = moviesMW.map( movie => mostWatchedhtml(movie) )
-
-    return (`
-    <div class="most-watched-movies column" id="most-watched-movies">
-        ${ mwHtml.join('') }
-    </div>
-    `)
-}
-
-function homeMockup() { // homeMockup = resultMockup + mostWatchedMockup
-    const displaytypeDiv = `
-    <div class="display-type">
-        <button data-view="grid" class="invisible-btn svg-btn">
-            <svg data-view="grid" class="display-mw" width="58" height="36" viewBox="0 0 58 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect data-view="grid" x="39" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
-                <rect data-view="grid" x="23" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
-                <rect data-view="grid" x="7" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
-            </svg>
-        </button>
-        <button data-view="column" class="invisible-btn svg-btn selected">
-            <svg data-view="column" class="display-mw" width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect data-view="column" x="7" y="6" width="45" height="24" rx="2" fill="#D9D9D9"/>
-            </svg>
-        </button>
-    </div>`
-    return (`
-        ${ resultMockup() }
-        <div class="most-watched-container">
-            <div class="title-mw-and-mw-display">
-                <p class="title title--mw text--bold">Most Watched Movies</p>
-                ${ displaytypeDiv }
-            </div>
-            ${ mostWatchedMockup() }
-        </div>
-    `)
-}
-
-function getDetailsHtml( movieId ) {
-    getMovieById( movieId )
-        .then( movieRes => {
-            const { id,
-                title,
-                genres,
-                vote_average,
-                overview,
-                backdrop_path,
-                release_date,
-                original_language
-            } = movieRes
-            const movieModal = new Movie (
-                id,
-                title,
-                genres,
-                vote_average,
-                overview,
-                backdrop_path,
-                release_date,
-                original_language
-            )
-
-            const beforeModal = document.getElementById('master-container').innerHTML
-            
-            document.getElementById('master-container').innerHTML = movieModal.getModal()
-            
-            document.getElementById('close-modal').addEventListener('click', () => {
-                document.getElementById('master-container').innerHTML = beforeModal
-                setUpRecommendedMovies()
-            } )
-        } )
-    getRecommendedMovies( movieId )
-        .then( moviesRec => {
-            document.getElementById('similar-container').innerHTML = moviesRec
-            setUpRecommendedMovies()
-        } )
-    /*
-    const { id, title, extended, starsRatingDets, releaseDate, genre, ogLang, imgLong } = movies[movieId][0]
-    return(`
-    <div class="movie-modal">
-        <div class="movie-dets">
-            <div class="movie-header"
-                style="
-                    background: 
-                        linear-gradient(
-                            180deg, rgba(0, 0, 0, 0) 0%, 
-                            rgba(17, 17, 17, 1) 100%), 
-                        url(${ imgLong });
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: cover;
-                "
-            >
-                <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
-                <button id="play" class="play-btn">Play Trailer</button>
-                <h1 class="text--bold blue title title--dets">${ title }</h1>
-            </div>
-            <div class="movie-body">
-                <p class="extended summary">${ extended }</p>
-                <div class="details-and-similar--container">
-                    <div class="details--container">
-                        <div class="details--column">
-                            <div class="details--individual">
-                                <p class="text--bold details--title">Release Date:</p>
-                                <p class="details--info">${ releaseDate }</p>
-                            </div>
-                            <div class="details--individual">
-                                <p class="text--bold details--title">Genre:</p>
-                                <a href="#" class="details--info genre-dets cyan underline">${ genre }</a>
-                            </div>
-                        </div>
-                        <div class="details--column">
-                            <div class="details--individual details--individual-extra-padding">
-                                <p class="text--bold details--title">Original Language:</p>
-                                <p class="details--info">${ ogLang }</p>
-                            </div>
-                            <div class="details--individual details--individual-extra-padding">
-                                <p class="text--bold details--title">Popularity:</p>
-                                <p class="details--info">${ starsRatingDets } / 5</p>
-                            </div>
-                        </div>
-                    </div>
-                    ${ getRecs( id ) }
-                </div>
+            background-size: cover;
+    ">
+        <div class="stars-and-genre">
+            <p class="genre blue">${ genre }</p>
+            <div class="stars-container">
+                ${ getStarsArray( ratingBaseFive ) }
             </div>
         </div>
+        <p class="text--bold movie-title">${ title }</p>
+        <p class="summary">${ summary }</p>
+        <button class="watch-now-btn" data-movieId='${ id }'>Watch Now</button>
     </div>
-    `)
-    */
+    `
 }
 
-// showResAndSetUpBtn = displayHeaderAndSearchBar + homeMockup + setUpWatchBtns
-function showResAndSetUpBtn() { 
-    document.getElementById('master-container').innerHTML = headerAndSearchBarHtml 
-    document.getElementById('results-container').innerHTML = homeMockup()
-    setUpWatchBtns()
+const asMostWatched = ( id, title, summary, ratingBaseFive, backgroundURL ) => {
+    return `
+        <div data-movieid="${ id }" class="most-watched--movie"
+        style="
+            background: 
+                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+                url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
+            background-position: center;
+            background-size: cover;
+        ">
+            <p data-movieid="${ id }" class="text--bold most-watched--title">${ title }</p>
+            <div data-movieid="${ id }" class="stars-container">
+                ${ getStarsArray( ratingBaseFive ) }
+            </div>
+            <p data-movieid="${ id }" class="most-watched--summary">${ summary }</p>
+        </div>
+    `
 }
 
-function displayMostWatched() {
-
+const asRecommended = ( id, title, backgroundURL ) => {
+    const imgEl = document.createElement('img')
+    imgEl.classList.add('recommended-square')
+    imgEl.dataset.movieid = id
+    imgEl.src = `https://image.tmdb.org/t/p/w1280/${ backgroundURL }`
+    imgEl.alt = `Poster for ${title}`
+    return imgEl
 }
 
-function displayLogin() {
-    const isLogged = JSON.parse( localStorage.getItem('logged') )
 
-    if ( ! isLogged ) {
-        document.getElementById('master-container').innerHTML = loginHtml
-    
-        const passwordEye = document.getElementById('password-eye')
-        passwordEye.addEventListener('click', () => {
-    
-            const passwordInput = document.getElementById('password-input')
-            const attribute = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password'
-            passwordInput.setAttribute( 'type', attribute )
-    
-            const eye = document.getElementById('show-eye')
-            const eyeStyle = eye.style.fill === 'rgb(39, 145, 194)' ? 'none' : 'rgb(39, 145, 194)'
-            eye.style.fill = eyeStyle
-        } )
-        handleLogin()
-    } 
-    
-    else {
-        document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
-        getMostWatchedMovies()
-            .then( mostWatched => {
-                document.getElementById('results-container').innerHTML = mostWatched
-                setUpMovies()
-            } )
-    }
-}
-
-function searchFunctionality(){ //
-    document.getElementById('master-container').innerHTML = headerAndSearchBarHtml
-    const searchBar = document.getElementById('search-movie')
-
-    searchBar.addEventListener( 'keyup', e => {    
-        if ( searchBar.value.length < 3 ) { return }
-        search( searchBar.value )
-            .then( searchResults => {
-                document.getElementById('dropdown').innerHTML = searchResults
-            } )
-
-        if ( ! searchBar.value ){
-            document.getElementById('dropdown').innerHTML = ''
-        }
-
-        // console.log( e.key === 'Enter', searchBar.value, e.key === 'Enter' && searchBar.value ) 
-        if( e.key === 'Enter' && searchBar.value ) {
-            getMovieHtml( searchBar.value )
-                .then( htmlRes => {
-                    const resContainer = document.getElementById('results-container')
-                    resContainer.innerHTML = htmlRes
-                    setUpWatchBtns()
-                } )
-            searchBar.value = ''
-            document.getElementById('dropdown').innerHTML = ''
-        }
-
-    } )
-}
-
-export { 
-    Movie, 
+export {
     loginHtml, 
-    handleLogin, 
     headerAndSearchBarHtml, 
-    mostWatchedhtml, 
-    mostWatchedMockup, 
-    homeMockup, 
-    getDetailsHtml, 
-    showResAndSetUpBtn,
-    displayLogin,
-    searchFunctionality
+    asModal,
+    asMain,
+    asMostWatched,
+    asRecommended
 }

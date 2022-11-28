@@ -1,0 +1,95 @@
+:root {
+    --blue-color: #2791C2;
+    --link-color: #29B9FC;
+    --hover-btn: #4FC7FF;
+    --visited-btn: #4FC7FF;
+    --focus-btn-border: #82CAFF;
+    --active-font--btn: #2791C2;
+}
+
+* { box-sizing: border-box; }
+img { max-width: 100%;  }
+svg { height: 100%; width: 100%; }
+p, a, h1 { margin: 0; }
+a, button { cursor: pointer; }
+html {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/*  GENERAL */
+
+.bold { font-weight: 700; }
+.extra-bold { font-weight: 900; }
+.cyan { color: #0FEFFD; }
+.title {
+    font-family: Montserrat, sans-serif;
+    font-size: 2.25rem;
+    margin: 0;
+    padding: 0;
+}
+
+/* END GENERAL */
+
+/* TAGS */
+body {
+    width: 100vw;
+}
+
+button { 
+    align-self: center;
+    border-radius: 35px; 
+    border: none;
+    
+    background-color: var(--link-color);
+    color: #fff;
+    
+    height: 4.375rem;
+    width: 100%;
+    padding: 1rem .7rem;
+    
+    font-weight: 700;
+    /* font-size: 1.1rem; */
+    font-size: 1.5rem;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 2rem;
+}
+button:hover {
+    background-color: var(--hover-btn);
+}
+button:focus {
+    background-color: var(--blue-color);
+    border: var(--focus-btn-border) 2px solid;
+}
+button:visited {
+    background-color: var(--visited-btn);
+}
+button:active {
+    text-decoration: underline;
+    color: var(--active-font--btn);
+    background-color: #fff;
+}
+a { 
+    text-decoration: none; 
+    color: var(--link-color);
+}
+/* TODO -> ADD FOCUS AND HOVER STATE TO <a> */
+
+/* END TAGS */
+
+/* START Similar Movies Section */
+
+.similar-container {
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    place-content: center;
+    grid-template-columns: repeat( auto-fit, 15rem );
+    gap: 2rem;
+}
+.recommended-square {
+    object-fit: cover;
+    width: 15rem;
+    height: 15rem;
+}
+
+/* END Similar Movies Section */

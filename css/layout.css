@@ -602,37 +602,42 @@ header {
 }
 .similar-container {
     margin-top: 3.5rem;
-
-    display: flex;
-    flex-direction: column;
-}
-.similar--movies {
-    margin-top: 3.313rem;
-    display: grid;
-    gap: 2.119rem;
-    grid-template-columns: repeat( auto-fit, minmax(15.19rem, 1fr));
-}
-.img-link {
-    height: 15.191rem;
-    width: 15.191rem;
-    margin: 0;
-    padding: 0;
-}
-.rec-poster {
-    object-fit: cover;
-    height: 100%;
 }
 .similar--title {
     font-size: 1.5rem;
 }
+.similar--movies {
+    margin-top: 3.313rem;
+    gap: 2.119rem;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(15rem, 1fr));
+    width: 100%;
+}
+.similar-results {
+    border: 1px solid cyan;
+}
+.similar-sqr {
+    height: 15rem;
+    width: 15rem;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+}
+/* .img-link-btn {
+    display: inline;
+} */
+
 .invisible-btn {
     background-color: #000;
     border-radius: 0.125rem;
-    height: 15.191rem;
-    width: 15.191rem;
+    /* height: 15rem;
+    width: 15rem;
+    padding: 0;
+    margin: 0; */
 
-    display: grid;
-    place-items: center;
+    /* display: inline-flex;
+    align-items: center;
+    justify-content: center; */
 } 
 /* END MOVIE MODAL */
 
