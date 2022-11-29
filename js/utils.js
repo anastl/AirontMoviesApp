@@ -1,27 +1,31 @@
-// import {
-
-// } from ''
+import {
+    fetchMostWatched,
+    getUser,
+    addMoviesToMostWatched
+} from './async.js'
 
 const starSVG = `<svg class="star filled" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
-</svg>`
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
+    </svg>
+`
 const starEmpty = `<svg class="star" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
-</svg>`
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
+    </svg>
+`
 const loginHtml = `
 <div class="login--container">
-    <h1 class="title blue title--login">
-        <span class="text--boldest text--uppercased">Movie</span><span class="text--italic">finder</span>
+    <h1 class="title blue login--title">
+        <span class="extra-bold uppercased">Movie</span><span class="italic">finder</span>
     </h1>
-    <div class="login-screen">
+    <div class="login--screen">
         <div class="welcome-prompt">
-            <p class="text--bold">Welcome! Log in or Register</p>
+            <p class="bold">Welcome! Log in or Register</p>
             <p class="instructions">Log in to find the movies you're looking for!</p>
         </div>
-        <form>
-            <input id="email-input" class="input--full-width" type="email" placeholder="Email" />
+        <form class="login--form">
+            <input id="email-input" class="login--input" type="email" placeholder="Email" />
             <div class="password--container">
-                <input id="password-input" class="input--full-width" type="password" placeholder="Password" />
+                <input id="password-input" class="login--input" type="password" placeholder="Password" />
                 <svg id="password-eye" class="password-eye" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="19" cy="12" r="7" stroke="white" stroke-width="2"/>
                     <circle id="show-eye" cx="19" cy="12" r="7" stroke="#2791C2" stroke-width="2"/>
@@ -30,14 +34,17 @@ const loginHtml = `
                 </svg>
             </div>
             <div class="user-extras">
-                <label for="remember-user">
-                    <input class="input-checkbox" type="checkbox" id="remember-user" name="remember-user" />
+                <label for="remember-user" class="checkbox-container" >
+                    <span class="custom-checkbox">
+                        <svg class="custom-check" width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.42857L4.33333 8L9 2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>                    
+                    </span>
+                    <input class="hide-checkbox" type="checkbox" id="remember-user" name="remember-user" />
                     Remember me
                 </label>
                 <a class="link" href="#">Forgot Password?</a>
             </div>
             <span class="login-error-msg" id="login-error-msg"></span>
-            <button id="login" class="text--bold login-btn">Log in</button>
+            <button id="login" class="bold login-btn">Log in</button>
         </form>
         <p class="register-prompt">Not registered yet? <a class="link" href="#">Register now</a></p>
         <div class="separation">
@@ -53,7 +60,7 @@ const loginHtml = `
                             <path d="M27.9467 13.4969H30.4201V8.15967H26.71C21.5029 8.15967 18.9645 11.2839 18.9645 15.71V19.8756H14.8639V24.9526H18.9645V37.8401H25.0828V24.9526H29.1834L30.355 19.8756H25.0828V16.4259C25.0828 15.0591 25.8639 13.4969 27.9467 13.4969Z" fill="white"/>
                         </svg>
                     </div>
-                    <p class="option text--bold">Login with Facebook</p>
+                    <p class="option bold">Login with Facebook</p>
                 </div>
             </div>
             <div class="social-media-div button--full-width">
@@ -64,7 +71,7 @@ const loginHtml = `
                             <path d="M36.4761 44.6034H9.12726C4.61211 44.6034 1 40.9913 1 36.4761V9.12726C1 4.61211 4.61211 1 9.12726 1H36.4761C40.9913 1 44.6034 4.61211 44.6034 9.12726V36.4761C44.6034 40.9913 40.9913 44.6034 36.4761 44.6034Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <p class="option text--bold">Login with Twitter</p>
+                    <p class="option bold">Login with Twitter</p>
                 </div>
             </div>
             <div class="social-media-div button--full-width">
@@ -74,145 +81,136 @@ const loginHtml = `
                             <path d="M43.7032 17.9846H34.7983H22.559V26.3729H34.828C34.4322 28.5957 33.5813 30.5671 31.83 32.094C31.3353 32.5192 30.8109 32.9154 30.2568 33.273C28.0899 34.6646 25.4976 35.4764 22.7173 35.4764C16.7016 35.4764 11.5961 31.6881 9.7459 26.4213C9.27097 25.0586 9.00382 23.5994 9.00382 22.0725C9.00382 20.5359 9.27097 19.0477 9.75579 17.6754C11.6159 12.4375 16.7115 8.67824 22.7074 8.67824C25.9726 8.67824 28.8221 10.0698 31.1572 11.9736L37.6281 5.75972L37.6182 5.75005C33.6506 2.27103 28.3076 0 22.559 0C13.7729 0 6.10479 5.01559 2.38453 12.2539C0.860805 15.2207 0 18.5548 0 22.0821C0 25.5998 0.850911 28.9242 2.35485 31.8621C6.03553 39.0617 13.6443 44 22.4304 44C28.1493 44 33.4922 42.1252 37.4599 38.6848C37.4796 38.6655 37.5093 38.6462 37.5291 38.6172C41.0713 35.5054 43.0007 31.1759 43.7032 26.3729V26.3633C43.7032 26.3633 44 23.1548 44 22.0821C44 21.0578 43.7032 17.9846 43.7032 17.9846Z" fill="white"/>
                         </svg>
                     </div>
-                    <p class="option text--bold">Login with Google</p>
+                    <p class="option bold">Login with Google</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 `
-const headerAndSearchBarHtml = `
+const homeHtml = `
 <header>
     <p class="title header--title">
-        <span class="text--boldest text--uppercased">Movie</span><span class="fw--400 text--italic bigger-spaced">finder</span>
+        <span class="extra-bold uppercased">Movie</span><span class="fw--400 italic bigger-spaced">finder</span>
     </p>
     <div class="search--container">
         <input id="search-movie" class="input--search" type="text" placeholder="Search movies..." />
         <img class="search-icon" src="./img/vectors/magnifying_glass.svg" alt="search icon" />
     </div>
     <div class="profile-container">
-        <p id="log-out" class="text--tiny log">Log out</p>
+        <p id="log-out" class="tiny log">Log out</p>
         <div class="profile-vector-container">
             <img class="profile-vector" src="./img/vectors/profile_picture_vector.png" alt="profile picture" />
         </div>
     </div>
 </header>
-<div id="container-dropdown-results" class="container-dropdown-results">
-    <div id="dropdown" class="dropdown"></div>
-    <div class="results-container" id="results-container"></div>
+<div id="results" class="results">
+    <div id="dropdown-container" class="dropdown-container" ></div>
+    <div id="results-container" class="results-container" ></div>
+    <div id="most-watched-container" class="most-watched-container" ></div>
+    <div id="modal-container" class="modal-container" ></div>
 </div>
 `
-function getStarsArray( ratingBaseFive ) {
-    if ( ratingBaseFive > 0 ){
+function getStarsArray( rating ) {
+    if ( rating > 0 ){
         const starsArray = []
-        for ( let s = 0; s < ratingBaseFive; s++) {
+        for ( let s = 0; s < Math.round( rating/2 ); s++) {
             starsArray.push( starSVG )
         }
         return starsArray.join('')
-    } else {
+    } 
+    else {
         return starEmpty
     }
 }
 
-// class Movie {
-//     constructor ( id,
-//         title,
-//         genreIdArray,
-//         rating,
-//         summary,
-//         backgroundURL,
-//         releaseDate,
-//         originalLanguage ) {
-//             this.id = id
-//             this.title = title
-//             this.rating = rating
-//             this.genre = genreIdArray
-//             this.summary = summary
-//             this.releaseDate = releaseDate
-//             this.backgroundURL = `https://image.tmdb.org/t/p/w1280/${backgroundURL}`
-//             this.ratingBaseFive = Math.round( rating/2 )
-//             this.originalLanguage = originalLanguage 
-//         }
+function getSummary( summary ){
+    const wordsArray = summary.split(' ')
+    return wordsArray.length > 30 ? wordsArray.slice( 0, 30 ).join(' ') + '...' : summary
+}
 
-//     asMostWatched = () => { 
-//         return (`
-//         <div data-movieid="${ this.id }" class="most-watched--movie"
-//         style="
-//             background: 
-//                 linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-//                 url(${ this.backgroundURL });
-//             background-position: center;
-//             background-size: cover;
-//         ">
-//             <p data-movieid="${ this.id }" class="text--bold most-watched--title">${ this.title }</p>
-//             <div data-movieid="${ this.id }" class="stars-container">
-//                 ${ this._getStarsArray() }
-//             </div>
-//             <p data-movieid="${ this.id }" class="most-watched--summary">${ this.summary }</p>
-//         </div>
-//         `)
-//     }
-// }
+function getGenreName( genreId ){
+    const genresArray = JSON.parse( sessionStorage.getItem('genres') )
+    const genre = genresArray.find( genre => genre.id === genreId )
+    return genre.name
+}
 
-const asModal = ( id, title, genre, summary, releaseDate, backgroundURL, originalLanguage, ratingBaseFive ) => {
+function getLanguageName( iso ){
+    const languageArray = JSON.parse( sessionStorage.getItem('languages') )
+    const languageObj = languageArray.find( el => el.iso_639_1 === iso )
+    return languageObj.english_name
+}
+
+function getDate( dateRaw ){ // dateRaw = 2017-08-31
+    const [ year, month, day ] = dateRaw.split('-')
+    const date = new Date( Date.UTC( year, month, day ) )
+    const release = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long' }).format(date)
+    const releaseArray = release.split(' ')
+    return `${releaseArray[0]} ${releaseArray[1]}, ${releaseArray[2]}`
+}
+
+// rating must be base 10 ( raw )
+const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, languageIso, rating ) => {
+    const ratingBaseFive = Math.round( rating/2 )
+    const originalLanguage = getLanguageName( languageIso )
+    const releaseDate = getDate( dateRaw )
     return `
-    <div class="modal--container">
-            <div class="modal">
-                <div class="modal--header"
-                    style="
-                        background: 
-                            linear-gradient(
-                                180deg, rgba(0, 0, 0, 0) 0%, 
-                                rgba(17, 17, 17, 1) 100%), 
-                            url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        background-size: cover;
-                    "
-                >
-                    <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
-                    <button id="play" class="play-btn">Play Trailer</button>
-                    <h1 class="text--bold blue title modal--title">${ title }</h1>
-                </div>
-                <div class="modal--body">
-                    <p class="modal--summary">${ summary }</p>
-                    <div class="modal-info--container">
-                        <div class="modal-details--container">
-                            <div class="modal-details--column">
-                                <div class="modal-details--individual">
-                                    <p class="text--bold modal-details--title">Release Date:</p>
-                                    <p class="modal-details--info">${ releaseDate }</p>
-                                </div>
-                                <div class="modal-details--individual">
-                                    <p class="text--bold modal-details--title">Genre:</p>
-                                    <a class="modal-details--info modal--genre cyan underline" href="#" data-genreId="${ genre }">${ genre }</a>
-                                </div>
+        <div class="modal">
+            <div class="modal--header"
+                style="
+                    background: 
+                        linear-gradient(
+                            180deg, rgba(0, 0, 0, 0) 0%, 
+                            rgba(17, 17, 17, 1) 100%), 
+                        url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: cover;
+                "
+            >
+                <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
+                <button id="play" class="play-btn">Play Trailer</button>
+                <h1 class="bold blue title modal--title">${ title }</h1>
+            </div>
+            <div class="modal--body">
+                <p class="modal--summary">${ summary }</p>
+                <div class="modal-info--container">
+                    <div class="modal-details--container">
+                        <div class="modal-details--column">
+                            <div class="modal-details--individual">
+                                <p class="bold modal-details--title">Release Date:</p>
+                                <p class="modal-details--info">${ releaseDate }</p>
                             </div>
-                            <div class="modal-details--column">
-                                <div class="modal-details--individual extra-padding">
-                                    <p class="text--bold modal-details--title">Original Language:</p>
-                                    <p class="modal-details--info">${ originalLanguage }</p>
-                                </div>
-                                <div class="modal-details--individual extra-padding">
-                                    <p class="text--bold modal-details--title">Popularity:</p>
-                                    <p class="modal-details--info">${ ratingBaseFive } / 5</p>
-                                </div>
+                            <div class="modal-details--individual">
+                                <p class="bold modal-details--title">Genre:</p>
+                                <a id="genre-hyperlynk" class="modal-details--info modal--genre cyan underline" href="#" data-genre-id="${ genreObj.id }">${ genreObj.name }</a>
                             </div>
                         </div>
-                        <div class="similar-container" id="similar-container" >
-                            <svg data-movieid="${id}" data-number-of-recs="3" id="add-more" class="add-more recommended-square" width="244" height="244" viewBox="0 0 244 244" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0 2.95703C0 1.85246 0.895431 0.957031 2 0.957031H241.043C242.148 0.957031 243.043 1.85246 243.043 2.95703V242.001C243.043 243.105 242.148 244.001 241.043 244.001H1.99999C0.895425 244.001 0 243.105 0 242.001V2.95703Z" fill="black"/>
-                                <rect x="115.5" y="79" width="12" height="85" fill="#D9D9D9"/>
-                                <rect x="79" y="127.5" width="12" height="85" transform="rotate(-90 79 127.5)" fill="#D9D9D9"/>
-                            </svg>
+                        <div class="modal-details--column">
+                            <div class="modal-details--individual extra-padding">
+                                <p class="bold modal-details--title">Original Language:</p>
+                                <p class="modal-details--info">${ originalLanguage }</p>
+                            </div>
+                            <div class="modal-details--individual extra-padding">
+                                <p class="bold modal-details--title">Popularity:</p>
+                                <p class="modal-details--info">${ ratingBaseFive } / 5</p>
+                            </div>
                         </div>
+                    </div>
+                    <div class="similar-container" id="similar-container" >
+                        <svg data-movie-id="${id}" data-number-of-recs="3" id="add-more" class="add-more recommended-square" width="244" height="244" viewBox="0 0 244 244" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 2.95703C0 1.85246 0.895431 0.957031 2 0.957031H241.043C242.148 0.957031 243.043 1.85246 243.043 2.95703V242.001C243.043 243.105 242.148 244.001 241.043 244.001H1.99999C0.895425 244.001 0 243.105 0 242.001V2.95703Z" fill="black"/>
+                            <rect x="115.5" y="79" width="12" height="85" fill="#D9D9D9"/>
+                            <rect x="79" y="127.5" width="12" height="85" transform="rotate(-90 79 127.5)" fill="#D9D9D9"/>
+                        </svg>
                     </div>
                 </div>
             </div>
         </div>`
 }
 
-const asMain = ( id, title, genre, summary, ratingBaseFive, backgroundURL ) => {
+const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
+    const genre = getGenreName( genreId )
     return `
     <div class="movie"
         style="
@@ -225,19 +223,20 @@ const asMain = ( id, title, genre, summary, ratingBaseFive, backgroundURL ) => {
         <div class="stars-and-genre">
             <p class="genre blue">${ genre }</p>
             <div class="stars-container">
-                ${ getStarsArray( ratingBaseFive ) }
+                ${ getStarsArray( rating ) }
             </div>
         </div>
-        <p class="text--bold movie-title">${ title }</p>
+        <p class="bold movie-title">${ title }</p>
         <p class="summary">${ summary }</p>
-        <button class="watch-now-btn" data-movieId='${ id }'>Watch Now</button>
+        <button class="watch-now-btn" data-movie-id='${ id }'>Watch Now</button>
     </div>
     `
 }
 
-const asMostWatched = ( id, title, summary, ratingBaseFive, backgroundURL ) => {
+// rating must be base 10 ( raw )
+const asMostWatched = ( id, title, summary, rating, backgroundURL ) => {
     return `
-        <div data-movieid="${ id }" class="most-watched--movie"
+        <div data-movie-id="${ id }" class="most-watched--movie"
         style="
             background: 
                 linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
@@ -245,11 +244,11 @@ const asMostWatched = ( id, title, summary, ratingBaseFive, backgroundURL ) => {
             background-position: center;
             background-size: cover;
         ">
-            <p data-movieid="${ id }" class="text--bold most-watched--title">${ title }</p>
-            <div data-movieid="${ id }" class="stars-container">
-                ${ getStarsArray( ratingBaseFive ) }
+            <p data-movie-id="${ id }" class="bold most-watched--title">${ title }</p>
+            <div data-movie-id="${ id }" class="stars-container">
+                ${ getStarsArray( rating ) }
             </div>
-            <p data-movieid="${ id }" class="most-watched--summary">${ summary }</p>
+            <p data-movie-id="${ id }" class="most-watched--summary">${ getSummary( summary ) }</p>
         </div>
     `
 }
@@ -257,18 +256,104 @@ const asMostWatched = ( id, title, summary, ratingBaseFive, backgroundURL ) => {
 const asRecommended = ( id, title, backgroundURL ) => {
     const imgEl = document.createElement('img')
     imgEl.classList.add('recommended-square')
-    imgEl.dataset.movieid = id
+    imgEl.dataset.movieId = id
     imgEl.src = `https://image.tmdb.org/t/p/w1280/${ backgroundURL }`
     imgEl.alt = `Poster for ${title}`
     return imgEl
 }
 
+function setUpLogin() {
+    const masterContainer = document.getElementById('master-container')
+    masterContainer.innerHTML = loginHtml
+
+    const passwordEye = document.getElementById('password-eye')
+    passwordEye.addEventListener('click', () => {
+
+        const passwordInput = document.getElementById('password-input')
+        const attribute = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password'
+        passwordInput.setAttribute( 'type', attribute )
+
+        const eye = document.getElementById('show-eye')
+        const eyeStyle = eye.style.fill === 'rgb(39, 145, 194)' ? 'none' : 'rgb(39, 145, 194)'
+        eye.style.fill = eyeStyle
+    } )
+    
+    const loginBtn = document.getElementById('login')
+
+    loginBtn.addEventListener('click', async e => {
+        e.preventDefault()
+
+        const emailInput = document.getElementById('email-input')
+        const passwordInput = document.getElementById('password-input')
+        const errorSpan = document.getElementById('login-error-msg')
+
+        const passwordRegex = new RegExp('^[a-zA-Z0-9!@#$&()`\.+,/\"]{8,20}$', 'g')
+        const emailRegex = new RegExp('^([a-zA-Z0-9]+)@([a-zA-Z]+){4,}\.([a-z]+){3,}$', 'g')
+
+        if ( ! passwordRegex.test( passwordInput.value) ) {
+            errorSpan.textContent = `Please enter a valid password`
+            return
+        } 
+        else if ( ! emailRegex.test( emailInput.value )) {
+            errorSpan.textContent = `Please enter a valid email`
+            return
+        }
+
+        const response = await getUser( emailInput.value, passwordInput.value )
+        if ( typeof response === 'string' ) { // Error in the database
+            errorSpan.textContent = response
+        } 
+        else {
+            sessionStorage.setItem('logged', 'true') // Remember user is logged in
+            document.getElementById('master-container').innerHTML = homeHtml
+
+            const { movies, totalPages } = await fetchMostWatched( 1 )
+
+            const mostWatchedArray = movies.slice( 1 ).map( ( { id, title, overview, vote_average, backdrop_path } ) => {
+                if ( backdrop_path ) { 
+                    return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
+                }
+            } ).join('')
+
+            const { id, title, genre_ids, overview, vote_average, backdrop_path } = movies[0]
+            const mainMovie = asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path )
+
+            const mainContainer = document.getElementById('results-container')
+            const mostWatchedContainer = document.getElementById('most-watched-container')
+
+            mainContainer.innerHTML = mainMovie
+            mostWatchedContainer.innerHTML = mostWatchedArray
+        
+            const targetArray = mostWatchedContainer.getElementsByClassName('most-watched--movie')
+            const target = targetArray[ targetArray.length - 10 ]
+            target.setAttribute('id', 'trigger')
+            target.dataset.lastPage = 1
+            target.dataset.totalPages = totalPages
+
+            const observer = new IntersectionObserver( ( entries, observer ) => {
+                entries.forEach( entry => {
+                    if ( entry.isIntersecting ) {
+                        addMoviesToMostWatched( entry.target.dataset.lastPage, observer )
+                        observer.unobserve( entry.target )
+                    }
+                } )
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: .75
+            } )
+            observer.observe( target )
+        } 
+    } )        
+} 
+
 
 export {
     loginHtml, 
-    headerAndSearchBarHtml, 
+    homeHtml, 
     asModal,
     asMain,
     asMostWatched,
-    asRecommended
+    asRecommended,
+    setUpLogin
 }

@@ -9,30 +9,39 @@
 
 * { box-sizing: border-box; }
 img { max-width: 100%;  }
-svg { height: 100%; width: 100%; }
+/* svg { height: 100%; width: 100%; } */
 p, a, h1 { margin: 0; }
 a, button { cursor: pointer; }
 html {
     font-family: 'Open Sans', sans-serif;
 }
 
+.master-container {
+    width: 100vw;
+}
+
 /*  GENERAL */
 
 .bold { font-weight: 700; }
 .extra-bold { font-weight: 900; }
-.cyan { color: #0FEFFD; }
+.italic { font-style: italic; }
+.uppercased { text-transform: uppercase; }
 .title {
     font-family: Montserrat, sans-serif;
     font-size: 2.25rem;
     margin: 0;
     padding: 0;
 }
+.cyan { color: #0FEFFD; }
+.blue { color: var(--blue-color); }
 
 /* END GENERAL */
 
 /* TAGS */
-body {
+body, html {
     width: 100vw;
+    margin: 0;
+    padding: 0;
 }
 
 button { 
@@ -75,6 +84,84 @@ a {
 /* TODO -> ADD FOCUS AND HOVER STATE TO <a> */
 
 /* END TAGS */
+
+/* START Login Section */
+.login--container {
+    background-image: url(../img/backgrounds/login_desktop.png);
+    display: grid;
+    justify-items: center;
+    padding: 4.125rem 1.875rem 3.75rem;
+}
+.login--title {
+    font-size: 2.625rem;
+    line-height: 2rem;
+}
+.login--screen {
+    font-size: 1.5rem;
+    display: grid;
+    
+    width: 100%;
+    padding: 3.125rem 3rem;
+    margin-top: 4rem;
+    
+    border-radius: .625rem; 
+    color: #fff;
+    background-color: rgba(49, 49, 49, 0.95);
+    box-shadow: 0px 6px 6px rgba(11, 11, 11, 0.8);   
+}
+.welcome-prompt {
+    text-align: center;
+    line-height: 2.75rem;
+    margin-bottom: 1.25rem;
+}
+.login--form {
+    display: grid;
+    width: 100%;
+    gap: 1.125rem;
+}
+.login--input {
+    font-size: inherit;
+    padding-left: 1.563rem;
+    width: 100%;
+    height: 4.375rem;
+    border-radius: 0.313rem;
+}
+.password--container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-eye {
+    position: absolute;
+    right: 1.25rem;
+}
+.login-error-msg {
+    color: red;
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+.checkbox-container {
+    cursor: pointer;
+}
+.custom-checkbox {
+    background-color: var(--blue-color);
+    height: 1.875rem;
+    width: 1.875rem;
+}
+.custom-check {
+    visibility: hidden;
+}
+.custom-check input:checked {
+    visibility: visible;
+}
+.hide-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+/* END Login Section */
 
 /* START Similar Movies Section */
 
