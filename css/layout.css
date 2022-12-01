@@ -118,6 +118,9 @@ label {
     align-items: center;
     color: #BCBCBC;
 }
+.social-medias--container {
+    border: 10px solid yellow;
+}
 
 /* GENERAL */
 .title {
@@ -152,7 +155,7 @@ label {
     background-size: cover;
 }
 .title--login {
-    margin-left: -1px;
+    /* margin-left: -1px; */
 
     font-size: 2.625rem;
     line-height: 2rem;

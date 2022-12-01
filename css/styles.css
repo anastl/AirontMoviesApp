@@ -40,6 +40,7 @@ html {
 /* TAGS */
 body, html {
     width: 100vw;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
 }
@@ -81,6 +82,9 @@ a {
     text-decoration: none; 
     color: var(--link-color);
 }
+input{
+    cursor: pointer;
+}
 /* TODO -> ADD FOCUS AND HOVER STATE TO <a> */
 
 /* END TAGS */
@@ -88,8 +92,13 @@ a {
 /* START Login Section */
 .login--container {
     background-image: url(../img/backgrounds/login_desktop.png);
+    background-size: cover;
+    background-position: center;
+    
+    height: 100vh;
     display: grid;
     justify-items: center;
+    align-content: center;
     padding: 4.125rem 1.875rem 3.75rem;
 }
 .login--title {
@@ -140,27 +149,90 @@ a {
     font-size: 1.2rem;
     font-weight: bolder;
 }
+.user-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+}
 .checkbox-container {
+    position: relative;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 2.5rem;
 }
-.custom-checkbox {
-    background-color: var(--blue-color);
-    height: 1.875rem;
-    width: 1.875rem;
-}
-.custom-check {
-    visibility: hidden;
-}
-.custom-check input:checked {
-    visibility: visible;
-}
-.hide-checkbox {
+input.hide-checkbox {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
 }
+.custom-checkbox { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;  
+    top: 0;  
+    left: 0;
+    border-radius: .375rem;
+    height: 1.875rem;
+    width: 1.875rem;
+    margin-right: 2rem;
+    background-color: #fff;
+} 
+.custom-checkmark {
+    position: absolute;  
+    width: 1.1rem;
+    height: 1.3rem;
+}
+input:checked + .custom-checkbox  {
+    background-color: var(--blue-color);
+}
+.register-prompt {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 1.25rem;
+}
+.social-login--container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+.social-media-container {
+    border: .125rem solid #FFFFFF;
+    border-radius: 2.188rem;
+    padding: .813rem 4.688rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.563rem;
+    margin: 0 auto;
+}
+.social-media--icon {
+    width: 2.75rem;
+}
+.separation {
+    font-size: 1.25rem;
+    display: grid;
+    grid-template-columns: 46.5% 7% 46.5%;
+    align-items: center;
+    justify-items: center;
+    padding: 2rem 0;
+}
+.divider {
+    height: .06rem;
+    width: 80%;
+    background-color: #fff;
+}
+.divider--left {
+    justify-self: left;
+}
+.divider--right {
+    justify-self: right;
+}
+
 /* END Login Section */
 
 /* START Similar Movies Section */
