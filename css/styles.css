@@ -5,6 +5,9 @@
     --visited-btn: #4FC7FF;
     --focus-btn-border: #82CAFF;
     --active-font--btn: #2791C2;
+
+    --star-color: #FF9900;
+    --dark-background: #1E1E1E;
 }
 
 * { box-sizing: border-box; }
@@ -18,6 +21,10 @@ html {
 
 .master-container {
     width: 100vw;
+    position: relative;
+}
+.results {
+    position: relative;
 }
 
 /*  GENERAL */
@@ -39,15 +46,14 @@ html {
 
 /* TAGS */
 body, html {
-    width: 100vw;
-    min-height: 100vh;
     margin: 0;
     padding: 0;
+    background-color: var(--dark-background);
 }
 
 button { 
     align-self: center;
-    border-radius: 35px; 
+    border-radius: 2.188rem; 
     border: none;
     
     background-color: var(--link-color);
@@ -58,8 +64,7 @@ button {
     padding: 1rem .7rem;
     
     font-weight: 700;
-    /* font-size: 1.1rem; */
-    font-size: 1.5rem;
+    font-size: inherit;
     font-family: 'Open Sans', sans-serif;
     line-height: 2rem;
 }
@@ -68,7 +73,7 @@ button:hover {
 }
 button:focus {
     background-color: var(--blue-color);
-    border: var(--focus-btn-border) 2px solid;
+    border: var(--focus-btn-border) .13rem solid;
 }
 button:visited {
     background-color: var(--visited-btn);
@@ -82,10 +87,12 @@ a {
     text-decoration: none; 
     color: var(--link-color);
 }
-input{
-    cursor: pointer;
-}
 /* TODO -> ADD FOCUS AND HOVER STATE TO <a> */
+input[type=text]{
+    border: none;
+    cursor: pointer;
+    border-radius: .188rem;
+}
 
 /* END TAGS */
 
@@ -95,7 +102,8 @@ input{
     background-size: cover;
     background-position: center;
     
-    height: 100vh;
+    min-height: 100vh;
+    width: 100%;
     display: grid;
     justify-items: center;
     align-content: center;
@@ -148,6 +156,7 @@ input{
     color: red;
     font-size: 1.2rem;
     font-weight: bolder;
+    text-align: center;
 }
 .user-extras {
     display: flex;
@@ -232,23 +241,305 @@ input:checked + .custom-checkbox  {
 .divider--right {
     justify-self: right;
 }
-
 /* END Login Section */
 
-/* START Similar Movies Section */
+/* START HEADER */
+header {  
+    color: #fff;
+    background-color: var(--blue-color);
+    
+    display: grid;
+    grid-template-columns: 10.063rem 15.25rem 5.94rem;
+    grid-template-areas: 'title search profile';
+    align-items: center;
+    justify-content: space-evenly;
+    line-height: 2rem;
+    
+    height: 5.625rem;
+    width: 100%;
+    padding-left: .738rem;
+    padding-right: .625rem;
+}
+.header--title {
+    grid-area: title;
+
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+.search--container {
+    grid-area: search;
+    
+    display: flex;
+    align-items: center;
+        
+    width: 100%;
+    height: 2.875rem;
+    padding: 0;
+    margin: 0;
+    margin-left: 0rem;
+
+    position: relative;
+    left: 0;
+    top: 0;
+}
+.input--search {
+    padding-left: 3rem; 
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    
+    position: absolute;
+    left: .438rem;
+    top: 0;
+    font-size: .813rem;
+}
+.input--search::placeholder {
+    color: #BCBCBC;
+}
+.search-icon {
+    position: absolute;
+    left: .75rem;
+
+    margin-left: .5rem;
+    width: 1.458rem;
+    height: 1.458rem;
+}
+.profile-container {
+    grid-area: profile;
+    justify-self: end;
+
+    width: 5.938rem;
+
+    display: flex;
+    align-items: center;
+}
+.log {
+    margin-right: .3rem;
+    margin-top: .125rem;
+
+    width: fit-content;
+}
+.profile-vector-container {
+    display: grid;
+    place-items: center;
+    
+    width: 2.813rem;
+    height: 2.813rem;
+    margin-right: .15rem;
+
+    border-radius: 50%;
+    background-color: #BCBCBC;
+}
+/* END HEADER */
+
+/* START Dropdown Section */
+.dropdown-container {
+    position: absolute;
+    left: 2.5%;
+
+    width: 95%;
+    padding: 1.5rem 2rem;
+
+    display: none;
+    flex-direction: column;
+
+    color: var(--blue-color);
+    background-color: #fff;
+    border-radius: 0 0 .5rem .5rem;
+}
+.dropdown-result {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    gap: 1rem;
+    height: 7rem;
+}
+.dropdown-result--img {
+    height: 95%;
+} 
+/* END Dropdown Section */
+
+/* START Most Watched Section */
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+.movie {
+    width: 100%;
+    min-height: 53.125rem;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-end;
+    font-size: 1.5rem;
+    color: #fff;
+    padding: 9.5rem 5.563rem;
+}
+.stars-and-genre {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.stars-container {
+    display: flex;
+    gap: .732rem;
+}
+.movie-title {
+    font-size: 3.5rem;
+}
+.summary {
+    margin-top: 1rem;
+    text-align: justify;
+}
+.watch-now-btn {
+    margin-top: 3.125rem;
+}
+.most-watched-container {
+    width: 100%;
+    padding: 3.125rem 6rem;
+    color: #fff;
+    background-color: var(--dark-background);
+    display: flex;
+    flex-direction: column;
+    gap: 3.1rem;
+}
+.most-watched--section-title {
+    font-size: 2rem;
+}
+.most-watched--movie {
+    height: 38.586rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem 3.5rem;
+}
+.most-watched--title {
+    font-size: 2.25rem;
+}
+.most-watched--stars-container {
+    margin-top: .625rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    gap: .417rem;
+}
+.star {
+    width: .792rem;
+    height: .833rem;
+}
+.filled {
+    fill: var(--star-color);
+}
+.most-watched--summary {
+    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.25rem;
+}
+/* END Most Watched Section */
+
+/* START Modal Section */
+.modal-container {
+    display: none;
+    justify-content: center;
+
+    position: absolute;
+    top: -5.625rem;
+    left: 0;
+
+    width: 100vw;
+    min-height: 100vh;
+
+    color: #fff;
+    background-color: var(--dark-background);
+}
+.modal {
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    font-family: 'Open Sans', sans-serif;
+    /* padding: 2.139rem 2.163rem 4.938rem 3.75rem; */
+}
+
+.modal--header {
+    position: relative;
+    height: 34.625rem;
+    padding-left: 3.75rem;
+    padding-right: 4.875rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.875rem;
+}
+.modal--title {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 4rem;
+}
+.close {
+    position: absolute;
+    top: 2.139rem;
+    right: 2.163rem;
+}
+.play-btn {
+    width: 19.375rem;
+    align-self: flex-start;
+    font-size: 1.5rem;
+    line-height: 1.25rem;
+}
+
+.modal--body {
+    padding: 1.875rem 4.375rem 1.875rem 3.75rem;
+}
+.modal--summary {
+    font-size: 1.5rem;
+    line-height: 2.375rem;
+}
+
+.modal-info--container {
+    padding-top: 3.125rem;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+.modal-details--container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.modal-details--row {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+.details--info {
+    margin-top: 1.9rem;
+}
+.genre-dets {
+    display: inline-block;
+}
 
 .similar-container {
     width: 100%;
     margin: 0 auto;
     display: grid;
     place-content: center;
-    grid-template-columns: repeat( auto-fit, 15rem );
+    grid-template-columns: repeat( auto-fit, 14.5rem );
     gap: 2rem;
 }
+.similar-container--title {
+    margin-top: 6.25rem;
+    margin-bottom: 5.063rem;
+    font-size: 1.5rem;
+    align-self: flex-start;
+} 
 .recommended-square {
     object-fit: cover;
-    width: 15rem;
-    height: 15rem;
+    width: 14.5rem;
+    height: 14.5rem;
 }
-
-/* END Similar Movies Section */
+/* END Modal Section */
