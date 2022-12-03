@@ -1,9 +1,12 @@
 import {
-    asRecommended,
-    asMostWatched,
+    homeHtml, 
+    asModal,
     asMain,
+    asMostWatched,
+    asRecommended,
     asDropdown, 
     asError,
+    setUpLogin,
     setModalOpener
 } from './utils.js'
 
@@ -51,11 +54,21 @@ async function fetchSimilar( movieId, page ){
         const baseUrl = `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&page=${page}`
         const res = await fetch( baseUrl )
         const recommended = await res.json()
-        
-        const recommendedArray = recommended.results
-        const cleanSimilar = recommendedArray.filter( ( { id } ) => id !== movieId )
-    
-        return cleanSimilar.map( ( { id, title, backdrop_path } ) => backdrop_path && ( { id, title, backdrop_path } ) )
+        if ( recommended.total_results ) {
+            const recommendedArray = recommended.results
+            const cleanSimilar = recommendedArray.filter( ( { id } ) => id != movieId )
+
+            const completeSimilar = []
+            cleanSimilar.forEach( ( { id, title, backdrop_path } ) =>{
+                if( id && title && backdrop_path )
+                    completeSimilar.push( { id, title, backdrop_path } )
+            } )
+
+            return completeSimilar
+        } else {
+            document.getElementById('similar-container').style = 'none'
+            document.getElementById('similar-container--title').style = 'none'
+        }
     } catch ( e ) { console.log( e ) }
 }
 
@@ -96,10 +109,14 @@ async function searchMovieAsDropdown ( query ) {
         const url = `https://api.themoviedb.org/3/search/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&query=${ query }&include_adult=false`
         const res = await fetch( url )
         const searchResults = await res.json()
+        if ( searchResults.total_results ) {
+            const moviesArray = searchResults.results.slice(0,5).map( ( { id, title, release_date, poster_path } ) => asDropdown( id, title, release_date, poster_path ) ).join(' ')
+    
+            return moviesArray
+        } else {
+            document.getElementById('dropdown-container').style.display = 'none'
+        }
 
-        const moviesArray = searchResults.results.slice(0,5).map( ( { id, title, release_date, poster_path } ) => asDropdown( id, title, release_date, poster_path ) ).join(' ')
-
-        return moviesArray
     } catch ( e ) { document.getElementById('error-modal').innerHTML = asError( e ) }
 }
 
@@ -149,7 +166,8 @@ async function addSimilarMovies( movieId ) { //handle modal, works
 
     if ( oldPage === 1 ) {
         sessionStorage.setItem('similarMovies', JSON.stringify( recommendedArray ) )
-    }
+    } 
+    
     const recommendedImgs = recommendedArray.map( ( { id, title, backdrop_path } ) => asRecommended( id, title, backdrop_path ) )
 
     const parent = addMoreBtn.parentElement
@@ -208,6 +226,129 @@ async function searchInputCallback( e ) {
     }
 }
 
+async function setUpHome() {
+    document.getElementById('master-container').innerHTML = homeHtml
+        
+    const { movies, totalPages } = await fetchMostWatched( 1 )
+
+    const mostWatchedArray = movies.slice( 1 ).map( ( { id, title, overview, vote_average, backdrop_path } ) => {
+        if ( backdrop_path ) { 
+            return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
+        }
+    } ).join('')
+
+    const { id, title, genre_ids, overview, vote_average, backdrop_path } = movies[0]
+    const mainMovie = asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path )
+
+    const mainContainer = document.getElementById('results-container')
+    const mostWatchedContainer = document.getElementById('most-watched--results')
+
+    mainContainer.innerHTML = mainMovie
+    mostWatchedContainer.innerHTML = mostWatchedArray
+
+    const targetArray = mostWatchedContainer.getElementsByClassName('most-watched--movie')
+    const target = targetArray[ targetArray.length - 10 ]
+    target.setAttribute('id', 'trigger')
+    target.dataset.lastPage = 1
+    target.dataset.totalPages = totalPages
+
+    const observer = new IntersectionObserver( ( entries, observer ) => {
+        entries.forEach( entry => {
+            if ( entry.isIntersecting ) {
+                addMoviesToMostWatched( entry.target.dataset.lastPage, observer )
+                observer.unobserve( entry.target )
+            }
+        } )
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: .75
+    } )
+    observer.observe( target )
+
+    const logOut = document.getElementById('log-out')
+    const searchMovieInput = document.getElementById('search-movie')
+
+    logOut.addEventListener('click', () => {
+        localStorage.removeItem('logged')
+        setUpLogin()
+    } )
+    
+    document.addEventListener('click', event => {
+        const dropdown = document.getElementById('dropdown-container');
+      
+        if (!dropdown.contains(event.target)) {
+          dropdown.style.display = 'none'
+        }
+    })
+    searchMovieInput.addEventListener('keyup', searchInputCallback )
+
+    const showModalArray = [ ... document.getElementsByClassName('sm') ]
+    showModalArray.forEach( el => setModalOpener( el ) )
+    // document.getElementById('master-container').innerHTML = homeHtml
+    // fetchMostWatched( 1 )
+    //     .then( ( { movies, totalPages } ) => {
+    //         const mostWatchedArray = movies.slice( 1 ).map( ( { id, title, overview, vote_average, backdrop_path } ) => {
+    //             if ( backdrop_path ) { 
+    //                 return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
+    //             }
+    //         } ).join('')
+    
+    //         const { id, title, genre_ids, overview, vote_average, backdrop_path } = movies[0]
+    //         const mainMovie = asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path )
+    
+    //         const mainContainer = document.getElementById('results-container')
+    //         const mostWatchedContainer = document.getElementById('most-watched-container')
+    
+    //         mainContainer.innerHTML = mainMovie
+    //         mostWatchedContainer.innerHTML = mostWatchedArray
+        
+    //         const targetArray = mostWatchedContainer.getElementsByClassName('most-watched--movie')
+    //         const target = targetArray[ targetArray.length - 10 ]
+    //         target.setAttribute('id', 'trigger')
+    //         target.dataset.lastPage = 1
+    //         target.dataset.totalPages = totalPages
+    
+    //         const observer = new IntersectionObserver( ( entries, observer ) => {
+    //             entries.forEach( entry => {
+    //                 if ( entry.isIntersecting ) {
+    //                     addMoviesToMostWatched( entry.target.dataset.lastPage, observer )
+    //                     observer.unobserve( entry.target )
+    //                 }
+    //             } )
+    //         }, {
+    //             root: null,
+    //             rootMargin: '0px',
+    //             threshold: .75
+    //         } )
+    //         observer.observe( target )
+    //     } )
+    //     .catch ( e => document.getElementById('error-modal').textContent = 'An error has ocurred, please try again' )
+}
+
+async function displayModal( movieId ) {
+    const modalContainer = document.getElementById('modal-container')
+
+    const { id, title, genres, overview, release_date, backdrop_path, original_language, vote_average } = await fetchMovie( movieId )
+
+    modalContainer.innerHTML = asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average )
+
+    modalContainer.style.display = 'flex'
+    document.getElementById('most-watched-container').style.display = 'none'
+    document.getElementById('results-container').style.display = 'none'
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+        modalContainer.style.display = 'none'
+        modalContainer.innerHTML = ''
+        document.getElementById('most-watched-container').style.display = 'flex'
+        document.getElementById('results-container').style.display = 'flex'
+    } )
+    await addSimilarMovies( movieId )
+
+    const showModalArray = [ ... document.getElementsByClassName('sm') ]
+    showModalArray.forEach( el => setModalOpener( el ) )
+}
+
 export {
     fetchGenres, 
     fetchLanguages, 
@@ -219,5 +360,7 @@ export {
     searchMovieAsDropdown, 
     addMoviesToMostWatched,
     addSimilarMovies,
-    searchInputCallback
+    searchInputCallback,
+    setUpHome, 
+    displayModal
 }

@@ -5,7 +5,7 @@
     --visited-btn: #4FC7FF;
     --focus-btn-border: #82CAFF;
     --active-font--btn: #2791C2;
-
+    --light-gray: #BCBCBC;
     --star-color: #FF9900;
     --dark-background: #1E1E1E;
 }
@@ -336,9 +336,9 @@ header {
 /* START Dropdown Section */
 .dropdown-container {
     position: absolute;
-    left: 2.5%;
+    left: 5%;
 
-    width: 95%;
+    width: 90%;
     padding: 1.5rem 2rem;
 
     display: none;
@@ -346,7 +346,7 @@ header {
 
     color: var(--blue-color);
     background-color: #fff;
-    border-radius: 0 0 .5rem .5rem;
+    border-radius: 0 0 1rem 1rem;
 }
 .dropdown-result {
     display: flex;
@@ -366,6 +366,11 @@ header {
     flex-direction: column;
     gap: 2.5rem;
 }
+
+.display-type {
+    display: none;
+}
+
 .movie {
     width: 100%;
     min-height: 53.125rem;
@@ -396,6 +401,7 @@ header {
 .watch-now-btn {
     margin-top: 3.125rem;
 }
+
 .most-watched-container {
     width: 100%;
     padding: 3.125rem 6rem;
@@ -543,3 +549,24 @@ header {
     height: 14.5rem;
 }
 /* END Modal Section */
+
+@media screen and (min-width: 834px) {
+    .most-watched-container {
+        padding: 2.125rem 3.625rem 6.938rem 3.625rem;
+    }
+    .most-watched--title-and-display {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .display-type {
+        display: flex;
+    }
+    .svg-btn {
+        background-color: transparent;
+        padding: .375rem .438rem ;
+    }
+    .selected {
+        background-color: var(--light-gray);
+    }
+}
