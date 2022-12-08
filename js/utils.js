@@ -351,7 +351,9 @@ function setUpLogin() {
 } 
 
 function setModalOpener( element ) {
-    element.addEventListener('click', () => displayModal( element.dataset.movieId ) )
+    element.addEventListener('click', () => {
+        console.log("clicked")
+        displayModal( element.dataset.movieId )} )
 }
 
 export {

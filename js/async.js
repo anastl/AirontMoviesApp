@@ -271,6 +271,7 @@ async function setUpHome() {
 
     logOut.addEventListener('click', () => {
         localStorage.removeItem('logged')
+        document.removeEventListener('click')
         setUpLogin()
     } )
     

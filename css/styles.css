@@ -414,6 +414,11 @@ header {
 .most-watched--section-title {
     font-size: 2rem;
 }
+.most-watched--results {
+    display: flex;
+    flex-direction: column;
+    gap: 3.1rem;
+}
 .most-watched--movie {
     height: 38.586rem;
     display: flex;
