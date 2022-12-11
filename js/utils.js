@@ -23,9 +23,9 @@ const loginHtml = `
             <p class="instructions">Log in to find the movies you're looking for!</p>
         </div>
         <form class="login--form">
-            <input id="email-input" class="login--input" type="email" placeholder="Email" />
+            <input id="email-input" class="login--input" type="email" placeholder="Email" autocomplete="email" />
             <div class="password--container">
-                <input id="password-input" class="login--input" type="password" placeholder="Password" />
+                <input id="password-input" class="login--input" type="password" placeholder="Password" autocomplete="current-password" />
                 <svg id="password-eye" class="password-eye" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="19" cy="12" r="7" stroke="white" stroke-width="2"/>
                     <circle id="show-eye" cx="19" cy="12" r="7" stroke="#2791C2" stroke-width="2"/>
@@ -88,7 +88,7 @@ const homeHtml = `
         <span class="extra-bold uppercased">Movie</span><span class="fw--400 italic bigger-spaced">finder</span>
     </p>
     <div class="search--container">
-        <input id="search-movie" class="input--search" type="text" placeholder="Search movies..." />
+        <input id="search-movie" class="input--search" type="text" placeholder="Search movies..." autocomplete="on" />
         <img class="search-icon" src="./img/vectors/magnifying_glass.svg" alt="search icon" />
     </div>
     <div class="profile-container">
@@ -119,7 +119,7 @@ const homeHtml = `
                 </button>
             </div>
         </div>
-        <div id="most-watched--results" class="most-watched--results"></div>
+        <div id="most-watched--results" class="most-watched--results column"></div>
     </div>
     <div id="modal-container" class="modal-container" ></div>
     <div id="error-modal" class="error-modal" ></div>
@@ -356,6 +356,27 @@ function setModalOpener( element ) {
         displayModal( element.dataset.movieId )} )
 }
 
+function selectViewCallback(){
+    const btn = this 
+    const classes = [ ...btn.classList ]
+    if ( ! classes.includes('selected') ){
+        const oldSelected = document.getElementsByClassName('selected')[0]
+        const oldDisplay = oldSelected.dataset.view
+        oldSelected.classList.remove('selected')
+        btn.classList.add('selected')
+
+        const mwContainer = document.getElementById('most-watched--results')
+        mwContainer.classList.remove( oldDisplay )
+        mwContainer.classList.add( oldDisplay === 'column' ? 'grid' : 'column' )
+        
+        const mostWatchedMovies = [ ...document.getElementsByClassName('most-watched--movie') ]
+        mostWatchedMovies.forEach( movie => {
+            movie.classList.remove( `${oldDisplay}-movie` )
+            movie.classList.add( `${oldDisplay}-movie` === 'grid-movie' ? 'column-movie' : 'grid-movie' )
+        } )
+    }
+}
+
 export {
     loginHtml, 
     homeHtml, 
@@ -366,5 +387,6 @@ export {
     asDropdown, 
     asError,
     setUpLogin,
-    setModalOpener
+    setModalOpener,
+    selectViewCallback
 }

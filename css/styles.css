@@ -6,13 +6,13 @@
     --focus-btn-border: #82CAFF;
     --active-font--btn: #2791C2;
     --light-gray: #BCBCBC;
+    --selected-color: #373737;
     --star-color: #FF9900;
     --dark-background: #1E1E1E;
 }
 
 * { box-sizing: border-box; }
 img { max-width: 100%;  }
-/* svg { height: 100%; width: 100%; } */
 p, a, h1 { margin: 0; }
 a, button { cursor: pointer; }
 html {
@@ -376,11 +376,12 @@ header {
     min-height: 53.125rem;
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     align-content: flex-start;
     justify-content: flex-end;
     font-size: 1.5rem;
     color: #fff;
-    padding: 9.5rem 5.563rem;
+    padding: 5.563rem 9.5rem 0;
 }
 .stars-and-genre {
     display: flex;
@@ -400,6 +401,7 @@ header {
 }
 .watch-now-btn {
     margin-top: 3.125rem;
+    margin-bottom: 9.5rem;
 }
 
 .most-watched-container {
@@ -556,22 +558,94 @@ header {
 /* END Modal Section */
 
 @media screen and (min-width: 834px) {
+    .movie {
+        padding: 5.5rem 6.5rem 0;
+        min-height: 34.375rem;
+        margin-left: auto;
+    }
+    .genre {
+        font-size: .875rem;
+        line-height: 1rem;
+    }
+    .stars-container {
+        gap: .425rem;
+        margin-top: .95rem;
+    }
+    .star {
+        height: .68rem;
+        width: .833rem;
+    }
+    .movie-title {
+        margin-top: .5rem;
+    }
+    .summary {
+        margin-top: .9rem;
+        max-width: 37.813rem;
+        font-size: 1rem;
+        line-height: 2rem;
+    }
+    .watch-now-btn {
+        margin-top: auto;
+        margin-bottom: 5.5rem;
+        width: 15.625rem;
+        height: 3.75rem;
+        align-self: flex-start;
+        font-size: 1.25rem;
+    }
+
     .most-watched-container {
-        padding: 2.125rem 3.625rem 6.938rem 3.625rem;
+        gap: 1.875rem;
+        padding: 1.75rem 3.125rem 6.938rem;
     }
     .most-watched--title-and-display {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
+    .most-watched--section-title {
+        font-size: 1.5rem;
+        margin-left: .625rem;
+    }
     .display-type {
         display: flex;
+        align-items: center;
+        gap: .375rem;
     }
     .svg-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.688rem;
+        height: 2.25rem;
         background-color: transparent;
-        padding: .375rem .438rem ;
+        padding: .005rem;
+        border-radius: .188rem;
+    }
+    .display-mw {
+        height: 100%; 
+        width: 100%;
     }
     .selected {
-        background-color: var(--light-gray);
+        background-color: var(--selected-color);
     }
+
+    .most-watched--results.column {
+        padding: 0 .5rem;
+        gap: 2.188rem;
+    }
+    .column-movie { 
+        height: 19.375rem;
+        padding: 0 5.313rem 1.563rem 5.625rem;
+    }
+    .column-movie>.most-watched--title {
+        font-size: 1.5rem;
+    }
+    .column-movie .most-watched--stars-container {
+        margin: 0;
+    }
+    .column-movie .star {
+        width: .557rem;
+    }
+    /* .grid-movie */
+
 }

@@ -7,7 +7,8 @@ import {
     asDropdown, 
     asError,
     setUpLogin,
-    setModalOpener
+    setModalOpener,
+    selectViewCallback
 } from './utils.js'
 
 async function fetchGenres() {
@@ -125,7 +126,7 @@ async function addMoviesToMostWatched( lastPage, observer ) {
         const { movies, totalPages } = await fetchMostWatched( lastPage + 1 )
         
         const mostWatchedArray = movies.map( ( { id, title, overview, vote_average, backdrop_path } ) => {
-            if ( backdrop_path ) { 
+            if ( id && title && overview && vote_average && backdrop_path ) { 
                 return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
             }
         } ).join('')
@@ -204,13 +205,17 @@ async function searchInputCallback( e ) {
     const dropdown = document.getElementById('dropdown-container')
     const mainContainer = document.getElementById('results-container')
 
-    if ( ! query || query.length === 0 ) {
-        dropdown.style.display = 'none'
-    }
+    if ( ! query || query.length === 0 ) dropdown.style.display = 'none' 
     if ( query.length < 3 ) return
     
     dropdown.style.display = 'flex'
+    const lastSearches = JSON.parse( sessionStorage.getItem('lastSearches') )        
     if ( e.key === 'Enter' ) { // Show results
+        if ( lastSearches ) {
+            sessionStorage.setItem('lastSearches', JSON.stringify( [ ...lastSearches, searchMovieInput.value ] ) )
+        } else {
+            sessionStorage.setItem('lastSearches', JSON.stringify( [ searchMovieInput.value ] ) )
+        }
         mainContainer.innerHTML = await searchMovieAsMain( query )
         dropdown.innerHTML = ''
         searchMovieInput.value = ''
@@ -232,7 +237,7 @@ async function setUpHome() {
     const { movies, totalPages } = await fetchMostWatched( 1 )
 
     const mostWatchedArray = movies.slice( 1 ).map( ( { id, title, overview, vote_average, backdrop_path } ) => {
-        if ( backdrop_path ) { 
+        if ( id && title && overview && vote_average && backdrop_path ) { 
             return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
         }
     } ).join('')
@@ -266,6 +271,9 @@ async function setUpHome() {
     } )
     observer.observe( target )
 
+    const viewBtns = [ ... document.getElementsByClassName('svg-btn') ]
+    viewBtns.forEach( btn => btn.addEventListener('click', selectViewCallback) )
+
     const logOut = document.getElementById('log-out')
     const searchMovieInput = document.getElementById('search-movie')
 
@@ -286,6 +294,9 @@ async function setUpHome() {
 
     const showModalArray = [ ... document.getElementsByClassName('sm') ]
     showModalArray.forEach( el => setModalOpener( el ) )
+
+    const mostWatchedMovies = [ ...document.getElementsByClassName('most-watched--movie') ]
+    mostWatchedMovies.forEach( movie => movie.classList.add( 'column-movie' ) )
     // document.getElementById('master-container').innerHTML = homeHtml
     // fetchMostWatched( 1 )
     //     .then( ( { movies, totalPages } ) => {
