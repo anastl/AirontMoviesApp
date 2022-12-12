@@ -102,7 +102,7 @@ async function searchMovieAsMain ( query ) {
         const moviesArray = searchResults.results.slice(0,5).map( ( { id, title, genre_ids, vote_average, overview, backdrop_path } ) => asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path ) ).join(' ')
 
         return moviesArray
-    } catch ( e ) { document.getElementById('error-modal').innerHTML = asError( e ) }
+    } catch ( e ) { document.getElementById('error-modal').insertAdjacentHTML( 'beforeend', asError( e ) ) }
 }
 
 async function searchMovieAsDropdown ( query ) {
@@ -118,7 +118,7 @@ async function searchMovieAsDropdown ( query ) {
             document.getElementById('dropdown-container').style.display = 'none'
         }
 
-    } catch ( e ) { document.getElementById('error-modal').innerHTML = asError( e ) }
+    } catch ( e ) { document.getElementById('error-modal').insertAdjacentHTML( 'beforeend', asError( e ) ) }
 }
 
 async function addMoviesToMostWatched( lastPage, observer ) {
@@ -131,8 +131,8 @@ async function addMoviesToMostWatched( lastPage, observer ) {
             }
         } ).join('')
             
-        const mostWatchedContainer = document.getElementById('most-watched-container')
-        mostWatchedContainer.innerHTML += mostWatchedArray
+        const mostWatchedContainer = document.getElementById('most-watched--results')
+        mostWatchedContainer.insertAdjacentHTML( 'beforeend', mostWatchedArray )
     
         const trigger = document.getElementById('trigger')
         trigger.removeAttribute('id')
@@ -216,15 +216,15 @@ async function searchInputCallback( e ) {
         } else {
             sessionStorage.setItem('lastSearches', JSON.stringify( [ searchMovieInput.value ] ) )
         }
-        mainContainer.innerHTML = await searchMovieAsMain( query )
-        dropdown.innerHTML = ''
+        mainContainer.insertAdjacentHTML( 'beforeend', await searchMovieAsMain( query ) )
+        dropdown.insertAdjacentHTML( 'beforeend', '' )
         searchMovieInput.value = ''
         dropdown.style.display = 'none'
 
         const showModalArray = [ ... document.getElementsByClassName('sm') ]
         showModalArray.forEach( el => setModalOpener( el ) )
     } else { // Show dropdown
-        dropdown.innerHTML = await searchMovieAsDropdown( query )
+        dropdown.insertAdjacentHTML( 'beforeend', await searchMovieAsDropdown( query ) )
 
         const showModalArray = [ ... document.getElementsByClassName('sm') ]
         showModalArray.forEach( el => setModalOpener( el ) )
@@ -232,7 +232,7 @@ async function searchInputCallback( e ) {
 }
 
 async function setUpHome() {
-    document.getElementById('master-container').innerHTML = homeHtml
+    document.getElementById('master-container').insertAdjacentHTML( 'beforeend', homeHtml ) 
         
     const { movies, totalPages } = await fetchMostWatched( 1 )
 
@@ -248,8 +248,8 @@ async function setUpHome() {
     const mainContainer = document.getElementById('results-container')
     const mostWatchedContainer = document.getElementById('most-watched--results')
 
-    mainContainer.innerHTML = mainMovie
-    mostWatchedContainer.innerHTML = mostWatchedArray
+    mainContainer.insertAdjacentHTML( 'beforeend', mainMovie ) 
+    mostWatchedContainer.insertAdjacentHTML( 'beforeend', mostWatchedArray ) 
 
     const targetArray = mostWatchedContainer.getElementsByClassName('most-watched--movie')
     const target = targetArray[ targetArray.length - 10 ]
@@ -270,9 +270,6 @@ async function setUpHome() {
         threshold: .75
     } )
     observer.observe( target )
-
-    const viewBtns = [ ... document.getElementsByClassName('svg-btn') ]
-    viewBtns.forEach( btn => btn.addEventListener('click', selectViewCallback) )
 
     const logOut = document.getElementById('log-out')
     const searchMovieInput = document.getElementById('search-movie')
@@ -295,8 +292,9 @@ async function setUpHome() {
     const showModalArray = [ ... document.getElementsByClassName('sm') ]
     showModalArray.forEach( el => setModalOpener( el ) )
 
-    const mostWatchedMovies = [ ...document.getElementsByClassName('most-watched--movie') ]
-    mostWatchedMovies.forEach( movie => movie.classList.add( 'column-movie' ) )
+    const viewBtns = [ ... document.getElementsByClassName('svg-btn') ]
+    viewBtns.forEach( btn => btn.addEventListener('click', selectViewCallback) )
+
     // document.getElementById('master-container').innerHTML = homeHtml
     // fetchMostWatched( 1 )
     //     .then( ( { movies, totalPages } ) => {
@@ -343,7 +341,7 @@ async function displayModal( movieId ) {
 
     const { id, title, genres, overview, release_date, backdrop_path, original_language, vote_average } = await fetchMovie( movieId )
 
-    modalContainer.innerHTML = asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average )
+    modalContainer.insertAdjacentHTML( 'beforeend', asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average ) ) 
 
     modalContainer.style.display = 'flex'
     document.getElementById('most-watched-container').style.display = 'none'
@@ -351,7 +349,8 @@ async function displayModal( movieId ) {
 
     document.getElementById('close-modal').addEventListener('click', () => {
         modalContainer.style.display = 'none'
-        modalContainer.innerHTML = ''
+        console.log(modalContainer.firstChild)
+        modalContainer.removeChild( modalContainer.firstChild )
         document.getElementById('most-watched-container').style.display = 'flex'
         document.getElementById('results-container').style.display = 'flex'
     } )

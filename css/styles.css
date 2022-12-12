@@ -46,6 +46,7 @@ html {
 
 /* TAGS */
 body, html {
+    /* overflow-x: hidden; */
     margin: 0;
     padding: 0;
     background-color: var(--dark-background);
@@ -84,6 +85,7 @@ button:active {
     background-color: #fff;
 }
 a { 
+    cursor: pointer;
     text-decoration: none; 
     color: var(--link-color);
 }
@@ -593,14 +595,16 @@ header {
         font-size: 1.25rem;
     }
 
+    /* padding: 1.75rem 3.125rem 6.938rem; */
     .most-watched-container {
         gap: 1.875rem;
-        padding: 1.75rem 3.125rem 6.938rem;
+        padding: 0;
     }
     .most-watched--title-and-display {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin: 1.75rem 3.125rem 0 3.75rem;
     }
     .most-watched--section-title {
         font-size: 1.5rem;
@@ -629,23 +633,49 @@ header {
         background-color: var(--selected-color);
     }
 
-    .most-watched--results.column {
-        padding: 0 .5rem;
+    .most-watched--stars-container {
+        margin: 0;
+        gap: .293rem;
+    }
+    .star {
+        width: .557rem;
+    }
+
+    .most-watched--results {
+        padding: 0 3.625rem 6.938rem;
         gap: 2.188rem;
     }
-    .column-movie { 
+    .most-watched--movie { 
         height: 19.375rem;
         padding: 0 5.313rem 1.563rem 5.625rem;
     }
-    .column-movie>.most-watched--title {
+    .most-watched--title {
         font-size: 1.5rem;
+        line-height: 3rem;
     }
-    .column-movie .most-watched--stars-container {
-        margin: 0;
+    .most-watched--summary{
+        margin-top: .438rem;
+        font-size: .75rem;
     }
-    .column-movie .star {
-        width: .557rem;
-    }
-    /* .grid-movie */
 
+    .grid {
+        padding: 0 3.1rem 9.438rem;
+        display: grid;
+        gap: 1.875rem;
+        grid-template-columns: repeat( auto-fit , 14.063rem );
+    }
+    .grid .most-watched--movie {
+        height: 19.313rem;
+        width: 100%;
+        padding: 0 1rem 1.375rem 1.313rem;
+    }
+    .grid .most-watched--title {
+        font-size: 1.25rem;
+        line-height: 2.5rem;
+    }
+    .grid .most-watched--summary {
+        margin-top: .462rem;
+        font-size: .625rem;
+        line-height: 1.063rem;
+    }
 }

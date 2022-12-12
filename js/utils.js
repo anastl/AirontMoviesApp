@@ -112,9 +112,9 @@ const homeHtml = `
                         <rect data-view="grid" x="7" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
                     </svg>
                 </button>
-                <button data-view="column" class="svg-btn selected">
-                    <svg data-view="column" class="display-mw" width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect data-view="column" x="7" y="6" width="45" height="24" rx="2" fill="#D9D9D9"/>
+                <button class="svg-btn selected">
+                    <svg class="display-mw" width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="7" y="6" width="45" height="24" rx="2" fill="#D9D9D9"/>
                     </svg>
                 </button>
             </div>
@@ -168,8 +168,9 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
     const ratingBaseFive = Math.round( rating/2 )
     const originalLanguage = getLanguageName( languageIso )
     const releaseDate = getDate( dateRaw )
+    console.log(title)
     return `
-        <div class="modal">
+        <div class="modal" id="modal">
             <div class="modal--header"
                 style="
                     background: 
@@ -361,19 +362,11 @@ function selectViewCallback(){
     const classes = [ ...btn.classList ]
     if ( ! classes.includes('selected') ){
         const oldSelected = document.getElementsByClassName('selected')[0]
-        const oldDisplay = oldSelected.dataset.view
-        oldSelected.classList.remove('selected')
-        btn.classList.add('selected')
+        oldSelected.classList.toggle('selected')
+        btn.classList.toggle('selected')
 
         const mwContainer = document.getElementById('most-watched--results')
-        mwContainer.classList.remove( oldDisplay )
-        mwContainer.classList.add( oldDisplay === 'column' ? 'grid' : 'column' )
-        
-        const mostWatchedMovies = [ ...document.getElementsByClassName('most-watched--movie') ]
-        mostWatchedMovies.forEach( movie => {
-            movie.classList.remove( `${oldDisplay}-movie` )
-            movie.classList.add( `${oldDisplay}-movie` === 'grid-movie' ? 'column-movie' : 'grid-movie' )
-        } )
+        mwContainer.classList.toggle( 'grid' )
     }
 }
 
