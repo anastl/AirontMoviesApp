@@ -148,19 +148,7 @@ async function addMoviesToMostWatched( lastPage, observer ) {
 
 // SAVE API CALLS TO SESSION STORAGE
 async function addSimilarMovies( movieId ) { //handle modal, works
-/*
-    const { id,
-        title,
-        genres,
-        vote_average,
-        overview,
-        backdrop_path,
-        release_date,
-        original_language } = await fetchMovie( movieId )
-                
-        const modal = asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average )
-        document.getElementById('modal-container').innerHTML = modal
-*/
+
     const addMoreBtn = document.getElementById('add-more')
     const oldPage = parseInt( addMoreBtn.dataset.page )
     const recommendedArray = await fetchSimilar( movieId, oldPage )
@@ -224,6 +212,7 @@ async function searchInputCallback( e ) {
         const showModalArray = [ ... document.getElementsByClassName('sm') ]
         showModalArray.forEach( el => setModalOpener( el ) )
     } else { // Show dropdown
+        dropdown.innerHTML = ''
         dropdown.insertAdjacentHTML( 'beforeend', await searchMovieAsDropdown( query ) )
 
         const showModalArray = [ ... document.getElementsByClassName('sm') ]
@@ -294,46 +283,6 @@ async function setUpHome() {
 
     const viewBtns = [ ... document.getElementsByClassName('svg-btn') ]
     viewBtns.forEach( btn => btn.addEventListener('click', selectViewCallback) )
-
-    // document.getElementById('master-container').innerHTML = homeHtml
-    // fetchMostWatched( 1 )
-    //     .then( ( { movies, totalPages } ) => {
-    //         const mostWatchedArray = movies.slice( 1 ).map( ( { id, title, overview, vote_average, backdrop_path } ) => {
-    //             if ( backdrop_path ) { 
-    //                 return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
-    //             }
-    //         } ).join('')
-    
-    //         const { id, title, genre_ids, overview, vote_average, backdrop_path } = movies[0]
-    //         const mainMovie = asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path )
-    
-    //         const mainContainer = document.getElementById('results-container')
-    //         const mostWatchedContainer = document.getElementById('most-watched-container')
-    
-    //         mainContainer.innerHTML = mainMovie
-    //         mostWatchedContainer.innerHTML = mostWatchedArray
-        
-    //         const targetArray = mostWatchedContainer.getElementsByClassName('most-watched--movie')
-    //         const target = targetArray[ targetArray.length - 10 ]
-    //         target.setAttribute('id', 'trigger')
-    //         target.dataset.lastPage = 1
-    //         target.dataset.totalPages = totalPages
-    
-    //         const observer = new IntersectionObserver( ( entries, observer ) => {
-    //             entries.forEach( entry => {
-    //                 if ( entry.isIntersecting ) {
-    //                     addMoviesToMostWatched( entry.target.dataset.lastPage, observer )
-    //                     observer.unobserve( entry.target )
-    //                 }
-    //             } )
-    //         }, {
-    //             root: null,
-    //             rootMargin: '0px',
-    //             threshold: .75
-    //         } )
-    //         observer.observe( target )
-    //     } )
-    //     .catch ( e => document.getElementById('error-modal').textContent = 'An error has ocurred, please try again' )
 }
 
 async function displayModal( movieId ) {
@@ -341,7 +290,7 @@ async function displayModal( movieId ) {
 
     const { id, title, genres, overview, release_date, backdrop_path, original_language, vote_average } = await fetchMovie( movieId )
 
-    modalContainer.insertAdjacentHTML( 'beforeend', asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average ) ) 
+    modalContainer.innerHTML = asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average )
 
     modalContainer.style.display = 'flex'
     document.getElementById('most-watched-container').style.display = 'none'
@@ -349,8 +298,7 @@ async function displayModal( movieId ) {
 
     document.getElementById('close-modal').addEventListener('click', () => {
         modalContainer.style.display = 'none'
-        console.log(modalContainer.firstChild)
-        modalContainer.removeChild( modalContainer.firstChild )
+        modalContainer.innerHTML = ''
         document.getElementById('most-watched-container').style.display = 'flex'
         document.getElementById('results-container').style.display = 'flex'
     } )

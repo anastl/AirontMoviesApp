@@ -168,7 +168,7 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
     const ratingBaseFive = Math.round( rating/2 )
     const originalLanguage = getLanguageName( languageIso )
     const releaseDate = getDate( dateRaw )
-    console.log(title)
+
     return `
         <div class="modal" id="modal">
             <div class="modal--header"
