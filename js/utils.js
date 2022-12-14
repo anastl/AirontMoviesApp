@@ -83,21 +83,23 @@ const loginHtml = `
 </div>
 `
 const homeHtml = `
-<header>
-    <p class="title header--title">
-        <span class="extra-bold uppercased">Movie</span><span class="fw--400 italic bigger-spaced">finder</span>
-    </p>
-    <div class="search--container">
-        <input id="search-movie" class="input--search" type="text" placeholder="Search movies..." autocomplete="on" />
-        <img class="search-icon" src="./img/vectors/magnifying_glass.svg" alt="search icon" />
-    </div>
-    <div class="profile-container">
-        <p id="log-out" class="tiny log">Log out</p>
-        <div class="profile-vector-container">
-            <img class="profile-vector" src="./img/vectors/profile_picture_vector.png" alt="profile picture" />
+<div class="header-container">
+    <header>
+        <p class="title header--title">
+            <span class="extra-bold uppercased">Movie</span><span class="fw--400 italic bigger-spaced">finder</span>
+        </p>
+        <div class="search--container">
+            <input id="search-movie" class="input--search" type="text" placeholder="Search movies..." autocomplete="on" />
+            <img class="search-icon" src="./img/vectors/magnifying_glass.svg" alt="search icon" />
         </div>
-    </div>
-</header>
+        <div class="profile-container">
+            <p id="log-out" class="tiny log">Log out</p>
+            <div class="profile-vector-container">
+                <img class="profile-vector" src="./img/vectors/profile_picture_vector.png" alt="profile picture" />
+            </div>
+        </div>
+    </header>
+</div>
 <div id="results" class="results">
     <div id="dropdown-container" class="dropdown-container" ></div>
     <div id="results-container" class="results-container" ></div>
