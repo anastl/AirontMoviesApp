@@ -283,7 +283,7 @@ header {
     height: 2.875rem;
     padding: 0;
     margin: 0;
-    margin-left: 0rem;
+    margin-left: .438rem;
 
     position: relative;
     left: 0;
@@ -296,7 +296,6 @@ header {
     margin: 0;
     
     position: absolute;
-    left: .438rem;
     top: 0;
     font-size: .813rem;
 }
@@ -307,7 +306,6 @@ header {
     position: absolute;
     left: .75rem;
 
-    margin-left: .5rem;
     width: 1.458rem;
     height: 1.458rem;
 }
@@ -582,6 +580,7 @@ svg.recommended-square--inside {
 /* END Modal Section */
 
 @media screen and (min-width: 834px) {
+    /* START Main movie and Results */
     .movie {
         padding: 5.5rem 6.5rem 0;
         min-height: 34.375rem;
@@ -615,8 +614,9 @@ svg.recommended-square--inside {
         align-self: flex-start;
         font-size: 1.25rem;
     }
+    /* END Main movie and Results */
 
-    /* padding: 1.75rem 3.125rem 6.938rem; */
+    /* START Most Watched */
     .most-watched-container {
         gap: 1.875rem;
         padding: 0;
@@ -700,4 +700,25 @@ svg.recommended-square--inside {
         font-size: .625rem;
         line-height: 1.063rem;
     }
+    /* START Most Watched */
+
+    /* START Header */
+    header {
+        grid-template-columns: 10.063rem 24.125rem 6.188rem;
+        gap: 4rem;
+        justify-content: space-between;
+        padding: 0 1.875rem;
+    }
+    .search--container {
+        margin: 0;
+        height: 3.125rem;
+    }
+    .profile-container {
+        gap: .75;
+        justify-content: space-between;
+    }
+    .profile-vector-container {
+        margin: 0;
+    }
+    /* END Header */
 }
