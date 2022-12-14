@@ -163,6 +163,30 @@ function getDate( dateRaw ){ // dateRaw = 2017-08-31
     return `${releaseArray[0]} ${releaseArray[1]}, ${releaseArray[2]}`
 }
 
+const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
+    const genre = getGenreName( genreId )
+    return `
+    <div class="movie"
+        style="
+            background: 
+                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+                url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
+            background-position: center;
+            background-size: cover;
+    ">
+        <div class="stars-and-genre">
+            <p class="genre blue">${ genre }</p>
+            <div class="stars-container">
+                ${ getStarsArray( rating ) }
+            </div>
+        </div>
+        <p class="bold movie-title">${ title }</p>
+        <p class="summary">${ getSummary( summary ) }</p>
+        <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
+    </div>
+    `
+}
+
 // rating must be base 10 ( raw )
 const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, languageIso, rating ) => {
     const ratingBaseFive = Math.round( rating/2 )
@@ -212,39 +236,17 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
                     </div>
                     <p class="bold similar-container--title" id="similar-container--title">Similar movies: </p>
                     <div class="similar-container" id="similar-container" >
-                        <svg data-movie-id="${id}" data-page="1" data-number-of-recs="3" id="add-more" class="add-more recommended-square" width="244" height="244" viewBox="0 0 244 244" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 2.95703C0 1.85246 0.895431 0.957031 2 0.957031H241.043C242.148 0.957031 243.043 1.85246 243.043 2.95703V242.001C243.043 243.105 242.148 244.001 241.043 244.001H1.99999C0.895425 244.001 0 243.105 0 242.001V2.95703Z" fill="black"/>
-                            <rect x="115.5" y="79" width="12" height="85" fill="#D9D9D9"/>
-                            <rect x="79" y="127.5" width="12" height="85" transform="rotate(-90 79 127.5)" fill="#D9D9D9"/>
-                        </svg>
+                        <button data-movie-id="${id}" data-page="1" data-number-of-recs="0" id="add-more" class="add-more recommended-square">                    
+                            <svg class="recommended-square--inside" width="244" height="244" viewBox="0 0 244 244" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 2.95703C0 1.85246 0.895431 0.957031 2 0.957031H241.043C242.148 0.957031 243.043 1.85246 243.043 2.95703V242.001C243.043 243.105 242.148 244.001 241.043 244.001H1.99999C0.895425 244.001 0 243.105 0 242.001V2.95703Z" fill="black"/>
+                                <rect x="115.5" y="79" width="12" height="85" fill="#D9D9D9"/>
+                                <rect x="79" y="127.5" width="12" height="85" transform="rotate(-90 79 127.5)" fill="#D9D9D9"/>
+                            </svg>
+                        </button>                            
                     </div>
                 </div>
             </div>
         </div>`
-}
-
-const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
-    const genre = getGenreName( genreId )
-    return `
-    <div class="movie"
-        style="
-            background: 
-                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-                url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
-            background-position: center;
-            background-size: cover;
-    ">
-        <div class="stars-and-genre">
-            <p class="genre blue">${ genre }</p>
-            <div class="stars-container">
-                ${ getStarsArray( rating ) }
-            </div>
-        </div>
-        <p class="bold movie-title">${ title }</p>
-        <p class="summary">${ getSummary( summary ) }</p>
-        <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
-    </div>
-    `
 }
 
 // rating must be base 10 ( raw )
@@ -268,17 +270,17 @@ const asMostWatched = ( id, title, summary, rating, backgroundURL ) => {
 }
 
 const asRecommended = ( id, title, backgroundURL ) => {
-    const imgEl = document.createElement('img')
-    imgEl.classList.add('recommended-square')
-    imgEl.classList.add('sm')
-    imgEl.dataset.movieId = id
-    imgEl.src = `https://image.tmdb.org/t/p/w1280/${ backgroundURL }`
-    imgEl.alt = `Poster for ${title}`
-    return imgEl
+    // const imgEl = document.createElement('img')
+    // imgEl.classList.add('recommended-square')
+    // imgEl.classList.add('sm')
+    // imgEl.dataset.movieId = id
+    // imgEl.src = `https://image.tmdb.org/t/p/w1280/${ backgroundURL }`
+    // imgEl.alt = `Poster for ${title}`
+
+    return `<button class="recommended-square sm" data-movie-id="${id}" ><img class="recommended-square--inside" src=https://image.tmdb.org/t/p/w1280/${backgroundURL} alt='Poster for ${title}' /></button>`
 }
 
 const asDropdown = ( id, title, release_date, poster_path ) => {
-    // console.log( id, title, release_date, poster_path )
     if ( poster_path ) {
         const releaseYear = release_date.split('-')[0]
         return `
@@ -352,9 +354,7 @@ function setUpLogin() {
 } 
 
 function setModalOpener( element ) {
-    element.addEventListener('click', () => {
-        console.log("clicked")
-        displayModal( element.dataset.movieId )} )
+    element.addEventListener('click', () => displayModal( element.dataset.movieId ) )
 }
 
 function selectViewCallback(){
