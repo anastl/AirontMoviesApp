@@ -706,7 +706,6 @@ svg.recommended-square--inside {
     header {
         grid-template-columns: 10.063rem 24.125rem 6.188rem;
         gap: 4rem;
-        justify-content: space-between;
         padding: 0 1.875rem;
     }
     .search--container {
@@ -714,7 +713,7 @@ svg.recommended-square--inside {
         height: 3.125rem;
     }
     .profile-container {
-        gap: .75;
+        gap: .75rem;
         justify-content: space-between;
     }
     .profile-vector-container {
