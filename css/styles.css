@@ -246,17 +246,21 @@ input:checked + .custom-checkbox  {
 /* END Login Section */
 
 /* START HEADER */
-header {  
+.header-container {
+    width: 100%;
+    max-width: 90rem;
     color: #fff;
     background-color: var(--blue-color);
-    
+}
+header {      
     display: grid;
-    grid-template-columns: 10.063rem 15.25rem 5.94rem;
+    grid-template-columns: 10.063rem 15.25rem 5.938rem;
     grid-template-areas: 'title search profile';
     align-items: center;
     justify-content: space-evenly;
     line-height: 2rem;
     
+    margin: 0 auto;
     height: 5.625rem;
     width: 100%;
     padding-left: .738rem;
@@ -311,16 +315,16 @@ header {
     grid-area: profile;
     justify-self: end;
 
-    width: 5.938rem;
+    width: 100%;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: 2.625rem 2.813rem;
+    gap: .5rem;
     align-items: center;
 }
 .log {
-    margin-right: .3rem;
-    margin-top: .125rem;
-
-    width: fit-content;
+    width: 100%;
+    font-size: .75rem;
 }
 .profile-vector-container {
     display: grid;
