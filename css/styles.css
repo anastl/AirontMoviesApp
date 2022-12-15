@@ -9,6 +9,7 @@
     --selected-color: #373737;
     --star-color: #FF9900;
     --dark-background: #1E1E1E;
+    --modal-body-background: #111111;
 }
 
 * { box-sizing: border-box; }
@@ -720,4 +721,76 @@ svg.recommended-square--inside {
         margin: 0;
     }
     /* END Header */
+
+    /* START Dropdown */
+    .dropdown-result {
+        height: 9.5rem;
+        font-size: 1.75rem;
+    }
+    /* END Dropdown */
+
+    /* START Modal */      
+    .modal-container {
+        background: linear-gradient(180deg, var(--dark-background) 0%, #010101 100%);
+        padding: 6.5rem 3.188rem;
+    }
+    .modal {
+        background-color: transparent;
+    }
+    .modal--header {
+        padding: 0 4rem 0 3.563rem;
+        gap: 1.875rem;
+        border-radius: 1.25rem 1.25rem 0 0;
+        height: 24.25rem;
+    }
+    .close {
+        top: 1.345rem;
+        right: 1.329rem;
+        width: 2.609rem;
+        height: 2.609rem;
+    }
+    .play-btn {
+        font-size: 1.25rem;
+        width: 17.688rem;
+        height: 3.813rem;
+    }
+    .modal--title {
+        font-size: 3.5rem;
+        line-height: 3.5rem;
+    }
+    .modal--body {
+        background-color: var(--modal-body-background);
+        border-radius: 0 0 1.25rem 1.25rem;
+        font-size: 1rem;
+    }
+    .modal--summary {
+        font-size: inherit;
+        line-height: 2rem;
+    }
+    .modal-details--container {
+        gap: 7.4rem;
+        justify-content: flex-start;
+    }
+    .modal-details--row {
+        width: fit-content;
+        font-size: inherit;
+        gap: 0rem;
+    }
+    .similar-container--title {
+        margin-top: 1.9rem;
+        margin-bottom: .735rem;
+        font-size: inherit;
+    }
+    .similar-container {
+        margin: 0;
+        justify-self: flex-start;
+        grid-template-columns: repeat( auto-fit, 6.125rem);
+        gap: 1.625rem;
+    }
+    .recommended-square {
+        height: 6.125rem;
+        width: 6.125rem;
+    }
+    /* END Modal */    
+
 }
