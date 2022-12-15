@@ -23,6 +23,9 @@ async function addMoviesToMostWatched( lastPage, observer ) {
             
         const mostWatchedContainer = document.getElementById('most-watched--results')
         mostWatchedContainer.insertAdjacentHTML( 'beforeend', mostWatchedArray )
+
+        const showModalArray = [ ... document.getElementsByClassName('sm') ]
+        showModalArray.forEach( el => setModalOpener( el ) )
     
         const trigger = document.getElementById('trigger')
         trigger.removeAttribute('id')
