@@ -783,8 +783,8 @@ svg.recommended-square--inside {
     }
     .similar-container {
         margin: 0;
-        justify-self: flex-start;
         grid-template-columns: repeat( auto-fit, 6.125rem);
+        place-content: initial;
         gap: 1.625rem;
     }
     .recommended-square {
