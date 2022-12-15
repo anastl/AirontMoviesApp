@@ -36,7 +36,7 @@ async function addMoviesToMostWatched( lastPage, observer ) {
     } catch ( e ) { console.log( e ) }
 }
 
-async function addSimilarMovies() { 
+async function addSimilarMovies( e ) { 
     const addMoreBtn = document.getElementById('add-more')
     
     const movieId = addMoreBtn.dataset.movieId
@@ -65,7 +65,7 @@ async function addSimilarMovies() {
     const showModalArray = [ ...document.getElementsByClassName('sm') ]
     showModalArray.forEach( el => setModalOpener( el ) )
 
-    addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
+    e && addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
 } 
 
 async function displayModal( movieId ) {
