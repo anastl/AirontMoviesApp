@@ -601,6 +601,7 @@ svg.recommended-square--inside {
     .login--screen {
         margin-top: 3.5rem;
         padding: 2rem 2.813rem 2.625rem;
+        /* min-height: fit-content; */
     }
     .welcome-prompt {
         font-size: 1rem;
@@ -660,10 +661,24 @@ svg.recommended-square--inside {
         grid-template-columns: 45% 6% 45%;
         gap: 4%;
         place-content: center;
-        padding: 1.159rem 0;
+        padding: 1.159rem 0 1.688rem;
     }
     .divider {
         width: 100%;
+    }
+    .social-login--container {
+        gap: .625rem;
+        font-size: .875rem;
+    }
+    .social-media-container {
+        padding-top: .438rem;
+        padding-bottom: .438rem;
+        padding-left:  4.313rem;
+        justify-content: flex-start;
+    }
+    .social-media--icon {
+        width: 1.75rem;
+        height: 1.813rem;
     }
     /* END Login */
     
