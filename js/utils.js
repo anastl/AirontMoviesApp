@@ -26,7 +26,7 @@ const loginHtml = `
             <input id="email-input" class="login--input" type="email" placeholder="Email" autocomplete="email" />
             <div class="password--container">
                 <input id="password-input" class="login--input" type="password" placeholder="Password" autocomplete="current-password" />
-                <svg id="password-eye" class="password-eye" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg tabindex=0 id="password-eye" class="password-eye focus-dark" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="19" cy="12" r="7" stroke="white" stroke-width="2"/>
                     <circle id="show-eye" cx="19" cy="12" r="7" stroke="#2791C2" stroke-width="2"/>
                     <path d="M37 12C37 12.1633 36.9344 12.4766 36.7106 12.9481C36.4943 13.4038 36.1614 13.9423 35.7106 14.5357C34.8097 15.7216 33.4846 17.0656 31.8282 18.3302C28.5075 20.8654 23.9654 23 19 23C14.0346 23 9.49253 20.8654 6.17179 18.3302C4.51536 17.0656 3.19029 15.7216 2.2894 14.5357C1.83863 13.9423 1.50568 13.4038 1.2894 12.9481C1.06558 12.4766 1 12.1633 1 12C1 11.8367 1.06558 11.5234 1.2894 11.0519C1.50568 10.5962 1.83863 10.0577 2.2894 9.46429C3.19029 8.27839 4.51536 6.93444 6.17179 5.66984C9.49253 3.13461 14.0346 1 19 1C23.9654 1 28.5075 3.13461 31.8282 5.66984C33.4846 6.93444 34.8097 8.27839 35.7106 9.46429C36.1614 10.0577 36.4943 10.5962 36.7106 11.0519C36.9344 11.5234 37 11.8367 37 12Z" stroke="white" stroke-width="2"/>
@@ -34,7 +34,7 @@ const loginHtml = `
                 </svg>
             </div>
             <div class="user-extras">
-                <label for="remember-user" class="checkbox-container" >
+                <label tabindex=0 id="remember-user" for="remember-user" class="checkbox-container" >
                     <input class="hide-checkbox" type="checkbox" id="remember-user" name="remember-user" />
                     <span class="custom-checkbox">
                         <svg class="custom-checkmark" width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.42857L4.33333 8L9 2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>                    
@@ -372,6 +372,14 @@ function selectViewCallback(){
     }
 }
 
+function hideDropdown( event ){
+    const dropdown = document.getElementById('dropdown-container')
+      
+    if (!dropdown.contains(event.target)) {
+      dropdown.style.display = 'none'
+    }
+}
+
 export {
     loginHtml, 
     homeHtml, 
@@ -383,5 +391,6 @@ export {
     asError,
     setUpLogin,
     setModalOpener,
-    selectViewCallback
+    selectViewCallback,
+    hideDropdown
 }

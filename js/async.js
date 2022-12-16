@@ -8,7 +8,8 @@ import {
     asError,
     setUpLogin,
     setModalOpener,
-    selectViewCallback
+    selectViewCallback,
+    hideDropdown
 } from './utils.js'
 
 async function addMoviesToMostWatched( lastPage, observer ) {
@@ -290,17 +291,11 @@ async function setUpHome() {
 
     logOut.addEventListener('click', () => {
         localStorage.removeItem('logged')
-        document.removeEventListener('click')
+        document.removeEventListener('click', hideDropdown )
         setUpLogin()
     } )
     
-    document.addEventListener('click', event => {
-        const dropdown = document.getElementById('dropdown-container')
-      
-        if (!dropdown.contains(event.target)) {
-          dropdown.style.display = 'none'
-        }
-    })
+    document.addEventListener('click', hideDropdown )
     searchMovieInput.addEventListener('keyup', searchInputCallback )
 
     const showModalArray = [ ... document.getElementsByClassName('sm') ]
