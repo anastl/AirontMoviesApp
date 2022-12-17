@@ -35,9 +35,9 @@ const loginHtml = `
             </div>
             <div class="user-extras">
                 <label tabindex=0 id="remember-user" for="remember-user" class="checkbox-container" >
-                    <input class="hide-checkbox" type="checkbox" id="remember-user" name="remember-user" />
-                    <span class="custom-checkbox">
-                        <svg class="custom-checkmark" width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.42857L4.33333 8L9 2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>                    
+                    <input tabindex=-1 class="hide-checkbox" type="checkbox" id="remember-user" name="remember-user" />
+                    <span tabindex=-1 class="custom-checkbox">
+                        <svg tabindex=-1 class="custom-checkmark" width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.42857L4.33333 8L9 2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>                    
                     </span>
                     Remember me
                 </label>
