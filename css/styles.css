@@ -24,10 +24,14 @@ a, button { cursor: pointer; }
 html {
     font-family: 'Open Sans', sans-serif;
 }
+/* body { width: 100vw; } */
 
 .master-container {
-    width: 100vw;
+    width: 100%;
     position: relative;
+    /* top: 0; */
+    /* left: 0; */
+    /* overflow: auto; */
 }
 .results {
     position: relative;
@@ -601,17 +605,18 @@ svg.recommended-square--inside {
     .login--screen {
         margin-top: 3.5rem;
         padding: 2rem 2.813rem 2.625rem;
-        /* min-height: fit-content; */
     }
     .welcome-prompt {
         font-size: 1rem;
+        line-height: normal;
         margin-bottom: 0;
     }
     .instructions {
         font-size: .625rem;
+        line-height: 1.3rem;
     }
     .login--form {
-        margin-top: .5rem;
+        margin-top: .6rem;
         gap: .5rem;
     }
     .login--input, 
@@ -631,6 +636,7 @@ svg.recommended-square--inside {
     .user-extras {
         font-size: .625rem;
         height: 1.125rem;
+        padding: .5rem 1.25rem 0 1rem;
     }
     .checkbox-container {
         line-height: 1.2rem;
@@ -661,7 +667,7 @@ svg.recommended-square--inside {
         grid-template-columns: 45% 6% 45%;
         gap: 4%;
         place-content: center;
-        padding: 1.159rem 0 1.688rem;
+        padding: .5rem 0 1.688rem;
     }
     .divider {
         width: 100%;
@@ -669,12 +675,14 @@ svg.recommended-square--inside {
     .social-login--container {
         gap: .625rem;
         font-size: .875rem;
+        margin-top: .6rem;
     }
     .social-media-container {
-        padding-top: .438rem;
+        padding-top: .38rem;
         padding-bottom: .438rem;
-        padding-left:  4.313rem;
+        padding-left:  4rem;
         justify-content: flex-start;
+        gap: 1.3rem;
     }
     .social-media--icon {
         width: 1.75rem;
@@ -896,4 +904,46 @@ svg.recommended-square--inside {
 
 }
 
-/* ADD DESKTOP STYLES */
+@media screen and (min-width: 1440px) {
+    /* START Login */
+    .login--container {
+        background-image: url(../img/backgrounds/login_desktop.png);
+        padding: 4.5rem 31.063rem 5rem;
+    }
+    .login--form {
+        margin-top: 1.4rem;
+        gap: .45rem;
+    }
+    .login--input, 
+    .password--container {
+        height: 2.325rem;
+    }
+    .login--input, .password--input {
+        line-height: 2rem;
+        padding-left: 1.142rem;
+    }
+    .password--container {
+        margin-top: .3rem;
+    }
+    .user-extras {
+        padding: .5rem 1.1rem 0 1.08rem;
+    }
+    .custom-checkbox {
+        width: 1rem;
+        height: 1rem;
+    }
+    .separation {
+        padding: 0;
+        font-size: .813rem;
+        line-height: 2rem;
+        grid-template-columns: 40% 6% 40%;
+        gap: 7%;
+    }
+    .divider {
+        margin-top: .5rem;
+    }
+    .social-login--container {
+        margin-top: 1.6rem;
+    }
+    /* END Login */
+}
