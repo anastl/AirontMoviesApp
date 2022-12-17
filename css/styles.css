@@ -156,6 +156,7 @@ input[type=text]{
     border-radius: 0.313rem;
 }
 .password--container {
+    cursor: pointer;
     position: relative;
     display: flex;
     align-items: center;
