@@ -12,8 +12,8 @@ import {
     setUpLogin
 } from './utils.js'
 
-if ( ! sessionStorage.getItem('genres') ) { fetchGenres().then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) ) }
-if ( ! sessionStorage.getItem('languages') ) { fetchLanguages().then( languagesArray => sessionStorage.setItem( 'languages', JSON.stringify( languagesArray ) ) ) }
+if ( sessionStorage.getItem('genres') !== undefined ) { fetchGenres().then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) ) }
+if ( sessionStorage.getItem('languages') !== undefined ) { fetchLanguages().then( languagesArray => sessionStorage.setItem( 'languages', JSON.stringify( languagesArray ) ) ) }
 
 setUpLogin()
 
