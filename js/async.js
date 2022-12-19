@@ -103,7 +103,6 @@ async function fetchGenres() {
         const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=a549a10218e6b1e84fddfc056a830b2c`
         const res = await fetch(url)
         const data = await res.json()
-        console.log( data.genres )
         return data.genres
     } catch ( e ) { console.log( e ) }
 }

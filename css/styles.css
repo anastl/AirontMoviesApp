@@ -947,4 +947,47 @@ svg.recommended-square--inside {
         margin-top: 1.6rem;
     }
     /* END Login */
+    /* START Modal */
+    .modal-container {
+        padding: 2.438rem 4.5rem 2.5rem;
+    }
+    .modal {
+        width: 77.5rem;
+    }
+    .modal--header {
+        height: 27.5rem;
+        padding: 0 4rem 0 5.563rem;
+    }
+    .modal--title {
+        margin-left: 1.313rem;
+    }
+    .modal--body {
+        padding-left: 6.875rem;
+        padding-right: 3.313rem;
+    }
+    .modal-info--container {
+        padding-top: 1.75rem;
+        display: grid;
+        grid-template-areas: 
+        'details similarTitle'
+        'details similarContainer';
+        grid-template-columns: 26.563rem 1fr;
+        column-gap: 10rem;
+        row-gap: .625rem;
+    }
+    .modal-details--container {
+        grid-area: details;
+        padding-left: .5rem;
+        padding-top: 1rem;
+        gap: 6rem;
+    }
+    .similar-container--title {
+        grid-area: similarTitle;
+        margin: 0;
+        padding-top: 1.1rem;
+    }
+    .similar-container {
+        grid-area: similarContainer;
+    }
+    /* END Modal */
 }
