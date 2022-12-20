@@ -9,7 +9,9 @@ import {
     setUpLogin,
     setModalOpener,
     selectViewCallback,
-    hideDropdown
+    hideDropdown,
+    asTrailer,
+    onYouTubeIframeAPIReady
 } from './utils.js'
 
 async function addMoviesToMostWatched( lastPage, observer ) {
@@ -90,6 +92,14 @@ async function displayModal( movieId ) {
         document.getElementById('most-watched-container').style.display = 'flex'
         document.getElementById('results-container').style.display = 'flex'
         sessionStorage.removeItem('similarMovies')
+    } )
+    document.getElementById('play').addEventListener('click', async event => {
+        const buttonMovieId = event.target.dataset.movieId
+        const trailerObj = await getVideoUrl( buttonMovieId )
+
+        const youTubeUrl = `https://www.youtube-nocookie.com/embed?v=${ trailerObj.key }`
+        
+        onYouTubeIframeAPIReady( buttonMovieId )
     } )
 
     const addMoreBtn = document.getElementById('add-more')
@@ -181,6 +191,15 @@ async function getUser( email, password ){
         console.log( e )
         return "A connection error ocurred, please try again" 
     }
+}
+
+async function getVideoUrl( movieId ){
+    try {
+        const baseUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US`
+        const res = await fetch( baseUrl )
+        const data = await res.json()
+        return data.results[0]
+    } catch ( e ) { console.log( e ) }
 }
 
 async function searchInputCallback( e ) {
@@ -348,5 +367,6 @@ export {
     addSimilarMovies,
     searchInputCallback,
     setUpHome, 
-    displayModal
+    displayModal,
+    getVideoUrl
 }

@@ -2,6 +2,7 @@ import {
     getUser,
     setUpHome, 
     displayModal,
+    getVideoUrl
 } from './async.js'
 
 const starSVG = `<svg class="star filled" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
@@ -34,7 +35,7 @@ const loginHtml = `
                 </svg>
             </div>
             <div class="user-extras">
-                <label tabindex=0 id="remember-user" for="remember-user" class="checkbox-container" >
+                <label tabindex=0 for="remember-user" class="checkbox-container" >
                     <input tabindex=-1 class="hide-checkbox" type="checkbox" id="remember-user" name="remember-user" />
                     <span tabindex=-1 class="custom-checkbox">
                         <svg tabindex=-1 class="custom-checkmark" width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 5.42857L4.33333 8L9 2" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>                    
@@ -121,7 +122,7 @@ const homeHtml = `
                 </button>
             </div>
         </div>
-        <div id="most-watched--results" class="most-watched--results column"></div>
+        <div id="most-watched--results" class="most-watched--results"></div>
     </div>
     <div id="modal-container" class="modal-container" ></div>
     <div id="error-modal" class="error-modal" ></div>
@@ -168,7 +169,7 @@ function getDate( dateRaw ){ // dateRaw = 2017-08-31
 const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
     const genre = getGenreName( genreId )
     return `
-    <div class="movie"
+    <div class="main-movie--container"
         style="
             background: 
                 linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
@@ -176,15 +177,17 @@ const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
             background-position: center;
             background-size: cover;
     ">
-        <div class="stars-and-genre">
-            <p class="genre blue">${ genre }</p>
-            <div class="stars-container">
-                ${ getStarsArray( rating ) }
+        <div class="movie">
+            <div class="stars-and-genre">
+                <p class="genre blue">${ genre }</p>
+                <div class="stars-container">
+                    ${ getStarsArray( rating ) }
+                </div>
             </div>
+            <p class="bold movie-title">${ title }</p>
+            <p class="summary">${ getSummary( summary ) }</p>
+            <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
         </div>
-        <p class="bold movie-title">${ title }</p>
-        <p class="summary">${ getSummary( summary ) }</p>
-        <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
     </div>
     `
 }
@@ -208,7 +211,7 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
                 "
             >
                 <img id="close-modal" class="close" src="./img/vectors/close.png" alt="close modal" />
-                <button id="play" class="play-btn">Play Trailer</button>
+                <button id="play" class="play-btn" data-movie-id="${id}">Play Trailer</button>
                 <h1 class="bold blue title modal--title">${ title }</h1>
             </div>
             <div class="modal--body">
@@ -248,6 +251,7 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
                     </div>
                 </div>
             </div>
+            <div id="trailer-container" class="trailer-container" ></div>
         </div>`
 }
 
@@ -296,6 +300,29 @@ const asDropdown = ( id, title, release_date, poster_path ) => {
 
 const asError = error => {
     return `<span>We're sorry, ${error}. Please try again</span>`
+}
+
+const asTrailer = url => {
+    return `
+    <iframe class="trailer" src="${url}" title="YouTube video player" credentials="omit" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+}
+
+let player
+function onYouTubeIframeAPIReady( videoKey ) {
+    player = new YT.Player( 'player', {
+        videoId: videoKey,
+        playerVars: {
+            'playsinline': 1
+        },
+        events: {
+            'onReady': onPlayerReady
+        }
+    } )
+    player.loadVideoById( videoKey, 0 )
+}
+
+function onPlayerReady( event ){
+    event.target.playVideo()
 }
 
 function setUpLogin() {
@@ -392,5 +419,7 @@ export {
     setUpLogin,
     setModalOpener,
     selectViewCallback,
-    hideDropdown
+    hideDropdown,
+    asTrailer,
+    onYouTubeIframeAPIReady
 }
