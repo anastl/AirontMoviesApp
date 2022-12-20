@@ -51,7 +51,7 @@ html {
 }
 .cyan { color: #0FEFFD; }
 .blue { color: var(--blue-color); }
-
+.filled { fill: var(--star-color); }
 /* END GENERAL */
 
 /* TAGS */
@@ -199,15 +199,14 @@ input.hide-checkbox {
     top: 0;  
     left: 0;
     border-radius: .375rem;
-    height: 1.875rem;
     width: 1.875rem;
+    height: 1.875rem;
     margin-right: 2rem;
     background-color: #fff;
 } 
 .custom-checkmark {
     position: absolute;  
-    width: 1.1rem;
-    height: 1.3rem;
+    width: 55%;
 }
 input:checked + .custom-checkbox  {
     background-color: var(--blue-color);
@@ -351,7 +350,9 @@ header {
 /* START Dropdown Section */
 .dropdown-container {
     position: absolute;
-    left: 5%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
 
     width: 90%;
     padding: 1.5rem 2rem;
@@ -375,53 +376,71 @@ header {
 } 
 /* END Dropdown Section */
 
-/* START Most Watched Section */
+/* START Results */
 .results-container {
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
 }
+/* .results-container.search {
 
-.display-type {
-    display: none;
-}
+} */
+/* END Results */
 
-.movie {
+/* START Movie */
+.main-movie--container {
     width: 100%;
     min-height: 53.125rem;
+    font-size: 1.5rem;
+    color: #fff;
+    padding: 8.8rem 5.5rem;
+    display: flex;
+    align-items: flex-start;
+}
+.movie {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: flex-end;
-    font-size: 1.5rem;
-    color: #fff;
-    padding: 5.563rem 9.5rem 0;
 }
 .stars-and-genre {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: .7rem;
 }
 .stars-container {
     display: flex;
     gap: .732rem;
 }
+.star {
+    width: 1.464rem;
+}
 .movie-title {
+    margin-top: 1rem;
     font-size: 3.5rem;
+    line-height: 4.375rem;
 }
 .summary {
     margin-top: 1rem;
+    margin-bottom: 26%;
     text-align: justify;
+    line-height: 2.375rem;
 }
 .watch-now-btn {
-    margin-top: 3.125rem;
-    margin-bottom: 9.5rem;
+    width: 28.188rem;
+    height: 4.688rem;
+}
+/* END Movie */
+
+/* START Most Watched */
+.display-type {
+    display: none;
 }
 
 .most-watched-container {
     width: 100%;
-    padding: 3.125rem 6rem;
+    padding: 3.125rem 15%;
     color: #fff;
     background-color: var(--dark-background);
     display: flex;
@@ -430,34 +449,35 @@ header {
 }
 .most-watched--section-title {
     font-size: 2rem;
+    line-height: 4rem;
 }
 .most-watched--results {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 3.1rem;
 }
 .most-watched--movie {
     height: 38.586rem;
+    max-width: 28.063rem;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 3rem 3.5rem;
+    align-items: flex-start;
+    padding: 3rem 3.5rem 2rem;
 }
 .most-watched--title {
     font-size: 2.25rem;
+    line-height: 4rem;
 }
 .most-watched--stars-container {
-    margin-top: .625rem;
     margin-bottom: 1.25rem;
     display: flex;
     gap: .417rem;
 }
-.star {
-    width: .792rem;
-    height: .833rem;
-}
-.filled {
-    fill: var(--star-color);
+.most-watched--stars-container .star {
+    width: .833rem;
 }
 .most-watched--summary {
     text-align: justify;
@@ -590,6 +610,19 @@ svg.recommended-square--inside {
 }
 /* END Modal Section */
 
+/* START Trailer */
+.trailer-container {
+    display: block;
+    width: 100%;
+    height: 100vh;
+}
+.trailer {
+    width: 25rem;
+    height: 14.063rem;
+    border: 10px solid yellow
+}
+/* END Trailer */
+
 @media screen and (min-width: 834px) {
     /* START Login */
     .login--container {
@@ -606,6 +639,7 @@ svg.recommended-square--inside {
     .login--screen {
         margin-top: 3.5rem;
         padding: 2rem 2.813rem 2.625rem;
+        max-width: 30rem;
     }
     .welcome-prompt {
         font-size: 1rem;
@@ -648,10 +682,6 @@ svg.recommended-square--inside {
         height: 1.125rem;
         width: 1.125rem;
     }
-    .custom-checkmark {
-        height: 100%;
-        width: 100%;
-    }
     .login-btn {
         font-size: .938rem;
         height: 2.938rem;
@@ -692,10 +722,13 @@ svg.recommended-square--inside {
     /* END Login */
     
     /* START Main movie and Results */
-    .movie {
+    .main-movie--container {
         padding: 5.5rem 6.5rem 0;
         min-height: 34.375rem;
     }
+    /* .movie {
+
+    } */
     .genre {
         font-size: .875rem;
         line-height: 1rem;
@@ -712,14 +745,15 @@ svg.recommended-square--inside {
         margin-top: .5rem;
     }
     .summary {
+        margin: 0;
         margin-top: .9rem;
         max-width: 37.813rem;
         font-size: 1rem;
         line-height: 2rem;
     }
     .watch-now-btn {
-        margin-top: auto;
-        margin-bottom: 5.5rem;
+        margin: 0;
+        margin-top: 3.625rem;
         width: 15.625rem;
         height: 3.75rem;
         align-self: flex-start;
@@ -729,18 +763,17 @@ svg.recommended-square--inside {
 
     /* START Most Watched */
     .most-watched-container {
-        gap: 1.875rem;
+        gap: 1rem;
         padding: 0;
     }
     .most-watched--title-and-display {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 1.75rem 3.125rem 0 3.75rem;
+        margin: 1rem 3.125rem 0 3.65rem;
     }
     .most-watched--section-title {
         font-size: 1.5rem;
-        margin-left: .625rem;
     }
     .display-type {
         display: flex;
@@ -765,25 +798,28 @@ svg.recommended-square--inside {
         background-color: var(--selected-color);
     }
 
-    .most-watched--stars-container {
-        margin: 0;
-        gap: .293rem;
-    }
-    .star {
-        width: .557rem;
-    }
-
     .most-watched--results {
         padding: 0 3.625rem 6.938rem;
         gap: 2.188rem;
     }
     .most-watched--movie { 
+        /* max-width: 44.938rem; */
+        max-width: unset;
+        width: 100%;
         height: 19.375rem;
         padding: 0 5.313rem 1.563rem 5.625rem;
     }
     .most-watched--title {
         font-size: 1.5rem;
-        line-height: 3rem;
+        line-height: 3.3rem;
+    }
+    .most-watched--stars-container {
+        margin: 0;
+        gap: .293rem;
+    }
+    .most-watched--stars-container .star {
+        width: .586rem;
+        height: .557rem;
     }
     .most-watched--summary{
         margin-top: .438rem;
@@ -806,12 +842,15 @@ svg.recommended-square--inside {
         font-size: 1.25rem;
         line-height: 2.5rem;
     }
+    .grid .most-watched--stars-container {
+        margin-top: .25rem;
+    }
     .grid .most-watched--summary {
-        margin-top: .462rem;
+        margin-top: .5rem;
         font-size: .625rem;
         line-height: 1.063rem;
     }
-    /* START Most Watched */
+    /* END Most Watched */
 
     /* START Header */
     header {
@@ -954,6 +993,7 @@ svg.recommended-square--inside {
     }
     header {
         width: 100%;
+        max-width: 77.5rem;
         height: 4.372rem;
         padding: 0;
         grid-template-columns: 10.063rem 24rem 6.25rem;
@@ -966,6 +1006,89 @@ svg.recommended-square--inside {
         margin-left: -1.9rem;
     }
     /* END Header */
+
+    /* START Movie */
+    .main-movie--container {
+        padding: 5.558rem 0 0 11.188rem;
+    }
+    .stars-container, .most-watched--stars-container {
+        gap: .417rem;
+    }
+    .star {
+        width: .833rem;
+        max-width: .833rem;
+        height: .792rem;
+    }
+    .movie-title {
+        line-height: 4rem;
+        margin-top: .75rem;
+    }
+    .genre {
+        font-size: .875rem;
+    }
+    .summary {
+        margin-top: 1.25rem;
+    }
+    .watch-now-btn {
+        width: 16.313rem;
+        max-width: 16.313rem;
+        height: 3.438rem;
+        padding: .5rem 1.125rem;
+        margin-bottom: 5.787rem;
+        font-size: .938rem;
+    }
+    /* END Movie */
+
+    /* START Most Watched */
+    .most-watched-container {
+        padding: 2.75rem 11rem 6.875rem;
+        gap: 3.125rem;
+    }
+    .most-watched--title-and-display {
+        margin: 0;
+        padding: 0 2.125rem;
+    }
+    .most-watched--section-title {
+        margin: 0;
+    }
+    .most-watched--results {
+        padding: 0 1.875rem;
+        gap: 3.125rem;
+    }
+    .most-watched--movie {
+        height: 27.5rem;
+        min-width: 63.875rem;
+        padding: 0 7.625rem 3.75rem 8rem;
+    }
+    .most-watched--title {
+        line-height: 3rem;
+    }
+    .most-watched--stars-container {
+        margin-bottom: .4rem;
+    }
+
+    .grid {
+        padding: 0;
+        gap: 1.875rem 3.75rem;
+        grid-template-columns: repeat( auto-fit, 20rem );
+    }
+    .grid .most-watched--movie {
+        height: 27.479rem;
+        min-width: unset;
+        padding: 0 3.625rem 3.5rem 1.875rem;
+    }
+    .grid .most-watched--title {
+        font-size: 1.5rem;
+        line-height: 1.875rem;
+    }
+    .grid .most-watched--stars-container {
+        margin: .75rem 0 .646rem;
+    }
+    .grid .most-watched--summary {
+        margin: 0;
+        line-height: 1.25rem;
+    }
+    /* END Most Watched */
     
     /* START Modal */
     .modal-container {
@@ -973,6 +1096,7 @@ svg.recommended-square--inside {
     }
     .modal {
         width: 77.5rem;
+        max-width: 77.5rem;
     }
     .modal--header {
         height: 27.5rem;
@@ -1010,4 +1134,30 @@ svg.recommended-square--inside {
         grid-area: similarContainer;
     }
     /* END Modal */
+
+    /* START Dropdown */
+    .dropdown-container {
+        width: 80%;
+        max-width: 70rem;
+    }
+    .dropdown-result {
+        height: 13rem;
+        font-size: 2.5rem;
+    }
+    .dropdown-result:not( :last-child ) {
+        border-bottom: currentColor .15rem solid;
+    }
+    .dropdown-result--img {
+        height: 90%;
+    }
+    /* END Dropdown */
+}
+
+@media screen and (min-width: 1800px) {
+    .main-movie--container {
+        padding-left: 22.5%;
+    }
+    .most-watched-container {
+        padding: 2.75rem 20% 6.875rem;
+    }
 }
