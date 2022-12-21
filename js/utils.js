@@ -302,9 +302,9 @@ const asError = error => {
     return `<span>We're sorry, ${error}. Please try again</span>`
 }
 
-const asTrailer = url => {
+const asTrailer = ( key, title ) => {
     return `
-    <iframe class="trailer" src="${url}" title="YouTube video player" credentials="omit" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+    <iframe id="player" class="trailer" src="https://www.youtube-nocookie.com/embed/${key}?autoplay=0&origin=http://127.0.0.1:5500&enablejsapi=true" title="${title}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
 }
 
 let player
@@ -402,7 +402,7 @@ function selectViewCallback(){
 function hideDropdown( event ){
     const dropdown = document.getElementById('dropdown-container')
       
-    if (!dropdown.contains(event.target)) {
+    if ( !dropdown.contains( event.target ) ) {
       dropdown.style.display = 'none'
     }
 }
@@ -421,5 +421,6 @@ export {
     selectViewCallback,
     hideDropdown,
     asTrailer,
-    onYouTubeIframeAPIReady
+    onYouTubeIframeAPIReady,
+    player
 }

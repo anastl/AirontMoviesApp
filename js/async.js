@@ -11,7 +11,8 @@ import {
     selectViewCallback,
     hideDropdown,
     asTrailer,
-    onYouTubeIframeAPIReady
+    onYouTubeIframeAPIReady,
+    player
 } from './utils.js'
 
 async function addMoviesToMostWatched( lastPage, observer ) {
@@ -95,11 +96,16 @@ async function displayModal( movieId ) {
     } )
     document.getElementById('play').addEventListener('click', async event => {
         const buttonMovieId = event.target.dataset.movieId
-        const trailerObj = await getVideoUrl( buttonMovieId )
+        const videoId = await getVideoUrl( buttonMovieId )
 
-        const youTubeUrl = `https://www.youtube-nocookie.com/embed?v=${ trailerObj.key }`
+        const trailerContainer = document.getElementById('trailer-container')
         
-        onYouTubeIframeAPIReady( buttonMovieId )
+        trailerContainer.style.display = 'grid'
+        trailerContainer.innerHTML = asTrailer(videoId, title)
+        trailerContainer.addEventListener( 'click', () => {
+            trailerContainer.innerHTML = ''
+            trailerContainer.style.display = 'none'
+        } )
     } )
 
     const addMoreBtn = document.getElementById('add-more')
@@ -198,7 +204,12 @@ async function getVideoUrl( movieId ){
         const baseUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US`
         const res = await fetch( baseUrl )
         const data = await res.json()
-        return data.results[0]
+        const videos = data.results
+        for ( const video of videos ) {
+            if ( video.type === 'Trailer' ) 
+                return video.key
+        }
+        return videos[0].key
     } catch ( e ) { console.log( e ) }
 }
 

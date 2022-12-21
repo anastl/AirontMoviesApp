@@ -9,7 +9,10 @@ import {
     loginHtml,
     asModal,
     asRecommended,
-    setUpLogin
+    setUpLogin,
+    asTrailer,
+    onYouTubeIframeAPIReady,
+    player
 } from './utils.js'
 
 if ( sessionStorage.getItem('genres') !== undefined ) { fetchGenres().then( genresArray => sessionStorage.setItem( 'genres', JSON.stringify( genresArray ) ) ) }
