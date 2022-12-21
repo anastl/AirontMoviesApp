@@ -1,16 +1,10 @@
 'use strict;'
 import {
     fetchGenres,
-    fetchLanguages,
-    fetchMovie,
-    fetchSimilar
+    fetchLanguages
 } from './async.js'
 import {
-    loginHtml,
-    asModal,
-    asRecommended,
     setUpLogin,
-    asTrailer,
     onYouTubeIframeAPIReady,
     player
 } from './utils.js'

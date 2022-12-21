@@ -1,19 +1,22 @@
 import {
-    homeHtml, 
-    asModal,
-    asMain,
-    asMostWatched,
-    asRecommended,
-    asDropdown, 
-    asError,
-    setUpLogin,
     setModalOpener,
     selectViewCallback,
+    setUpHomeFunctionalities,
     hideDropdown,
-    asTrailer,
     onYouTubeIframeAPIReady,
     player
 } from './utils.js'
+
+import {
+    asDropdown,
+    asError,
+    asMain,
+    asModal,
+    asMostWatched,
+    asRecommended,
+    asTrailer,
+    homeHtml
+} from './elementCreators.js'
 
 async function addMoviesToMostWatched( lastPage, observer ) {
     try {
@@ -44,7 +47,7 @@ async function addMoviesToMostWatched( lastPage, observer ) {
 }
 
 async function addSimilarMovies( e ) { 
-    const addMoreBtn = document.getElementById('add-more')
+    const addMoreBtn = document.getElementById('active')
     
     const movieId = addMoreBtn.dataset.movieId
     const oldPage = parseInt( addMoreBtn.dataset.page )
@@ -54,14 +57,14 @@ async function addSimilarMovies( e ) {
     const isEndOfCurrPage = newNumberOfRecs >= oldPage*18 ? true : false
     const newPage = isEndOfCurrPage ? oldPage+1 : oldPage
 
-    let memoryRecs = JSON.parse( sessionStorage.getItem('similarMovies') )
+    let memoryRecs = JSON.parse( sessionStorage.getItem( movieId ) )
     if ( ! memoryRecs ) { // first time fetching similar movies 
         memoryRecs = await fetchSimilar( movieId, newPage )
-        sessionStorage.setItem('similarMovies', JSON.stringify( memoryRecs ) )
+        sessionStorage.setItem( movieId, JSON.stringify( memoryRecs ) )
     } 
     else if ( isEndOfCurrPage ) { // time to get a new page from API
         memoryRecs = [ ...memoryRecs, ...await fetchSimilar( movieId, newPage ) ]
-        sessionStorage.setItem('similarMovies', JSON.stringify( memoryRecs ) )
+        sessionStorage.setItem( movieId, JSON.stringify( memoryRecs ) )
     }
 
     const recommendedImgs = memoryRecs.map( ( { id, title, backdrop_path } ) => asRecommended( id, title, backdrop_path ) ).slice( oldNumberOfRecs, newNumberOfRecs ).join('')
@@ -76,42 +79,31 @@ async function addSimilarMovies( e ) {
 } 
 
 async function displayModal( movieId ) {
-    sessionStorage.removeItem('similarMovies')
     const modalContainer = document.getElementById('modal-container')
+
+    const oldActive = document.getElementById('active')
+    if ( oldActive ) oldActive.id = ''
 
     const { id, title, genres, overview, release_date, backdrop_path, original_language, vote_average } = await fetchMovie( movieId )
 
-    modalContainer.innerHTML = asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average )
+    console.log( `displayed ${title} modal` )
+    
+    const prevModals = [ ...document.getElementsByClassName('modal') ]
+    // prevModals.forEach( prevModal => prevModal.style.display = 'none' )
+    prevModals.forEach( (prevModal, index) => prevModal.style.zIndex = 'auto' )
 
+    modalContainer.appendChild( asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average ) )
+
+    setTimeout( () => {
+        document.getElementById('most-watched-container').style.display = 'none'
+        document.getElementById('results-container').style.display = 'none'
+    }, 480 )
+    modalContainer.classList.add('slide-in-right')
     modalContainer.style.display = 'flex'
-    document.getElementById('most-watched-container').style.display = 'none'
-    document.getElementById('results-container').style.display = 'none'
-
-    document.getElementById('close-modal').addEventListener('click', () => {
-        modalContainer.style.display = 'none'
-        modalContainer.innerHTML = ''
-        document.getElementById('most-watched-container').style.display = 'flex'
-        document.getElementById('results-container').style.display = 'flex'
-        sessionStorage.removeItem('similarMovies')
-    } )
-    document.getElementById('play').addEventListener('click', async event => {
-        const buttonMovieId = event.target.dataset.movieId
-        const videoId = await getVideoUrl( buttonMovieId )
-
-        const trailerContainer = document.getElementById('trailer-container')
-        
-        trailerContainer.style.display = 'grid'
-        trailerContainer.innerHTML = asTrailer(videoId, title)
-        trailerContainer.addEventListener( 'click', () => {
-            trailerContainer.innerHTML = ''
-            trailerContainer.style.display = 'none'
-        } )
-    } )
-
-    const addMoreBtn = document.getElementById('add-more')
-    addMoreBtn.addEventListener( 'click', addSimilarMovies )
-
-    await addSimilarMovies( )
+    setTimeout( () => {
+        modalContainer.classList.remove('slide-in-right')
+    }, 510 )
+    setUpModalButtons( title, movieId )
 }
 
 async function fetchGenres() {
@@ -278,23 +270,27 @@ async function searchMovieAsMain ( query ) {
 
 async function setUpHome() {
     document.getElementById('master-container').innerHTML = homeHtml
+
+    const resultsContainer = document.getElementById('results-container')
+    const mostWatchedContainer = document.getElementById('most-watched--results')
         
     const { movies, totalPages } = await fetchMostWatched( 1 )
 
+    // gets the Main Movie string
+    const { id, title, genre_ids, overview, vote_average, backdrop_path } = movies[0]
+    const mainMovie = asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path )
+
+    // gets the Most Watched Movies array as a string
     const mostWatchedArray = movies.slice( 1 ).map( ( { id, title, overview, vote_average, backdrop_path } ) => {
         if ( id && title && overview && vote_average && backdrop_path ) { 
             return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
         }
     } ).join('')
 
-    const { id, title, genre_ids, overview, vote_average, backdrop_path } = movies[0]
-    const mainMovie = asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path )
-
-    const resultsContainer = document.getElementById('results-container')
-    const mostWatchedContainer = document.getElementById('most-watched--results')
-
     resultsContainer.innerHTML = mainMovie 
     mostWatchedContainer.innerHTML = mostWatchedArray 
+
+    // Sets the intersection observer for infinite scrolling
 
     const targetArray = mostWatchedContainer.getElementsByClassName('most-watched--movie')
     const target = targetArray[ targetArray.length - 10 ]
@@ -316,23 +312,57 @@ async function setUpHome() {
     } )
     observer.observe( target )
 
-    const logOut = document.getElementById('log-out')
-    const searchMovieInput = document.getElementById('search-movie')
-
-    logOut.addEventListener('click', () => {
-        localStorage.removeItem('logged')
-        document.removeEventListener('click', hideDropdown )
-        setUpLogin()
-    } )
-    
-    document.addEventListener('click', hideDropdown )
-    searchMovieInput.addEventListener('keyup', searchInputCallback )
+    setUpHomeFunctionalities()
 
     const showModalArray = [ ... document.getElementsByClassName('sm') ]
     showModalArray.forEach( el => setModalOpener( el ) )
 
     const viewBtns = [ ... document.getElementsByClassName('svg-btn') ]
     viewBtns.forEach( btn => btn.addEventListener('click', selectViewCallback) )
+}
+
+
+
+async function setUpModalButtons( title, movieId ) {
+    const closeModalBtns = [ ...document.getElementsByClassName('close-modal') ]
+    closeModalBtns.forEach( closeModalBtn => closeModalBtn.addEventListener('click', () => {       
+        const modalContainer = document.getElementById('modal-container')
+        const modals = [ ...modalContainer.children ]
+        modalContainer.removeChild( modals.at(-1) )
+        console.log( modals )
+        if( modals.length - 1 ){ 
+
+            if ( modals.length - 2 ) { // modalContainer had at least two children                
+                const prevModals = [ ...document.getElementsByClassName('modal') ]
+                prevModals.at(-1).style.zIndex = 'initial'
+            }
+        } else {
+            modalContainer.style.display = 'none'
+            modalContainer.innerHTML = ''
+            document.getElementById('most-watched-container').style.display = 'flex'
+            document.getElementById('results-container').style.display = 'flex'
+        }
+    } ) )
+    
+    const playTrailerBtns = [ ...document.getElementsByClassName('play') ]
+    playTrailerBtns.forEach( playTrailerBtn => playTrailerBtn.addEventListener('click', async event => {
+        const buttonMovieId = event.target.dataset.movieId
+        const videoId = await getVideoUrl( buttonMovieId )
+
+        const trailerContainer = document.getElementById('trailer-container')
+        
+        trailerContainer.style.display = 'grid'
+        trailerContainer.innerHTML = asTrailer(videoId, title)
+        trailerContainer.addEventListener( 'click', () => {
+            trailerContainer.innerHTML = ''
+            trailerContainer.style.display = 'none'
+        } )
+    } ) )
+
+    const addMoreBtns = [ ...document.getElementsByClassName('add-more') ]
+    addMoreBtns.forEach( addMoreBtn => addMoreBtn.addEventListener( 'click', addSimilarMovies ) )
+
+    await addSimilarMovies( )
 }
 
 
