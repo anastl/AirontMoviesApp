@@ -14,7 +14,7 @@ const starEmpty = `<svg class="star" stroke="#FF9900" viewBox="46.045 2.309 23.4
     </svg>
 `
 const loginHtml = `
-<div class="login--container">
+<div id="login--container" class="login--container">
     <h1 class="title blue login--title">
         <span class="extra-bold uppercased">Movie</span><span class="italic">finder</span>
     </h1>
@@ -84,7 +84,7 @@ const loginHtml = `
 </div>
 `
 const homeHtml = `
-<div class="header-container">
+<div class="fade-in header-container">
     <header>
         <p class="title header--title">
             <span class="extra-bold uppercased">Movie</span><span class="fw--400 italic bigger-spaced">finder</span>
@@ -101,7 +101,7 @@ const homeHtml = `
         </div>
     </header>
 </div>
-<div id="results" class="results">
+<div id="results" class="fade-in results">
     <div id="dropdown-container" class="dropdown-container" ></div>
     <div id="results-container" class="results-container" ></div>
     <div id="most-watched-container" class="most-watched-container" >
@@ -376,6 +376,7 @@ function setUpLogin() {
                 if ( rememberUser.checked ) {
                     localStorage.setItem('logged', 'true') 
                 }
+                document.getElementById('login--container').classList.add('fade-out')
                 setUpHome()
             } 
         } )        
