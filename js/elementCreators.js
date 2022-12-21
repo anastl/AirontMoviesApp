@@ -11,6 +11,9 @@ import {
     onYouTubeIframeAPIReady,
     player
 } from './utils.js'
+import {
+    displayModal
+} from './async.js'
 
 const starSVG = `<svg class="star filled" stroke="#FF9900" viewBox="46.045 2.309 23.428 22.257" width="23.428" height="22.257">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M 57.759 2.309 L 60.687 10.717 L 69.473 10.717 L 62.64 16.158 L 65.08 24.566 L 57.759 19.62 L 50.437 24.566 L 52.878 16.158 L 46.045 10.717 L 54.83 10.717 L 57.759 2.309 Z"></path>
@@ -137,14 +140,29 @@ const homeHtml = `
 `
 
 const asDropdown = ( id, title, release_date, poster_path ) => {
+    // if ( poster_path ) {
+    //     const releaseYear = release_date.split('-')[0]
+    //     return `
+    //         <span data-movie-id="${id}" class="dropdown-result sm">
+    //             <img class="dropdown-result--img" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="Poster for ${title}" />
+    //             <p class="bold">${title}</p>
+    //             <p class="italic">(${releaseYear})</p>
+    //         </span>`
+    // }
     if ( poster_path ) {
         const releaseYear = release_date.split('-')[0]
-        return `
-            <span data-movie-id="${id}" class="dropdown-result sm">
-                <img class="dropdown-result--img" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="Poster for ${title}" />
-                <p class="bold">${title}</p>
-                <p class="italic">(${releaseYear})</p>
-            </span>`
+
+        const span = document.createElement('span')
+        span.dataset.movieId = id
+        span.classList.add('dropdown-result')
+        span.classList.add('sm')
+        span.innerHTML = `
+            <img class="dropdown-result--img" src="https://image.tmdb.org/t/p/w500/${poster_path}" alt="Poster for ${title}" />
+            <p class="bold">${title}</p>
+            <p class="italic">(${releaseYear})</p>`
+
+        span.addEventListener('click', () => { displayModal( id ) } )
+        return span
     }
 }
 
@@ -154,28 +172,53 @@ const asError = error => {
 
 const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
     const genre = getGenreName( genreId )
-    return `
-    <div class="main-movie--container"
-        style="
-            background: 
-                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-                url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
-            background-position: center;
-            background-size: cover;
-    ">
-        <div class="movie">
-            <div class="stars-and-genre">
-                <p class="genre blue">${ genre }</p>
-                <div class="stars-container">
-                    ${ getStarsArray( rating ) }
-                </div>
+    
+    const main = document.createElement('div')
+    main.classList.add('main-movie--container')
+
+    main.style.background = `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(https://image.tmdb.org/t/p/w1280/${ backgroundURL })`
+    main.style.backgroundPosition = 'center'
+    main.style.backgroundSize = 'cover'
+
+    main.innerHTML = `        
+    <div class="movie">
+        <div class="stars-and-genre">
+            <p class="genre blue">${ genre }</p>
+            <div class="stars-container">
+                ${ getStarsArray( rating ) }
             </div>
-            <p class="bold movie-title">${ title }</p>
-            <p class="summary">${ getSummary( summary ) }</p>
-            <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
         </div>
-    </div>
-    `
+        <p class="bold movie-title">${ title }</p>
+        <p class="summary">${ getSummary( summary ) }</p>
+        <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
+    </div>`
+
+    main.querySelector('.watch-now-btn').addEventListener('click', () => { displayModal( id ) } )
+
+    return main
+
+    // return `
+    // <div class="main-movie--container"
+    //     style="
+    //         background: 
+    //             linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+    //             url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
+    //         background-position: center;
+    //         background-size: cover;
+    // ">
+    //     <div class="movie">
+    //         <div class="stars-and-genre">
+    //             <p class="genre blue">${ genre }</p>
+    //             <div class="stars-container">
+    //                 ${ getStarsArray( rating ) }
+    //             </div>
+    //         </div>
+    //         <p class="bold movie-title">${ title }</p>
+    //         <p class="summary">${ getSummary( summary ) }</p>
+    //         <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
+    //     </div>
+    // </div>
+    // `
 }
 
 // rating must be base 10 ( raw )
@@ -241,39 +284,58 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
     </div>
     <div class="trailer-container" ></div>
     `
-    console.log( modal.querySelector('.recommended-square') )
+    // console.log( modal.querySelector('.recommended-square') )
     return modal
 }
 
 // rating must be base 10 ( raw )
 const asMostWatched = ( id, title, summary, rating, backgroundURL ) => {
-    return `
-        <div data-movie-id="${ id }" class="most-watched--movie sm"
-        style="
-            background: 
-                linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
-                url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
-            background-position: center;
-            background-size: cover;
-        ">
-            <p data-movie-id="${ id }" class="bold most-watched--title">${ title }</p>
-            <div data-movie-id="${ id }" class="most-watched--stars-container">
-                ${ getStarsArray( rating ) }
-            </div>
-            <p data-movie-id="${ id }" class="most-watched--summary">${ getSummary( summary ) }</p>
+    const movie = document.createElement('div')
+    movie.dataset.movieId = id
+    movie.classList.add('most-watched--movie')
+    movie.classList.add('sm')
+
+    movie.style.background = `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(https://image.tmdb.org/t/p/w1280/${ backgroundURL })`
+    movie.style.backgroundPosition = 'center'
+    movie.style.backgroundSize = 'cover'
+
+    movie.innerHTML = `
+        <p data-movie-id="${ id }" class="bold most-watched--title">${ title }</p>
+        <div data-movie-id="${ id }" class="most-watched--stars-container">
+            ${ getStarsArray( rating ) }
         </div>
-    `
+        <p data-movie-id="${ id }" class="most-watched--summary">${ getSummary( summary ) }</p>`
+    
+    movie.addEventListener('click', () => { displayModal( id ) } )
+    return movie
+
+    // <div data-movie-id="${ id }" class="most-watched--movie sm"
+    // style="
+    //     background: 
+    //         linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), 
+    //         url(https://image.tmdb.org/t/p/w1280/${ backgroundURL });
+    //     background-position: center;
+    //     background-size: cover;
+    // ">
+    //     <p data-movie-id="${ id }" class="bold most-watched--title">${ title }</p>
+    //     <div data-movie-id="${ id }" class="most-watched--stars-container">
+    //         ${ getStarsArray( rating ) }
+    //     </div>
+    //     <p data-movie-id="${ id }" class="most-watched--summary">${ getSummary( summary ) }</p>
+    // </div>
 }
 
 const asRecommended = ( id, title, backgroundURL ) => {
-    // const imgEl = document.createElement('img')
-    // imgEl.classList.add('recommended-square')
-    // imgEl.classList.add('sm')
-    // imgEl.dataset.movieId = id
-    // imgEl.src = `https://image.tmdb.org/t/p/w1280/${ backgroundURL }`
-    // imgEl.alt = `Poster for ${title}`
+    const button = document.createElement('button')
+    button.classList.add('recommended-square')
+    button.classList.add('sm')
+    button.dataset.movieId = id
 
-    return `<button class="recommended-square sm" data-movie-id="${id}" ><img class="recommended-square--inside" src=https://image.tmdb.org/t/p/w1280/${backgroundURL} alt='Poster for ${title}' /></button>`
+    button.innerHTML = `<img class="recommended-square--inside" src=https://image.tmdb.org/t/p/w1280/${backgroundURL} alt='Poster for ${title}' />`
+
+    button.addEventListener('click', () => { displayModal( id ) } )
+
+    return button
 }
 
 const asTrailer = ( key, title ) => {

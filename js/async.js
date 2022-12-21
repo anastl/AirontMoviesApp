@@ -26,13 +26,14 @@ async function addMoviesToMostWatched( lastPage, observer ) {
             if ( id && title && overview && vote_average && backdrop_path ) { 
                 return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
             }
-        } ).join('')
+        } )
             
         const mostWatchedContainer = document.getElementById('most-watched--results')
-        mostWatchedContainer.insertAdjacentHTML( 'beforeend', mostWatchedArray )
+        mostWatchedArray.forEach( movie => mostWatchedContainer.insertAdjacentElement( 'beforeend', movie ) )
+        
 
-        const showModalArray = [ ... document.getElementsByClassName('sm') ]
-        showModalArray.forEach( el => setModalOpener( el ) )
+        // const showModalArray = [ ... document.getElementsByClassName('sm') ]
+        // showModalArray.forEach( el => setModalOpener( el ) )
     
         const trigger = document.getElementById('trigger')
         trigger.removeAttribute('id')
@@ -67,13 +68,15 @@ async function addSimilarMovies( e ) {
         sessionStorage.setItem( movieId, JSON.stringify( memoryRecs ) )
     }
 
-    const recommendedImgs = memoryRecs.map( ( { id, title, backdrop_path } ) => asRecommended( id, title, backdrop_path ) ).slice( oldNumberOfRecs, newNumberOfRecs ).join('')
-    addMoreBtn.insertAdjacentHTML( 'beforebegin', recommendedImgs )
+    const recommendedImgs = memoryRecs.map( ( { id, title, backdrop_path } ) => asRecommended( id, title, backdrop_path ) ).slice( oldNumberOfRecs, newNumberOfRecs )
+
+    recommendedImgs.forEach( img => addMoreBtn.insertAdjacentElement( 'beforebegin', img ) )
+    
     addMoreBtn.dataset.page = newPage
     addMoreBtn.dataset.numberOfRecs = newNumberOfRecs
 
-    const showModalArray = [ ...document.getElementsByClassName('sm') ]
-    showModalArray.forEach( el => setModalOpener( el ) )
+    // const showModalArray = [ ...document.getElementsByClassName('sm') ]
+    // showModalArray.forEach( el => setModalOpener( el ) )
 
     e && addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
 } 
@@ -222,21 +225,24 @@ async function searchInputCallback( e ) {
         } else {
             sessionStorage.setItem('lastSearches', JSON.stringify( [ searchMovieInput.value ] ) )
         }
-        resultsContainer.innerHTML =  await searchMovieAsMain( query )
+        resultsContainer.innerHTML = ''
+        const moviesToInsert = await searchMovieAsMain( query )
+        moviesToInsert.forEach( movie => resultsContainer.insertAdjacentElement( 'beforeend', movie ) )
+        
         dropdown.innerHTML = ''
         searchMovieInput.value = ''
         dropdown.style.display = 'none'
 
-        const showModalArray = [ ... document.getElementsByClassName('sm') ]
-        showModalArray.forEach( el => setModalOpener( el ) )
+        // const showModalArray = [ ... document.getElementsByClassName('sm') ]
+        // showModalArray.forEach( el => setModalOpener( el ) )
     } else { // Show dropdown
-        dropdown.innerHTML = await searchMovieAsDropdown( query ) 
-        const showModalArray = [ ... document.getElementsByClassName('sm') ]
-        showModalArray.forEach( el => setModalOpener( el ) )
+        await searchMovieAsDropdown( query, dropdown ) 
+        // const showModalArray = [ ... document.getElementsByClassName('sm') ]
+        // showModalArray.forEach( el => setModalOpener( el ) )
     }
 }
 
-async function searchMovieAsDropdown ( query ) {
+async function searchMovieAsDropdown ( query, container ) {
     try {
         const url = `https://api.themoviedb.org/3/search/movie?api_key=a549a10218e6b1e84fddfc056a830b2c&language=en-US&query=${ query }&include_adult=false`
         const res = await fetch( url )
@@ -247,10 +253,10 @@ async function searchMovieAsDropdown ( query ) {
                 if ( id && title && release_date && poster_path )
                     moviesArray.push( asDropdown( id, title, release_date, poster_path ) )
             }  )
-    
-            return moviesArray.join(' ')
+            container.innerHTML = ''
+            moviesArray.forEach( movie => container.insertAdjacentElement( 'beforeend', movie ) )
         } else {
-            document.getElementById('dropdown-container').style.display = 'none'
+            container.style.display = 'none'
         }
 
     } catch ( e ) { document.getElementById('error-modal').innerHTML = asError( e ) }
@@ -262,7 +268,7 @@ async function searchMovieAsMain ( query ) {
         const res = await fetch( url ) 
         const searchResults = await res.json()
 
-        const moviesArray = searchResults.results.slice(0,5).map( ( { id, title, genre_ids, vote_average, overview, backdrop_path } ) => asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path ) ).join(' ')
+        const moviesArray = searchResults.results.slice(0,5).map( ( { id, title, genre_ids, vote_average, overview, backdrop_path } ) => asMain( id, title, genre_ids[0], overview, vote_average, backdrop_path ) )
 
         return moviesArray
     } catch ( e ) { document.getElementById('error-modal').innerHTML = asError( e ) }
@@ -285,10 +291,11 @@ async function setUpHome() {
         if ( id && title && overview && vote_average && backdrop_path ) { 
             return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
         }
-    } ).join('')
+    } )
 
-    resultsContainer.innerHTML = mainMovie 
-    mostWatchedContainer.innerHTML = mostWatchedArray 
+    resultsContainer.append( mainMovie )
+    mostWatchedArray.forEach( movie => mostWatchedContainer.insertAdjacentElement( 'beforeend', movie ) )
+    // mostWatchedContainer.innerHTML = mostWatchedArray 
 
     // Sets the intersection observer for infinite scrolling
 
@@ -312,24 +319,25 @@ async function setUpHome() {
     } )
     observer.observe( target )
 
+    // set up logout and search bar
     setUpHomeFunctionalities()
 
-    const showModalArray = [ ... document.getElementsByClassName('sm') ]
-    showModalArray.forEach( el => setModalOpener( el ) )
+    // const showModalArray = [ ... document.getElementsByClassName('sm') ]
+    // showModalArray.forEach( el => setModalOpener( el ) )
 
     const viewBtns = [ ... document.getElementsByClassName('svg-btn') ]
     viewBtns.forEach( btn => btn.addEventListener('click', selectViewCallback) )
 }
 
-
-
 async function setUpModalButtons( title, movieId ) {
     const closeModalBtns = [ ...document.getElementsByClassName('close-modal') ]
-    closeModalBtns.forEach( closeModalBtn => closeModalBtn.addEventListener('click', () => {       
+    // closeModalBtns.forEach( closeModalBtn => )
+        
+    closeModalBtns.at(-1).addEventListener('click', () => {       
         const modalContainer = document.getElementById('modal-container')
         const modals = [ ...modalContainer.children ]
         modalContainer.removeChild( modals.at(-1) )
-        console.log( modals )
+        
         if( modals.length - 1 ){ 
 
             if ( modals.length - 2 ) { // modalContainer had at least two children                
@@ -342,7 +350,7 @@ async function setUpModalButtons( title, movieId ) {
             document.getElementById('most-watched-container').style.display = 'flex'
             document.getElementById('results-container').style.display = 'flex'
         }
-    } ) )
+    } ) 
     
     const playTrailerBtns = [ ...document.getElementsByClassName('play') ]
     playTrailerBtns.forEach( playTrailerBtn => playTrailerBtn.addEventListener('click', async event => {

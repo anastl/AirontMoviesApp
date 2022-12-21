@@ -110,7 +110,7 @@ function setUpLogin() {
 }
 
 function setModalOpener( element ) {
-    element.addEventListener('click', () => displayModal( element.dataset.movieId ) )
+    // element.addEventListener('click', () => { displayModal( element.dataset.movieId ) } )
 }
 
 function selectViewCallback(){
@@ -144,9 +144,9 @@ function setUpHomeFunctionalities() {
 function hideDropdown( event ){
     const dropdown = document.getElementById('dropdown-container')
       
-    if ( !dropdown.contains( event.target ) ) {
-      dropdown.style.display = 'none'
-    }
+    // if ( !dropdown.contains( event.target ) ) {
+    // }
+    dropdown.style.display = 'none'
 }
 
 // YOUTUBE API
