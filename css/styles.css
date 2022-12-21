@@ -489,6 +489,7 @@ header {
 /* START Modal Section */
 .modal-container {
     display: none;
+    position: relative;
     justify-content: center;
 
     position: absolute;
@@ -502,11 +503,16 @@ header {
     background-color: var(--dark-background);
 }
 .modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+
     display: flex;
     flex-direction: column;
+
     background-color: #000;
     font-family: 'Open Sans', sans-serif;
-    position: relative;
+    /* position: relative; */
     /* padding: 2.139rem 2.163rem 4.938rem 3.75rem; */
 }
 
