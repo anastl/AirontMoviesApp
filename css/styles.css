@@ -506,6 +506,7 @@ header {
     flex-direction: column;
     background-color: #000;
     font-family: 'Open Sans', sans-serif;
+    position: relative;
     /* padding: 2.139rem 2.163rem 4.938rem 3.75rem; */
 }
 
@@ -612,14 +613,19 @@ svg.recommended-square--inside {
 
 /* START Trailer */
 .trailer-container {
-    display: block;
-    width: 100%;
-    height: 100vh;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--dark-background);
+    justify-content: center;
+    width: 100vw;
+    height: 100%;
 }
 .trailer {
-    width: 25rem;
-    height: 14.063rem;
-    border: 10px solid yellow
+    width: 50vw;
+    height: 28.13vw;
+    margin-top: 25vh;
 }
 /* END Trailer */
 
