@@ -466,6 +466,7 @@ button.most-watched--movie-parent {
 }
 
 .most-watched--movie-parent {
+    text-align: left;
     color: #fff;
     height: 38.586rem;
     max-width: 28.063rem;
@@ -1144,9 +1145,12 @@ svg.recommended-square--inside {
         padding: 0 1.875rem;
         gap: 3.125rem;
     }
-    .most-watched--movie {
+    .most-watched--movie-parent {
         height: 27.5rem;
         min-width: 63.875rem;
+    }
+    .most-watched--movie {
+        width: 100%;
         padding: 0 7.625rem 3.75rem 8rem;
     }
     .most-watched--title {
@@ -1163,9 +1167,9 @@ svg.recommended-square--inside {
     }
     .grid .most-watched--movie {
         padding: 1.5rem 3.625rem 3.5rem 1.875rem;
-        min-width: unset;
     }
     .grid .most-watched--movie-parent{
+        min-width: unset;
         height: 27.479rem;
     }
     .grid .most-watched--title {
