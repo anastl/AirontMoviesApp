@@ -456,16 +456,53 @@ header {
     align-items: center;
     gap: 3.1rem;
 }
-.most-watched--movie {
+
+.most-watched--movie-parent {
     height: 38.586rem;
     max-width: 28.063rem;
+    
+    position: relative;
+    display: flex;
+
+    overflow: hidden;
+}
+
+.most-watched--movie {
+    z-index: 10;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-start;
     padding: 3rem 3.5rem 2rem;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8));
 }
+
+.most-watched--poster {
+    /* background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)); */
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.on-hover-text {
+    /* font-size: .625rem; */
+    margin-bottom: auto;
+    display: none;
+}
+
+
+/* .most-watched--movie:not(.hover-mw) .on-hover-text {
+    display: none;
+} */
+
+
 .most-watched--title {
     font-size: 2.25rem;
     line-height: 4rem;
@@ -813,18 +850,31 @@ svg.recommended-square--inside {
     .selected {
         background-color: var(--selected-color);
     }
-
     .most-watched--results {
         padding: 0 3.625rem 6.938rem;
         gap: 2.188rem;
     }
-    .most-watched--movie { 
-        /* max-width: 44.938rem; */
+
+    .most-watched--movie-parent {
         max-width: unset;
         width: 100%;
         height: 19.375rem;
+    }
+
+    .most-watched--movie { 
+        height: 100%;
         padding: 0 5.313rem 1.563rem 5.625rem;
     }
+    
+    .grid .most-watched--movie-parent:hover>.most-watched--poster {
+        transform: scale(1.5);
+        transition: all .5s ease-in-out;
+    }
+    
+    .grid .most-watched--movie-parent:hover .on-hover-text {
+        display: initial;
+    }
+
     .most-watched--title {
         font-size: 1.5rem;
         line-height: 3.3rem;
@@ -849,10 +899,12 @@ svg.recommended-square--inside {
         grid-template-columns: repeat( auto-fit , 14.063rem );
         justify-content: center;
     }
-    .grid .most-watched--movie {
+    .grid .most-watched--movie-parent {
         height: 19.313rem;
         width: 100%;
-        padding: 0 1rem 1.375rem 1.313rem;
+    }
+    .grid .most-watched--movie {
+        padding: .625rem 1rem 1.375rem 1.313rem;
     }
     .grid .most-watched--title {
         font-size: 1.25rem;
@@ -1096,9 +1148,11 @@ svg.recommended-square--inside {
         grid-template-columns: repeat( auto-fit, 20rem );
     }
     .grid .most-watched--movie {
-        height: 27.479rem;
+        padding: 1.5rem 3.625rem 3.5rem 1.875rem;
         min-width: unset;
-        padding: 0 3.625rem 3.5rem 1.875rem;
+    }
+    .grid .most-watched--movie-parent{
+        height: 27.479rem;
     }
     .grid .most-watched--title {
         font-size: 1.5rem;

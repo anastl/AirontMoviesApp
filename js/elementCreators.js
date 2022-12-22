@@ -290,23 +290,38 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
 
 // rating must be base 10 ( raw )
 const asMostWatched = ( id, title, summary, rating, backgroundURL ) => {
+    // const movie = document.createElement('button')
     const movie = document.createElement('div')
     movie.dataset.movieId = id
-    movie.classList.add('most-watched--movie')
+    movie.classList.add('most-watched--movie-parent')
     movie.classList.add('sm')
 
-    movie.style.background = `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(https://image.tmdb.org/t/p/w1280/${ backgroundURL })`
-    movie.style.backgroundPosition = 'center'
-    movie.style.backgroundSize = 'cover'
+    // movie.style.background = `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .8)), url(https://image.tmdb.org/t/p/w1280/${ backgroundURL })`
+    // movie.style.backgroundPosition = 'center'
+    // movie.style.backgroundSize = 'cover'
 
     movie.innerHTML = `
-        <p data-movie-id="${ id }" class="bold most-watched--title">${ title }</p>
-        <div data-movie-id="${ id }" class="most-watched--stars-container">
-            ${ getStarsArray( rating ) }
+        <img class="most-watched--poster" src= 'https://image.tmdb.org/t/p/w1280/${ backgroundURL }' alt="Poster for ${ title }" />
+        <div class="most-watched--movie" >
+            <span class="on-hover-text" >WATCH</span>
+            <p data-movie-id="${ id }" class="bold most-watched--title">${ title }</p>
+            <div data-movie-id="${ id }" class="most-watched--stars-container">
+                ${ getStarsArray( rating ) }
+            </div>
+            <p data-movie-id="${ id }" class="most-watched--summary">${ getSummary( summary ) }</p>
         </div>
-        <p data-movie-id="${ id }" class="most-watched--summary">${ getSummary( summary ) }</p>`
+        `
     
     movie.addEventListener('click', () => { displayModal( id ) } )
+
+    movie.addEventListener('mouseover', event => { 
+        movie.classList.add('hover-mw')
+        // movie.style.backgroundSize = '200%'
+    } )
+    movie.addEventListener('mouseleave', event => { 
+        movie.classList.remove('hover-mw')
+        // movie.style.backgroundSize = 'cover'
+    } )
     return movie
 
     // <div data-movie-id="${ id }" class="most-watched--movie sm"
