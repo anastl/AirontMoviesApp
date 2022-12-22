@@ -262,7 +262,6 @@ input:checked + .custom-checkbox  {
     background-color: var(--blue-color);
 }
 header {
-    max-width: 90rem;
     display: grid;
     grid-template-columns: 10.063rem 15.25rem 5.938rem;
     grid-template-areas: 'title search profile';
@@ -275,6 +274,7 @@ header {
     width: 100%;
     padding-left: .738rem;
     padding-right: .625rem;
+    max-width: 90rem;
 }
 .header--title {
     grid-area: title;
@@ -500,7 +500,7 @@ header {
     min-height: 100vh;
 
     color: #fff;
-    background-color: var(--dark-background);
+    background-color: linear-gradient(180deg, rgb(1, 1, 1, 0) 0%, rgb(1, 1, 1) 100%);
 }
 .modal {
     position: absolute;
@@ -620,17 +620,19 @@ svg.recommended-square--inside {
 /* START Trailer */
 .trailer-container {
     display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: var(--dark-background);
+    background-color: #000;
     justify-content: center;
+
     width: 100vw;
-    height: 100%;
+    height: 100vh;
+
+    position: absolute;
+    top: -5.625rem;
+    left: 0;
 }
 .trailer {
-    width: 50vw;
-    height: 28.13vw;
+    width: 36.875rem;
+    height: calc( 36.875rem * 9 / 16 );
     margin-top: 25vh;
 }
 /* END Trailer */
@@ -892,10 +894,12 @@ svg.recommended-square--inside {
 
     /* START Modal */      
     .modal-container {
-        background: linear-gradient(180deg, var(--dark-background) 0%, #010101 100%);
-        padding: 6.5rem 3.188rem;
+        background: linear-gradient(180deg, rgba(1, 1, 1, 0) 0%, #010101 100%);
     }
     .modal {
+        left: 0;
+        right: 0;
+        margin: 6.5rem 3.188rem;
         background-color: transparent;
     }
     .modal--header {
@@ -953,6 +957,10 @@ svg.recommended-square--inside {
         width: 6.125rem;
     }
     /* END Modal */    
+    .trailer {
+        width: 48.76rem;
+        height: calc( 48.76rem * 9 / 16 );
+    }
 
 }
 
@@ -1103,10 +1111,12 @@ svg.recommended-square--inside {
     /* END Most Watched */
     
     /* START Modal */
-    .modal-container {
-        padding: 2.438rem 4.5rem 2.5rem;
-    }
+    /* .modal-container {
+    } */
     .modal {
+        left: 0;
+        right: 0;
+        margin: 2.438rem auto 2.5rem;
         width: 77.5rem;
         max-width: 77.5rem;
     }
@@ -1146,6 +1156,11 @@ svg.recommended-square--inside {
         grid-area: similarContainer;
     }
     /* END Modal */
+
+    .trailer {
+        width: 48.76rem;
+        height: calc( 48.76rem * 9 / 16 );
+    }
 
     /* START Dropdown */
     .dropdown-container {
