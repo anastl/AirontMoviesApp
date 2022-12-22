@@ -20,7 +20,7 @@
 }
 img { max-width: 100%;  }
 p, a, h1 { margin: 0; }
-a, button { cursor: pointer; }
+a, button, .sm { cursor: pointer; }
 html {
     font-family: 'Open Sans', sans-serif;
 }
@@ -29,14 +29,14 @@ html {
 .master-container {
     width: 100%;
     position: relative;
-    /* top: 0; */
-    /* left: 0; */
-    /* overflow: auto; */
+    top: 0;
+    left: 0;
 }
 .results {
     position: relative;
+    top: 0;
+    left: 0;
 }
-
 /*  GENERAL */
 
 .bold { font-weight: 700; }
@@ -56,7 +56,6 @@ html {
 
 /* TAGS */
 body, html {
-    /* overflow-x: hidden; */
     margin: 0;
     padding: 0;
     background-color: var(--dark-background);
@@ -496,11 +495,13 @@ header {
     top: -5.625rem;
     left: 0;
 
-    width: 100vw;
-    min-height: 100vh;
+    width: 100%;
+    /* min-height: 100vh; */
+    height: 100vh;
 
     color: #fff;
-    background-color: linear-gradient(180deg, rgb(1, 1, 1, 0) 0%, rgb(1, 1, 1) 100%);
+    background: linear-gradient(180deg, rgba(1, 1, 1, 0) 0%, #010101 100%);
+
 }
 .modal {
     position: absolute;
@@ -623,15 +624,15 @@ svg.recommended-square--inside {
     background-color: #000;
     justify-content: center;
 
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: calc( 100vh + 90rem );
 
     position: absolute;
     top: -5.625rem;
     left: 0;
 }
 .trailer {
-    border: var(--focus-btn-border) 1px solid;
+    border: var(--focus-btn-border) .1px solid;
     width: 36.875rem;
     height: calc( 36.875rem * 9 / 16 );
     margin-top: 25vh;
@@ -893,9 +894,10 @@ svg.recommended-square--inside {
     }
     /* END Dropdown */
 
-    /* START Modal */      
+    /* START Modal */ 
     .modal-container {
-        background: linear-gradient(180deg, rgba(1, 1, 1, 0) 0%, #010101 100%);
+        /* height: calc( 100vh + 90px ); */
+        height: 100%;
     }
     .modal {
         left: 0;
@@ -1113,11 +1115,15 @@ svg.recommended-square--inside {
     
     /* START Modal */
     /* .modal-container {
+        align-items: center; 
+        justify-content: center; 
+        align-content: center;
     } */
     .modal {
+        position: absolute;
+        top: 10vh;
         left: 0;
-        right: 0;
-        margin: 2.438rem auto 2.5rem;
+        margin: auto;
         width: 77.5rem;
         max-width: 77.5rem;
     }
