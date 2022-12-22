@@ -392,7 +392,7 @@ async function setUpModalButtons( title, movieId ) {
 
         const trailerContainer = document.getElementById('trailer-container')
         trailerContainer.style.display = 'grid'
-        trailerContainer.style.zIndex = 1000
+        trailerContainer.style.zIndex = 10000
         trailerContainer.innerHTML = asTrailer(videoId, title)
 
         const animationEnter = isTablet ? 'slide-in-right' : 'slide-in-top'

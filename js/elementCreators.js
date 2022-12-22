@@ -55,7 +55,7 @@ const loginHtml = `
                 <a class="link" href="#">Forgot Password?</a>
             </div>
             <span class="login-error-msg" id="login-error-msg"></span>
-            <button id="login" class="bold login-btn">Log in</button>
+            <button id="login" class="button bold login-btn">Log in</button>
         </form>
         <p class="register-prompt">Not registered yet? <a class="link" href="#">Register now</a></p>
         <div class="separation">
@@ -104,7 +104,7 @@ const homeHtml = `
             <img class="search-icon" src="./img/vectors/magnifying_glass.svg" alt="search icon" />
         </div>
         <div class="profile-container">
-            <p id="log-out" class="tiny log">Log out</p>
+            <a id="log-out" class="tiny log">Log out</a>
             <div class="profile-vector-container">
                 <img class="profile-vector" src="./img/vectors/profile_picture_vector.png" alt="profile picture" />
             </div>
@@ -120,14 +120,14 @@ const homeHtml = `
         <div id="most-watched--title-and-display" class="most-watched--title-and-display">
             <p class="bold most-watched--section-title">Most Watched Movies</p>
             <div class="display-type">
-                <button data-view="grid" class="svg-btn">
+                <button data-view="grid" class="button svg-btn">
                     <svg data-view="grid" class="display-mw" width="58" height="36" viewBox="0 0 58 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect data-view="grid" x="39" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
                         <rect data-view="grid" x="23" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
                         <rect data-view="grid" x="7" y="6" width="12" height="24" rx="2" fill="#D9D9D9"/>
                     </svg>
                 </button>
-                <button class="svg-btn selected">
+                <button class="svg-btn button selected">
                     <svg class="display-mw" width="59" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="7" y="6" width="45" height="24" rx="2" fill="#D9D9D9"/>
                     </svg>
@@ -191,7 +191,7 @@ const asMain = ( id, title, genreId, summary, rating, backgroundURL ) => {
         </div>
         <p class="bold movie-title">${ title }</p>
         <p class="summary">${ getSummary( summary ) }</p>
-        <button class="watch-now-btn sm" data-movie-id='${ id }'>Watch Now</button>
+        <button class="watch-now-btn button sm" data-movie-id='${ id }'>Watch Now</button>
     </div>`
 
     main.querySelector('.watch-now-btn').addEventListener('click', () => { displayModal( id ) } )
@@ -242,8 +242,10 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
             background-size: cover;
         "
     >
-        <img class="close-modal close" src="./img/vectors/close.png" alt="close modal" />
-        <button class="play play-btn" data-movie-id="${id}">Play Trailer</button>
+        <button class="close-modal close" >
+            <img src="./img/vectors/close.png" alt="close modal" />
+        </button>
+        <button class="play button play-btn" data-movie-id="${id}">Play Trailer</button>
         <h1 class="bold blue title modal--title">${ title }</h1>
     </div>
     <div class="modal--body">
@@ -257,7 +259,7 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
                     </div>
                     <div class="modal-details--individual">
                         <p class="bold modal-details--title">Genre:</p>
-                        <a class="modal-details--info modal--genre cyan underline" href="#" data-genre-id="${ genreObj.id }">${ genreObj.name }</a>
+                        <p class="modal-details--info modal--genre cyan underline" href="#" data-genre-id="${ genreObj.id }">${ genreObj.name }</p>
                     </div>
                 </div>
                 <div class="modal-details--row">
@@ -273,7 +275,7 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
             </div>
             <p class="bold similar-container--title">Similar movies: </p>
             <div class="similar-container">
-                <button data-movie-id="${id}" data-page="1" data-number-of-recs="0" id="active" class="add-more recommended-square">                    
+                <button data-movie-id="${id}" data-page="1" data-number-of-recs="0" id="active" class="button add-more recommended-square">                    
                     <svg class="recommended-square--inside" width="244" height="244" viewBox="0 0 244 244" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 2.95703C0 1.85246 0.895431 0.957031 2 0.957031H241.043C242.148 0.957031 243.043 1.85246 243.043 2.95703V242.001C243.043 243.105 242.148 244.001 241.043 244.001H1.99999C0.895425 244.001 0 243.105 0 242.001V2.95703Z" fill="black"/>
                         <rect x="115.5" y="79" width="12" height="85" fill="#D9D9D9"/>
@@ -285,13 +287,14 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
     </div>
     `
     // console.log( modal.querySelector('.recommended-square') )
+    modal.style.zIndex = 100
     return modal
 }
 
 // rating must be base 10 ( raw )
 const asMostWatched = ( id, title, summary, rating, backgroundURL ) => {
     // const movie = document.createElement('button')
-    const movie = document.createElement('div')
+    const movie = document.createElement('button')
     movie.dataset.movieId = id
     movie.classList.add('most-watched--movie-parent')
     movie.classList.add('sm')
@@ -344,6 +347,7 @@ const asRecommended = ( id, title, backgroundURL ) => {
     const button = document.createElement('button')
     button.classList.add('recommended-square')
     button.classList.add('sm')
+    button.classList.add('button')
     button.dataset.movieId = id
 
     button.innerHTML = `<img class="recommended-square--inside" src=https://image.tmdb.org/t/p/w1280/${backgroundURL} alt='Poster for ${title}' />`
