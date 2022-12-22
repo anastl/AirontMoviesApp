@@ -112,6 +112,7 @@ const homeHtml = `
     </header>
 </div>
 <div id="results" class="fade-in results">
+    <div id="trailer-container" class="trailer-container" ></div>
     <div id="modal-container" class="modal-container" ></div>
     <div id="dropdown-container" class="dropdown-container" ></div>
     <div id="results-container" class="results-container" ></div>
@@ -282,7 +283,6 @@ const asModal = ( id, title, genreObj, summary, dateRaw, backgroundURL, language
             </div>
         </div>
     </div>
-    <div class="trailer-container" ></div>
     `
     // console.log( modal.querySelector('.recommended-square') )
     return modal

@@ -149,6 +149,14 @@ function hideDropdown( event ){
     dropdown.style.display = 'none'
 }
 
+function hideTarget( event, target, toClose ){
+    console.log( target.contains( event.target ) )
+
+    if ( !target.contains( event.target ) ) {
+        toClose.style.display = 'none'
+    }
+}
+
 // YOUTUBE API
 
 let player
@@ -180,6 +188,7 @@ export {
     selectViewCallback,
     setUpHomeFunctionalities,
     hideDropdown,
+    hideTarget,
     onYouTubeIframeAPIReady,
     player
 }

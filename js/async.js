@@ -3,6 +3,7 @@ import {
     selectViewCallback,
     setUpHomeFunctionalities,
     hideDropdown,
+    hideTarget,
     onYouTubeIframeAPIReady,
     player
 } from './utils.js'
@@ -30,10 +31,6 @@ async function addMoviesToMostWatched( lastPage, observer ) {
             
         const mostWatchedContainer = document.getElementById('most-watched--results')
         mostWatchedArray.forEach( movie => mostWatchedContainer.insertAdjacentElement( 'beforeend', movie ) )
-        
-
-        // const showModalArray = [ ... document.getElementsByClassName('sm') ]
-        // showModalArray.forEach( el => setModalOpener( el ) )
     
         const trigger = document.getElementById('trigger')
         trigger.removeAttribute('id')
@@ -78,34 +75,57 @@ async function addSimilarMovies( e ) {
     // const showModalArray = [ ...document.getElementsByClassName('sm') ]
     // showModalArray.forEach( el => setModalOpener( el ) )
 
-    e && addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
+    // e && addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
 } 
 
+function hideModal( e ) {
+    const modals = [ ...document.getElementsByClassName('modal') ]
+    const lastModal = modals.at(-1)
+
+    if ( ! lastModal.contains( e.target ) ) {
+        if ( modals.length < 2 ) {
+            document.getElementById('modal-container').style.display = 'none'
+        } else {
+            modals.at(-2).style.display = 'flex'
+        }
+        lastModal.remove()
+    }
+}
+
 async function displayModal( movieId ) {
+    const isTablet = window.matchMedia('(min-width: 834px)').matches
+    
     const modalContainer = document.getElementById('modal-container')
 
     const oldActive = document.getElementById('active')
     if ( oldActive ) oldActive.id = ''
 
     const { id, title, genres, overview, release_date, backdrop_path, original_language, vote_average } = await fetchMovie( movieId )
-
-    console.log( `displayed ${title} modal` )
     
     const prevModals = [ ...document.getElementsByClassName('modal') ]
-    // prevModals.forEach( prevModal => prevModal.style.display = 'none' )
-    prevModals.forEach( (prevModal, index) => prevModal.style.zIndex = 'auto' )
 
     modalContainer.appendChild( asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average ) )
+    if ( isTablet ) {
+        modalContainer.removeEventListener( 'click', hideModal )
+        modalContainer.addEventListener( 'click', hideModal )
+    }
 
+    modalContainer.style.display = 'block'
+
+    const newModal = [ ...document.getElementsByClassName('modal') ].at(-1)
+
+    newModal.classList.add('slide-in-right')
+    
     setTimeout( () => {
-        document.getElementById('most-watched-container').style.display = 'none'
-        document.getElementById('results-container').style.display = 'none'
-    }, 480 )
-    modalContainer.classList.add('slide-in-right')
-    modalContainer.style.display = 'flex'
-    setTimeout( () => {
-        modalContainer.classList.remove('slide-in-right')
-    }, 510 )
+        prevModals.forEach( (prevModal, index) => prevModal.style.display = 'none' )
+        if( ! isTablet ) {
+            document.getElementById('dropdown-container').style.display = 'none'
+            document.getElementById('results-container').style.display = 'none'
+            document.getElementById('most-watched-container').style.display = 'none'
+        }
+        newModal.classList.remove('slide-in-right')
+    }, 400 )
+
     setUpModalButtons( title, movieId )
 }
 
@@ -330,26 +350,39 @@ async function setUpHome() {
 }
 
 async function setUpModalButtons( title, movieId ) {
-    const closeModalBtns = [ ...document.getElementsByClassName('close-modal') ]
-    // closeModalBtns.forEach( closeModalBtn => )
-        
+    const closeModalBtns = [ ...document.getElementsByClassName('close-modal') ]       
+
     closeModalBtns.at(-1).addEventListener('click', () => {       
+        document.getElementById('results-container').style.display = 'flex'
+        document.getElementById('most-watched-container').style.display = 'flex'
         const modalContainer = document.getElementById('modal-container')
         const modals = [ ...modalContainer.children ]
-        modalContainer.removeChild( modals.at(-1) )
-        
-        if( modals.length - 1 ){ 
+        const modalToClose = modals.at(-1)
 
-            if ( modals.length - 2 ) { // modalContainer had at least two children                
-                const prevModals = [ ...document.getElementsByClassName('modal') ]
-                prevModals.at(-1).style.zIndex = 'initial'
-            }
+        modalToClose.classList.add('fade-out')
+        setTimeout( () => {
+            modalContainer.removeChild( modalToClose )
+        }, 400 )
+
+        // if( modals.length - 1 ){ 
+        //         const prevModal = [ ...document.getElementsByClassName('modal') ].at(-1)
+        //         console.log( prevModal )
+        //         prevModal.style.display = 'flex'
+        //     // if ( modals.length - 2 ) { // modalContainer had at least two children                
+
+        //     // }
+        // } else {
+        //     modalContainer.style.display = 'none'
+        //     modalContainer.innerHTML = ''
+        // }
+
+        if( modals.length - 1 ){ 
+            const prevModal = [ ...document.getElementsByClassName('modal') ].at(-2)
+            prevModal.style.display = 'flex'
         } else {
             modalContainer.style.display = 'none'
-            modalContainer.innerHTML = ''
-            document.getElementById('most-watched-container').style.display = 'flex'
-            document.getElementById('results-container').style.display = 'flex'
         }
+        
     } ) 
     
     const playTrailerBtns = [ ...document.getElementsByClassName('play') ]
@@ -358,13 +391,16 @@ async function setUpModalButtons( title, movieId ) {
         const videoId = await getVideoUrl( buttonMovieId )
 
         const trailerContainer = document.getElementById('trailer-container')
-        
         trailerContainer.style.display = 'grid'
+        trailerContainer.style.zIndex = 1000
         trailerContainer.innerHTML = asTrailer(videoId, title)
+        document.getElementById('player').classList.add('slide-in-top')
+
         trailerContainer.addEventListener( 'click', () => {
             trailerContainer.innerHTML = ''
             trailerContainer.style.display = 'none'
         } )
+        
     } ) )
 
     const addMoreBtns = [ ...document.getElementsByClassName('add-more') ]
