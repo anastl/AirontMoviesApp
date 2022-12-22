@@ -3,7 +3,9 @@ import {
     selectViewCallback,
     setUpHomeFunctionalities,
     hideDropdown,
+    hideModal,
     hideTarget,
+    isInViewport,
     onYouTubeIframeAPIReady,
     player
 } from './utils.js'
@@ -23,14 +25,13 @@ async function addMoviesToMostWatched( lastPage, observer ) {
     try {
         const { movies, totalPages } = await fetchMostWatched( lastPage + 1 )
         
-        const mostWatchedArray = movies.map( ( { id, title, overview, vote_average, backdrop_path } ) => {
+        const mostWatchedContainer = document.getElementById('most-watched--results')
+
+        movies.forEach( ( { id, title, overview, vote_average, backdrop_path } ) => {
             if ( id && title && overview && vote_average && backdrop_path ) { 
-                return asMostWatched( id, title, overview, vote_average, backdrop_path ) 
+                mostWatchedContainer.insertAdjacentElement( 'beforeend', asMostWatched( id, title, overview, vote_average, backdrop_path ) )
             }
         } )
-            
-        const mostWatchedContainer = document.getElementById('most-watched--results')
-        mostWatchedArray.forEach( movie => mostWatchedContainer.insertAdjacentElement( 'beforeend', movie ) )
     
         const trigger = document.getElementById('trigger')
         trigger.removeAttribute('id')
@@ -75,25 +76,24 @@ async function addSimilarMovies( e ) {
     // const showModalArray = [ ...document.getElementsByClassName('sm') ]
     // showModalArray.forEach( el => setModalOpener( el ) )
 
-    // e && addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
-} 
-
-function hideModal( e ) {
-    const modals = [ ...document.getElementsByClassName('modal') ]
-    const lastModal = modals.at(-1)
-
-    if ( ! lastModal.contains( e.target ) ) {
-        if ( modals.length < 2 ) {
-            document.getElementById('modal-container').style.display = 'none'
-        } else {
-            modals.at(-2).style.display = 'flex'
-        }
-        lastModal.remove()
+    const isTablet = window.matchMedia('(min-width: 834px)').matches 
+    if ( ! isTablet ) {
+        e && addMoreBtn.scrollIntoView( { behavior: 'smooth' } )
     }
-}
+    else {
+        if ( ! isInViewport(addMoreBtn) ) {
+            const windowHeight = window.innerHeight
+            const buttonRect = addMoreBtn.getBoundingClientRect()
+            const y = windowHeight + buttonRect.height
+            console.log( y )
+            addMoreBtn.scrollTo( { 'top': y, 'left': 0, 'behavior': 'smooth' } )
+        }
+    }
+} 
 
 async function displayModal( movieId ) {
     const isTablet = window.matchMedia('(min-width: 834px)').matches
+    const isDesktop = window.matchMedia('(min-width: 1440px)').matches
     
     const modalContainer = document.getElementById('modal-container')
 
@@ -104,26 +104,28 @@ async function displayModal( movieId ) {
     
     const prevModals = [ ...document.getElementsByClassName('modal') ]
 
+    document.getElementById('master-container').scrollIntoView({behavior: 'smooth'})
     modalContainer.appendChild( asModal( id, title, genres[0], overview, release_date, backdrop_path, original_language, vote_average ) )
     if ( isTablet ) {
         modalContainer.removeEventListener( 'click', hideModal )
         modalContainer.addEventListener( 'click', hideModal )
     }
 
-    modalContainer.style.display = 'block'
+    modalContainer.style.display = 'flex'
 
     const newModal = [ ...document.getElementsByClassName('modal') ].at(-1)
 
-    newModal.classList.add('slide-in-right')
+    const animationEnter = isDesktop ? 'fade-in' : 'slide-in-right'
+    newModal.classList.add( animationEnter )
     
-    setTimeout( () => {
+    setTimeout( () => {    
         prevModals.forEach( (prevModal, index) => prevModal.style.display = 'none' )
         if( ! isTablet ) {
             document.getElementById('dropdown-container').style.display = 'none'
             document.getElementById('results-container').style.display = 'none'
             document.getElementById('most-watched-container').style.display = 'none'
         }
-        newModal.classList.remove('slide-in-right')
+        newModal.classList.remove( animationEnter )
     }, 400 )
 
     setUpModalButtons( title, movieId )
@@ -350,41 +352,39 @@ async function setUpHome() {
 }
 
 async function setUpModalButtons( title, movieId ) {
-    const closeModalBtns = [ ...document.getElementsByClassName('close-modal') ]       
+    const isTablet = window.matchMedia('(min-width: 834px)').matches
+    const isDesktop = window.matchMedia('(min-width: 1440px)').matches
 
-    closeModalBtns.at(-1).addEventListener('click', () => {       
+    const closeModalBtn = [ ...document.getElementsByClassName('close-modal') ].at(-1)
+    // close button
+    closeModalBtn.addEventListener('click', () => {       
         document.getElementById('results-container').style.display = 'flex'
         document.getElementById('most-watched-container').style.display = 'flex'
         const modalContainer = document.getElementById('modal-container')
         const modals = [ ...modalContainer.children ]
         const modalToClose = modals.at(-1)
 
-        modalToClose.classList.add('fade-out')
+        const animationExit = isDesktop ? 'fade-out' : 'slide-out-right'
+        modalToClose.classList.add( animationExit )
+
         setTimeout( () => {
             modalContainer.removeChild( modalToClose )
-        }, 400 )
-
-        // if( modals.length - 1 ){ 
-        //         const prevModal = [ ...document.getElementsByClassName('modal') ].at(-1)
-        //         console.log( prevModal )
-        //         prevModal.style.display = 'flex'
-        //     // if ( modals.length - 2 ) { // modalContainer had at least two children                
-
-        //     // }
-        // } else {
-        //     modalContainer.style.display = 'none'
-        //     modalContainer.innerHTML = ''
-        // }
+        }, 500 )
 
         if( modals.length - 1 ){ 
             const prevModal = [ ...document.getElementsByClassName('modal') ].at(-2)
+            const addBtn = [...document.getElementsByClassName('add-more')].at(-2)
+            addBtn.id="active"
             prevModal.style.display = 'flex'
         } else {
-            modalContainer.style.display = 'none'
+            setTimeout( () => {
+                modalContainer.style.display = 'none'
+            }, 500 )
         }
         
     } ) 
     
+    // play trailer button
     const playTrailerBtns = [ ...document.getElementsByClassName('play') ]
     playTrailerBtns.forEach( playTrailerBtn => playTrailerBtn.addEventListener('click', async event => {
         const buttonMovieId = event.target.dataset.movieId
@@ -394,15 +394,26 @@ async function setUpModalButtons( title, movieId ) {
         trailerContainer.style.display = 'grid'
         trailerContainer.style.zIndex = 1000
         trailerContainer.innerHTML = asTrailer(videoId, title)
-        document.getElementById('player').classList.add('slide-in-top')
 
+        const animationEnter = isTablet ? 'slide-in-right' : 'slide-in-top'
+        const animationExit = isTablet ? 'slide-out-right' : 'slide-out-top'
+        document.getElementById('player').classList.add( animationEnter )
+
+        document.body.style.overflowY = 'hidden'
+        
         trailerContainer.addEventListener( 'click', () => {
-            trailerContainer.innerHTML = ''
-            trailerContainer.style.display = 'none'
+            document.getElementById('player').classList.remove( animationEnter )
+            document.getElementById('player').classList.add( animationExit )
+            
+            setTimeout( () => {
+                trailerContainer.innerHTML = ''
+                trailerContainer.style.display = 'none'
+            }, 500 )
         } )
         
     } ) )
 
+    // add similar movies button
     const addMoreBtns = [ ...document.getElementsByClassName('add-more') ]
     addMoreBtns.forEach( addMoreBtn => addMoreBtn.addEventListener( 'click', addSimilarMovies ) )
 

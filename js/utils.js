@@ -86,7 +86,6 @@ function setUpLogin() {
             const emailRegex = /^([a-zA-Z0-9]+)@([a-zA-Z]+){4,}\.([a-z]+){3,}$/
     
             if ( ! passwordRegex.test( passwordInput.value ) ) {
-                console.log( passwordRegex.test( passwordInput.value ), passwordInput.value )
                 errorSpan.textContent = `Please enter a valid password`
                 return
             } 
@@ -96,7 +95,7 @@ function setUpLogin() {
             }
             const response = await getUser( emailInput.value, passwordInput.value )
             if ( typeof response === 'string' ) { // Login unsuccessful
-                errorSpan.textContent = response
+                errorSpan.textContent = `Please check the email or password you've entered and try again`
             } 
             else { // Login successful
                 if ( rememberUser.checked ) {
@@ -149,12 +148,48 @@ function hideDropdown( event ){
     dropdown.style.display = 'none'
 }
 
+function hideModal( e ) {
+    const modals = [ ...document.getElementsByClassName('modal') ]
+    const lastModal = modals.at(-1)
+   
+    if ( ! lastModal.contains( e.target ) ) {
+        const isDesktop = window.matchMedia('(min-width: 1440px)').matches
+        const animationExit = isDesktop ? 'fade-out' : 'slide-out-right'
+        lastModal.classList.add( animationExit )
+
+        setTimeout( () => {
+            if ( modals.length < 2 ) {
+                document.getElementById('modal-container').style.display = 'none'
+                document.body.style.overflowY = 'auto'   
+            } else {
+                const addBtn = [...document.getElementsByClassName('add-more')].at(-2)
+                addBtn.id= 'active'
+                modals.at(-2).style.display = 'flex'
+            }
+        }, 500 )
+
+        setTimeout( () => {
+            lastModal.remove()    
+        }, 500 )
+    }
+}
+
 function hideTarget( event, target, toClose ){
     console.log( target.contains( event.target ) )
 
     if ( !target.contains( event.target ) ) {
         toClose.style.display = 'none'
     }
+}
+
+function isInViewport( el ) {
+    const rect = el.getBoundingClientRect()
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.right <= window.innerWidth
+    )
 }
 
 // YOUTUBE API
@@ -188,7 +223,9 @@ export {
     selectViewCallback,
     setUpHomeFunctionalities,
     hideDropdown,
+    hideModal,
     hideTarget,
+    isInViewport,
     onYouTubeIframeAPIReady,
     player
 }
