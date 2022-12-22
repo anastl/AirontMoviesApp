@@ -631,6 +631,7 @@ svg.recommended-square--inside {
     left: 0;
 }
 .trailer {
+    border: var(--focus-btn-border) 1px solid;
     width: 36.875rem;
     height: calc( 36.875rem * 9 / 16 );
     margin-top: 25vh;
