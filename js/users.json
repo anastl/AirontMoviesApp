@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "person1@email.com",
+      "password": "123Pass!word"
+    },
+    {
+      "id": 2,
+      "email": "person2@email.com",
+      "password": "Password123!"
+    },
+    {
+      "id": 3,
+      "email": "person3@email.com",
+      "password": "AnotherPass213word."
+    },
+    {
+      "id": 4,
+      "email": "person4@email.com",
+      "password": "CestUneMotDePass3!"
+    },
+    {
+      "email": "person5@email.com",
+      "password": "$2a$10$T48sX/K78opxxdfn4rHaJuT/XnIUKOLlnEci.7alKIVHED/mWjdCG",
+      "id": 5
+    },
+    {
+      "email": "email1@email.com",
+      "password": "$2a$10$m.KVNdNrtYLHKOzoFwothOVXDRSvgwZlwmUiG2mJBjPLQlXZRKnke",
+      "id": 6
+    },
+    {
+      "email": "email3@email.com",
+      "password": "$2a$10$quiTBraBEmw/U9T2cGwlbO4jwKPXzJi6JMps82ttiW6w7Bm8YosmK",
+      "id": 7
+    },
+    {
+      "email": "email@email.com",
+      "password": "$2a$10$p0euQ/t49y3Oi0Cvi9bfu.Jpf/Oak9iXjGv7B3HmQ68suHTNfqCvO",
+      "id": 8
+    }
+  ]
+}
