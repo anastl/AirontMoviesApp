@@ -94,9 +94,9 @@ function setUpLogin() {
                 return
             }
             const response = await getUser( emailInput.value, passwordInput.value )
-            if ( typeof response === 'string' ) { // Login unsuccessful
+            if ( response === 'string' ) { // Login unsuccessful
                 errorSpan.textContent = `Please check the email or password you've entered and try again`
-            } 
+            } else if ( !response ) return
             else { // Login successful
                 if ( rememberUser.checked ) {
                     localStorage.setItem('logged', 'true') 

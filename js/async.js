@@ -197,8 +197,6 @@ async function fetchSimilar( movieId, page ){
 }
 
 async function getUser( email, password ){
-    // Password123!
-    // email@email.com
     try {
         const options = {
             method: 'POST',
@@ -212,7 +210,8 @@ async function getUser( email, password ){
     } 
     catch ( e ) {
         console.log( e )
-        return "A connection error ocurred, please try again" 
+        document.getElementById('login-error-msg').textContent = "A connection error ocurred, please try again" 
+        return false
     }
 }
 
